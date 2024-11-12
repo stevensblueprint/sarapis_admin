@@ -6,6 +6,12 @@
 - now you are ready
 - npm run dev
 
+# Story Book
+
+- Story Book is a way for developers to interact with individual components visually. Usefull for testing and debugging
+
+- npx storybook init
+
 ## Features
 
 This template comes with the following features:
