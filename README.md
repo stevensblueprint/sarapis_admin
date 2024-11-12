@@ -1,5 +1,11 @@
 # Mantine Vite template
 
+# Setup
+
+- npm install
+- now you are ready
+- npm run dev
+
 ## Features
 
 This template comes with the following features:
