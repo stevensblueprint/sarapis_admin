@@ -1,14 +1,14 @@
 # Mantine Vite template
 
-# Setup
+## Setup
 
 - npm install
-- now you are ready
-- npm run dev
 
-# Story Book
+## Story Book
 
-- Story Book is a way for developers to interact with individual components visually. Usefull for testing and debugging
+- Story Book is a way for developers to interact with individual components visually. Useful for testing and debugging
+
+Use by:
 
 - npx storybook init
 
