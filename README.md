@@ -1,16 +1,4 @@
 # Mantine Vite template
-# Setup
-If you do not have yarn set up,
-- npm install --global yarn
-
-then
-
-- yarn add @mantine/core @mantine/hooks @mantine/form
-
-then
-
-- yarn add --dev postcss postcss-preset-mantine postcss-simple-vars
-
 
 ## Features
 
