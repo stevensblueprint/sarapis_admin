@@ -1,6 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Center, Group, Textarea, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import ProgramForm from './ProgramForm';
+
+interface Service {
+  name: string;
+  alternateName?: string;
+  description?: string;
+  status: string;
+}
+
+interface Program {
+  name: string;
+  alternateName?: string;
+  services: Service[];
+}
 
 function OrganizationForm() {
   const form = useForm({
@@ -25,16 +39,71 @@ function OrganizationForm() {
     },
   });
 
+  const [programs, setPrograms] = useState<Program[]>([]);
+
+  const addProgram = (program: Program) => {
+    setPrograms((prev) => [...prev, { ...program, services: [] }]);
+  };
+
+  const editProgram = (index: number, updatedProgram: Program) => {
+    setPrograms((prev) => {
+      const updated = [...prev];
+      updated[index] = updatedProgram;
+      return updated;
+    });
+  };
+
+  const deleteProgram = (index: number) => {
+    setPrograms((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const addService = (programIndex: number, service: Service) => {
+    setPrograms((prev) => {
+      const updated = [...prev];
+      updated[programIndex].services.push(service);
+      return updated;
+    });
+  };
+
+  const editService = (programIndex: number, serviceIndex: number, updatedService: Service) => {
+    setPrograms((prev) => {
+      const updated = [...prev];
+      updated[programIndex].services[serviceIndex] = updatedService;
+      return updated;
+    });
+  };
+
+  const deleteService = (programIndex: number, serviceIndex: number) => {
+    setPrograms((prev) => {
+      const updated = [...prev];
+      updated[programIndex].services = updated[programIndex].services.filter(
+        (_, i) => i !== serviceIndex
+      );
+      return updated;
+    });
+  };
+
+  const handleSubmit = (values: typeof form.values) => {
+    const completeData = {
+      organization: values,
+      programs,
+    };
+    //test data
+    console.log(completeData);
+  };
+
   return (
-    <Center style={{ height: '100vh' }}>
+    <Center style={{ height: '100vh', overflowY: 'auto' }}>
       <form
-        onSubmit={form.onSubmit((values) => console.log(values))}
+        onSubmit={form.onSubmit(handleSubmit)}
         style={{
           width: '100%',
-          maxWidth: '500px', // Limits form width to 500px
-          padding: '20px', // Optional padding around form
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', // Optional shadow for styling
-          borderRadius: '8px', // Rounded corners
+          maxWidth: '600px',
+          padding: '20px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+          borderRadius: '8px',
+          overflowY: 'auto',
+          maxHeight: '90vh',
         }}
       >
         <TextInput
@@ -73,8 +142,22 @@ function OrganizationForm() {
           {...form.getInputProps('legal_status')}
         />
 
-        <Group mt="md">
-          <Button type="submit">Submit</Button>
+        <div style={{ marginTop: '20px' }}>
+          <ProgramForm
+            programs={programs}
+            addProgram={addProgram}
+            editProgram={editProgram}
+            deleteProgram={deleteProgram}
+            addService={addService}
+            editService={editService}
+            deleteService={deleteService}
+          />
+        </div>
+
+        <Group mt="md" position="center">
+          <Button type="submit" style={{ marginTop: '20px' }}>
+            Submit
+          </Button>
         </Group>
       </form>
     </Center>
