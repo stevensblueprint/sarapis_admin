@@ -10,7 +10,7 @@
 
 Use by:
 
-- npx storybook init
+- `npx storybook init`
 
 ## Features
 
