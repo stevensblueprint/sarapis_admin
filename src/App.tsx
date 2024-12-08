@@ -1,7 +1,6 @@
 import '@mantine/core/styles.css';
 
 import { MantineProvider } from '@mantine/core';
-import OrganizationForm from './OrganizationForm';
 import { Router } from './Router';
 import { theme } from './theme';
 
