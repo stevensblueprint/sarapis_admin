@@ -18,5 +18,9 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm install
+      - name: Run linter
+        run: npm run lint
+      - name: Run prettier
+        run: npm run prettier
       - name: Build
         run: npm run build
