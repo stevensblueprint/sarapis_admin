@@ -154,7 +154,7 @@ function OrganizationForm() {
           />
         </div>
 
-        <Group mt="md" position="center">
+        <Group mt="md">
           <Button type="submit" style={{ marginTop: '20px' }}>
             Submit
           </Button>

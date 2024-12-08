@@ -101,7 +101,7 @@ const ProgramForm: React.FC<ProgramFormProps> = ({
         >
           <h3>{program.name}</h3>
           <p>Alternate Name: {program.alternateName || 'N/A'}</p>
-          <Group spacing="xs">
+          <Group>
             <Button
               onClick={() => {
                 setEditingProgramIndex(programIndex);
@@ -143,7 +143,7 @@ const ProgramForm: React.FC<ProgramFormProps> = ({
               <p>Alternate Name: {service.alternateName || 'N/A'}</p>
               <p>Description: {service.description || 'No description provided'}</p>
               <p>Status: {service.status}</p>
-              <Group spacing="xs">
+              <Group>
                 <Button
                   onClick={() => {
                     setEditingServiceIndex(serviceIndex);
