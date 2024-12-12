@@ -1,9 +1,22 @@
-function App() {
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Home } from './pages/Home';
+// import { AuthContext } from './auth/AuthContext';
+
+const App: React.FC = () => {
+  // const { isAuthenticated } = useContext(AuthContext);
+
   return (
-    <div>
-      <h1 className="text-xl">Hello World</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          // element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
+          element={<Home />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
