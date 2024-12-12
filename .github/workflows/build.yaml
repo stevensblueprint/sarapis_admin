@@ -20,7 +20,7 @@ jobs:
         run: npm install
       - name: Run linter
         run: npm run lint
-      - name: Run prettier
-        run: npm run prettier
+      - name: Run prettier check
+        run: npm run format:check
       - name: Build
         run: npm run build
