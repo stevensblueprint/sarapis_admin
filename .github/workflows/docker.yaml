@@ -1,7 +1,7 @@
 name: Build and publish Docker image
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   workflow_dispatch:
 
 env:
@@ -17,6 +17,7 @@ jobs:
       packages: write
       attestations: write
       id-token: write
+      actions: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
