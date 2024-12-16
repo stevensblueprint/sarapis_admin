@@ -19,5 +19,28 @@ export const AuthContext = createContext<AuthContextType>({
   method: 'cognito',
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
-  register: () => {},
+  register: () => { },
 });
+
+export const generateSecretHash = async (
+  clientId: string,
+  clientSecret: string,
+  username: string
+): Promise<string> => {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(clientSecret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const signature = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    encoder.encode(username + clientId)
+  );
+
+  return btoa(String.fromCharCode(...new Uint8Array(signature)));
+};

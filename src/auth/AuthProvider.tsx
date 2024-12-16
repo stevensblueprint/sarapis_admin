@@ -163,6 +163,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       password: string
     ): Promise<CognitoUserSession | { message: string }> =>
       new Promise((resolve, reject) => {
+        // const clientId = process.env.REACT_APP_CLIENT_ID || '';
+        // const clientSecret = process.env.REACT_APP_CLIENT_SECRET || '';
+        // const secretHash = generateSecretHash(clientId, clientSecret, email);
+
         const user = new CognitoUser({
           Username: email,
           Pool: UserPool,
@@ -170,9 +174,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         const authDetails = new AuthenticationDetails({
           Username: email,
-          Password: password,
+          Password: password
         });
-
         user.authenticateUser(authDetails, {
           onSuccess: (data) => {
             getSession();
