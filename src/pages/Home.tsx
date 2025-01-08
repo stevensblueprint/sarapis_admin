@@ -20,6 +20,7 @@ import {
 import ServiceCard from '../components/ServiceCard';
 import Map from '../components/Map';
 import { Service } from '../interface/Service';
+import Navbar from '../components/Navbar';
 
 export const Home: React.FC = () => {
   const [searchText, setSearchText] = useState<string>('');
@@ -66,6 +67,7 @@ export const Home: React.FC = () => {
 
   return (
     <>
+      <Navbar />
       <div className="flex flex-row justify-evenly gap-10 p-5">
         <AutoComplete
           options={options}
