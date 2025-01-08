@@ -66,7 +66,7 @@ export const Home: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-row justify-center gap-10 p-5">
+      <div className="flex flex-row justify-evenly gap-10 p-5">
         <AutoComplete
           options={options}
           onSelect={onSelectSearch}
@@ -133,6 +133,9 @@ export const Home: React.FC = () => {
         <div className="basis-1/3 grow-0">
           <Map />
         </div>
+      </div>
+      <div className="flex flex-row justify-start p-10">
+        <p>Showing 1 to 10 of 100 entries</p>
       </div>
     </>
   );
