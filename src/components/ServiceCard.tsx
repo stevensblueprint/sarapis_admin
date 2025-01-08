@@ -20,11 +20,13 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
     <Card
       title={<span style={{ fontSize: '1.5em' }}>{service.name}</span>}
       bordered={false}
+      className="mx-8 mt-8"
     >
-      <div className="text-lg">
+      <div className="text-xl">
         <p>
+          Organization:
           <Link to={`/organization/${service.organizationId}`}>
-            Organization: {service.organizationName}
+            {' ' + service.organizationName}
           </Link>
         </p>
         <p>{service.description}</p>

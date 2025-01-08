@@ -2,7 +2,10 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 
 const Map = () => {
   return (
-    <div style={{ height: '100vh' }}>
+    <div
+      style={{ height: '100vh', borderRadius: '15px', overflow: 'hidden' }}
+      className="m-8"
+    >
       <MapContainer
         center={[51.505, -0.09]}
         zoom={13}
