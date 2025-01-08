@@ -9,9 +9,9 @@ interface ServiceCardProps {
     organizationName: string;
     description: string;
     location: string[];
-    phone: string | null;
-    serviceCategory: string | null;
-    serviceEligibility: string[] | null;
+    phone?: string | null;
+    serviceCategory?: string | null;
+    serviceEligibility?: string[] | null;
   };
 }
 
