@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthenticatedClient } from '../hooks/useAuthenticatedClient';
 import { getAllOrganizations } from '../api/lib/organizations';
-import type { CascaderProps } from 'antd';
-import { Cascader, Dropdown, Space } from 'antd';
+import { getTextSearchServices } from '../api/lib/services';
+import type { CascaderProps, AutoCompleteProps } from 'antd';
+import { Cascader, Dropdown, Space, AutoComplete, Button } from 'antd';
 import {
   ShareAltOutlined,
   DownloadOutlined,
@@ -18,8 +19,11 @@ import {
 } from '../data/HomeData';
 import ServiceCard from '../components/ServiceCard';
 import Map from '../components/Map';
+import { Service } from '../interface/Service';
 
 export const Home: React.FC = () => {
+  const [searchText, setSearchText] = useState<string>('');
+  const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
   const client = useAuthenticatedClient();
 
   useEffect(() => {
@@ -40,6 +44,7 @@ export const Home: React.FC = () => {
     true
   >['onChange'] = (value) => {
     console.log(value);
+    console.log(searchText);
   };
 
   const onChangeSortBy: CascaderProps<Option>['onChange'] = (value) => {
@@ -50,59 +55,83 @@ export const Home: React.FC = () => {
     console.log(value);
   };
 
+  const getPanelValue = async (searchText: string) => {
+    const response = await getTextSearchServices(client, searchText);
+    setOptions(
+      response.data.map((service: Service) => ({ value: service.name }))
+    );
+  };
+
+  const onSelectSearch = (data: string) => setSearchText(data);
+
   return (
     <>
-      <div className="bg-gray-200">
-        <div>
-          <div className="flex flex-row p-8">
-            <div className="basis-1/2 flex flex-row gap-4 justify-start">
-              <Cascader
-                options={typesOfServicesOptions}
-                onChange={onChangeTypesOfService}
-                multiple
-                placeholder="Types of Services"
-              />
-              <Cascader
-                options={sortByOptions}
-                onChange={onChangeSortBy}
-                placeholder="Sort By"
-                className="h-10"
-              />
-              <Cascader
-                options={resulsPerPageOptions}
-                onChange={onChangeResultsPerPage}
-                placeholder="Results Per Page"
-                className="h-10"
-              />
-            </div>
-            <div className="basis-1/2 flex flex-row justify-end gap-4">
-              <div className="flex flex-row justify-center items-center gap-2">
-                <ShareAltOutlined style={{ fontSize: '18px' }} />
-                <p className="text-lg">Share</p>
-              </div>
-              <div className="flex flex-row justify-center items-center gap-2">
-                <DownloadOutlined style={{ fontSize: '18px' }} />
-                <Dropdown menu={{ items }} trigger={['click']}>
-                  <a onClick={(e) => e.preventDefault()}>
-                    <Space>
-                      <p className="text-lg">Download</p>
-                      <DownOutlined />
-                    </Space>
-                  </a>
-                </Dropdown>
-              </div>
-            </div>
+      <div className="flex flex-row justify-center gap-10 p-5">
+        <AutoComplete
+          options={options}
+          onSelect={onSelectSearch}
+          onSearch={(text) => getPanelValue(text)}
+          placeholder="Search for Services"
+          className="h-12 w-80"
+        />
+        <AutoComplete
+          options={options}
+          onSelect={onSelectSearch}
+          onSearch={(text) => getPanelValue(text)}
+          placeholder="Search for Location"
+          className="h-12 w-80"
+        />
+        <Button type="primary" className="h-12">
+          Search
+        </Button>
+      </div>
+      <div className="flex flex-row p-8">
+        <div className="basis-1/2 flex flex-row gap-4 justify-start">
+          <Cascader
+            options={typesOfServicesOptions}
+            onChange={onChangeTypesOfService}
+            multiple
+            placeholder="Types of Services"
+          />
+          <Cascader
+            options={sortByOptions}
+            onChange={onChangeSortBy}
+            placeholder="Sort By"
+            className="h-10"
+          />
+          <Cascader
+            options={resulsPerPageOptions}
+            onChange={onChangeResultsPerPage}
+            placeholder="Results Per Page"
+            className="h-10"
+          />
+        </div>
+        <div className="basis-1/2 flex flex-row justify-end gap-4">
+          <div className="flex flex-row justify-center items-center gap-2">
+            <ShareAltOutlined style={{ fontSize: '18px' }} />
+            <p className="text-lg">Share</p>
           </div>
-          <div className="flex flex-row">
-            <div className="basis-2/3">
-              {servicesList.map((service) => {
-                return <ServiceCard key={service.id} service={service} />;
-              })}
-            </div>
-            <div className="basis-1/3 grow-0">
-              <Map />
-            </div>
+          <div className="flex flex-row justify-center items-center gap-2">
+            <DownloadOutlined style={{ fontSize: '18px' }} />
+            <Dropdown menu={{ items }} trigger={['click']}>
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <p className="text-lg">Download</p>
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
           </div>
+        </div>
+      </div>
+      <div className="flex flex-row">
+        <div className="basis-2/3">
+          {servicesList.map((service) => {
+            return <ServiceCard key={service.id} service={service} />;
+          })}
+        </div>
+        <div className="basis-1/3 grow-0">
+          <Map />
         </div>
       </div>
     </>

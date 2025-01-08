@@ -21,6 +21,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
       title={<span style={{ fontSize: '1.5em' }}>{service.name}</span>}
       bordered={false}
       className="mx-8 mt-8"
+      style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}
     >
       <div className="text-xl">
         <p>
