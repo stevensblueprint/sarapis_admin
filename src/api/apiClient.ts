@@ -7,7 +7,6 @@ const getApiClient = (baseUrl: string) => {
       'Content-Type': 'application/json',
       Accept: 'application/json',
     },
-    withCredentials: true,
   } satisfies AxiosRequestConfig);
   return apiClient;
 };

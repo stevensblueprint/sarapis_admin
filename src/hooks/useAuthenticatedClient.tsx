@@ -4,7 +4,7 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import getApiClient from '../api/apiClient';
 import { RequestParamsI } from '../interface/Request';
 
-const apiClient = getApiClient('https://localhost:8080');
+const apiClient = getApiClient('http://localhost:8080');
 
 export const useAuthenticatedClient = (): ((
   params: RequestParamsI

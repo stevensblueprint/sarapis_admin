@@ -6,7 +6,7 @@ import {
   CognitoUserSession,
 } from 'amazon-cognito-identity-js';
 import { AuthContext, State, initialState } from './AuthContext';
-import { useCallback, useEffect, useReducer, ReactNode } from 'react';
+import { useCallback, useEffect, useReducer, PropsWithChildren } from 'react';
 import axios from 'axios';
 
 export const UserPool = new CognitoUserPool({
@@ -74,11 +74,7 @@ const handlers: { [key: string]: (state: State, action: Action) => State } = {
 const reducer = (state: State, action: Action): State =>
   handlers[action.type] ? handlers[action.type](state, action) : state;
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: PropsWithChildren) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const getUserAttributes = useCallback(
@@ -106,12 +102,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (user) {
           user.getSession(async (error: Error | null, session: Session) => {
             if (error) {
+              dispatch({
+                type: 'AUTHENTICATE',
+                payload: { isAuthenticated: false, user: null },
+              });
               reject(error);
               return;
             }
             const attributes: UserAttributes = await getUserAttributes(user);
             const token: string = session.getIdToken().getJwtToken();
             axios.defaults.headers.common.Authorization = token;
+            localStorage.setItem('token', token);
             dispatch({
               type: 'AUTHENTICATE',
               payload: {
@@ -127,6 +128,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
             } as GetSessionResult);
           });
         } else {
+          const storedToken = localStorage.getItem('token');
+          if (storedToken) {
+            axios.defaults.headers.common.Authorization = storedToken;
+          }
           dispatch({
             type: 'AUTHENTICATE',
             payload: {
@@ -143,6 +148,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       await getSession();
     } catch {
+      localStorage.removeItem('token');
       dispatch({
         type: 'AUTHENTICATE',
         payload: {
@@ -174,11 +180,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         });
 
         user.authenticateUser(authDetails, {
-          onSuccess: (data) => {
-            getSession();
+          onSuccess: async (data) => {
+            await getSession();
             resolve(data as CognitoUserSession);
           },
           onFailure: (err) => {
+            localStorage.removeItem('token');
             reject(err);
             return;
           },
@@ -194,6 +201,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const user = UserPool.getCurrentUser();
     if (user) {
       user.signOut();
+      localStorage.removeItem('token');
+      delete axios.defaults.headers.common.Authorization;
       dispatch({ type: 'LOGOUT' });
     }
   };
