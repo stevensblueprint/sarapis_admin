@@ -22,7 +22,7 @@ import Map from '../components/Map';
 import { Service } from '../interface/Service';
 import Navbar from '../components/Navbar';
 
-export const Home: React.FC = () => {
+const Services: React.FC = () => {
   const [searchText, setSearchText] = useState<string>('');
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
   const client = useAuthenticatedClient();
@@ -142,3 +142,5 @@ export const Home: React.FC = () => {
     </>
   );
 };
+
+export default Services;
