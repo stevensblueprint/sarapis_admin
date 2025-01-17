@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuthenticatedClient } from '../hooks/useAuthenticatedClient';
-import { getAllOrganizations } from '../api/lib/organizations';
-import { getTextSearchServices } from '../api/lib/services';
+import { getAllServices, getTextSearchServices } from '../api/lib/services';
 import type { CascaderProps, AutoCompleteProps } from 'antd';
 import { Cascader, Dropdown, Space, AutoComplete, Button } from 'antd';
 import {
@@ -19,7 +18,7 @@ import {
 } from '../data/HomeData';
 import ServiceCard from '../components/ServiceCard';
 import Map from '../components/Map';
-import { Service } from '../interface/Service';
+import { Service } from '../interface/model/Service';
 import Navbar from '../components/Navbar';
 
 const Services: React.FC = () => {
@@ -30,8 +29,8 @@ const Services: React.FC = () => {
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
-        const response = await getAllOrganizations(client);
-        console.log(response.data);
+        const response = await getAllServices(client);
+        console.log(response);
       } catch (error) {
         console.error(error);
       }

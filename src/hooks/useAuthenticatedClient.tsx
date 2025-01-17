@@ -43,6 +43,10 @@ export const useAuthenticatedClient = (): ((
             .request(config)
             .then(resolve)
             .catch((error) => {
+              if (!error.response) {
+                reject(new Error('Network Error'));
+                return;
+              }
               switch (error.response.status) {
                 case 400:
                   reject(new Error('Bad Request'));
