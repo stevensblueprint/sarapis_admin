@@ -39,6 +39,69 @@ interface GetSessionResult {
   attributes: UserAttributes;
 }
 
+export class SessionManager {
+  private static readonly TOKEN_KEY = 'cognitoTokens';
+
+  static storeSession(session: CognitoUserSession) {
+    const tokens = {
+      idToken: session.getIdToken().getJwtToken(),
+      accessToken: session.getAccessToken().getJwtToken(),
+      refreshToken: session.getRefreshToken().getToken(),
+    };
+    localStorage.setItem(this.TOKEN_KEY, JSON.stringify(tokens));
+  }
+
+  static clearSession() {
+    localStorage.removeItem(this.TOKEN_KEY);
+    delete axios.defaults.headers.common.Authorization;
+  }
+
+  static getStoredTokens() {
+    const tokenString = localStorage.getItem(this.TOKEN_KEY);
+    return tokenString ? JSON.parse(tokenString) : null;
+  }
+
+  static isSessionValid(): boolean {
+    const tokens = this.getStoredTokens();
+    if (!tokens) {
+      return false;
+    }
+    // TODO: Check if the token is expired
+    return true;
+  }
+
+  static setupAxiosInterceptors() {
+    const tokens = this.getStoredTokens();
+    if (tokens) {
+      axios.defaults.headers.common.Authorization = tokens.idToken;
+    }
+  }
+
+  static async refreshSession(): Promise<boolean> {
+    return new Promise((resolve) => {
+      const user = UserPool.getCurrentUser();
+      if (!user) {
+        this.clearSession();
+        resolve(false);
+        return;
+      }
+
+      user.getSession(
+        (err: Error | null, session: CognitoUserSession | null) => {
+          if (err || !session) {
+            this.clearSession();
+            resolve(false);
+            return;
+          }
+
+          this.storeSession(session);
+          resolve(true);
+        }
+      );
+    });
+  }
+}
+
 export interface AuthContextType extends State {
   method: 'cognito';
   login: (
@@ -102,6 +165,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
         if (user) {
           user.getSession(async (error: Error | null, session: Session) => {
             if (error) {
+              console.error(error);
+              SessionManager.clearSession();
               dispatch({
                 type: 'AUTHENTICATE',
                 payload: { isAuthenticated: false, user: null },
@@ -110,9 +175,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
               return;
             }
             const attributes: UserAttributes = await getUserAttributes(user);
-            const token: string = session.getIdToken().getJwtToken();
-            axios.defaults.headers.common.Authorization = token;
-            localStorage.setItem('token', token);
+            SessionManager.storeSession(session as CognitoUserSession);
             dispatch({
               type: 'AUTHENTICATE',
               payload: {
@@ -123,39 +186,43 @@ export function AuthProvider({ children }: PropsWithChildren) {
             resolve({
               user,
               session,
-              headers: { Authorization: token },
+              headers: { Authorization: session.getIdToken().getJwtToken() },
               attributes,
             } as GetSessionResult);
           });
         } else {
-          const storedToken = localStorage.getItem('token');
-          if (storedToken) {
-            axios.defaults.headers.common.Authorization = storedToken;
+          const tokens = SessionManager.getStoredTokens();
+          if (tokens) {
+            SessionManager.setupAxiosInterceptors();
+          } else {
+            dispatch({
+              type: 'AUTHENTICATE',
+              payload: {
+                isAuthenticated: false,
+                user: null,
+              },
+            });
           }
-          dispatch({
-            type: 'AUTHENTICATE',
-            payload: {
-              isAuthenticated: false,
-              user: null,
-            },
-          });
         }
       }),
     [getUserAttributes]
   );
 
   const initial = useCallback(async () => {
-    try {
-      await getSession();
-    } catch {
-      localStorage.removeItem('token');
-      dispatch({
-        type: 'AUTHENTICATE',
-        payload: {
-          isAuthenticated: false,
-          user: null,
-        },
-      });
+    if (SessionManager.isSessionValid()) {
+      try {
+        await getSession();
+      } catch {
+        SessionManager.clearSession();
+      }
+    } else {
+      const isRefreshed = await SessionManager.refreshSession();
+      if (!isRefreshed) {
+        dispatch({
+          type: 'AUTHENTICATE',
+          payload: { isAuthenticated: false, user: null },
+        });
+      }
     }
   }, [getSession]);
 
@@ -181,13 +248,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
         user.authenticateUser(authDetails, {
           onSuccess: async (data) => {
+            SessionManager.storeSession(data as CognitoUserSession);
             await getSession();
             resolve(data as CognitoUserSession);
           },
           onFailure: (err) => {
-            localStorage.removeItem('token');
+            SessionManager.clearSession();
             reject(err);
-            return;
           },
           newPasswordRequired: () => {
             resolve({ message: 'newPasswordRequired' });
@@ -201,8 +268,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const user = UserPool.getCurrentUser();
     if (user) {
       user.signOut();
-      localStorage.removeItem('token');
-      delete axios.defaults.headers.common.Authorization;
+      SessionManager.clearSession();
       dispatch({ type: 'LOGOUT' });
     }
   };
@@ -228,7 +294,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
         if (err) {
           throw err;
         }
-        window.location.href = '/login';
       }
     );
   };
