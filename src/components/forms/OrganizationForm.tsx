@@ -14,6 +14,9 @@ import LocationForm from './LocationForm';
 import PhoneForm from './PhoneForm';
 import Phone from '../../interface/model/Phone';
 import { phoneTableColumns } from '../../data/PhoneData';
+import Program from '../../interface/model/Program';
+import ProgramForm from './ProgramForm';
+import { programTableColumns } from '../../data/ServicesData';
 
 const normFile = (e: UploadChangeParam) => {
   console.log('Upload event:', e);
@@ -32,6 +35,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
   const [currentStep, setCurrentStep] = useState<number>(2);
   const [locations, setLocations] = useState<Location[]>([]);
   const [phones, setPhones] = useState<Phone[]>([]);
+  const [programs, setPrograms] = useState<Program[]>([]);
   const [form] = Form.useForm();
 
   useState(() => {
@@ -309,6 +313,28 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
           })}
           tableColumns={phoneTableColumns || []}
           dataSource={phones}
+        />
+      ),
+    },
+    {
+      title: 'Program Information',
+      content: (
+        <CollapsibleFormTable
+          formLabel="Add a new Program"
+          selectLabel="Select an existing Program"
+          customForm={
+            <ProgramForm parentForm={form} setPrograms={setPrograms} />
+          }
+          parentForm={form}
+          dropdownLabel="Program Name"
+          dropdownName="Program Name"
+          dropdownPlaceholder="Select a Program"
+          emptyText="Programs"
+          options={programs.map((program) => {
+            return { value: program.id, label: program.name };
+          })}
+          tableColumns={programTableColumns || []}
+          dataSource={programs}
         />
       ),
     },
