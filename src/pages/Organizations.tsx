@@ -28,6 +28,7 @@ import {
 import Response from '../interface/Response';
 import OrganizationCard from '../components/OrganizationCard';
 import EmptyData from '../components/EmptyData';
+import OrganizationForm from '../components/OrganizationForm';
 
 const Organizations = () => {
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
@@ -94,6 +95,7 @@ const Organizations = () => {
             placeholder="Results per page"
             className="h-10"
           />
+          <OrganizationForm organizations={organizations} />
         </div>
         <div className="basis-1/2 flex flex-row justify-end gap-4">
           <div className="flex flex-row justify-center items-center gap-2">

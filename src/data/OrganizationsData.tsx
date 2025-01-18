@@ -46,3 +46,10 @@ export const items: MenuProps['items'] = [
     key: '1',
   },
 ];
+
+export const legalStatusOptions = [
+  { value: '1', label: 'Non-profit' },
+  { value: '2', label: 'Private Corporation' },
+  { value: '3', label: 'Government' },
+  { value: '4', label: 'Other' },
+];

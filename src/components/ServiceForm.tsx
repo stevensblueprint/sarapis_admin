@@ -21,10 +21,13 @@ import { createProgram, getAllPrograms } from '../api/lib/programs';
 import Program from '../interface/model/Program';
 import Response from '../interface/Response';
 import { ProgramError } from '../api/lib/programs';
+import Organization from '../interface/model/Organization';
+import { getAllOrganizations } from '../api/lib/organizations';
 
 const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(3);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [programs, setPrograms] = useState<ProgramTableDataType[]>([]);
   const [programFormError, setProgramFormError] = useState<string>('');
   const [form] = Form.useForm();
@@ -51,6 +54,16 @@ const ServiceForm = () => {
         console.error(error);
       }
     };
+    const fetchOrganizations = async () => {
+      try {
+        const response = await getAllOrganizations();
+        const data = response.data as Response<Organization[]>;
+        setOrganizations(data.contents);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchOrganizations();
     fetchPrograms();
   });
 
@@ -125,7 +138,9 @@ const ServiceForm = () => {
             <Select
               showSearch
               placeholder="Select an Organization"
-              options={[{ value: '1', label: 'Organization' }]}
+              options={organizations.map((organization) => {
+                return { value: organization.id, label: organization.name };
+              })}
             />
           </Form.Item>
           <Form.Item
