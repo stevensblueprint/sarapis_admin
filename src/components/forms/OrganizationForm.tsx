@@ -20,6 +20,7 @@ import ContactForm from './ContactForm';
 import Contact from '../../interface/model/Contact';
 import { contactTableColumns } from '../../data/ContactData';
 import RegularScheduleForm from './RegularScheduleForm';
+import HolidayScheduleForm from './HolidayScheduleForm';
 
 const normFile = (e: UploadChangeParam) => {
   console.log('Upload event:', e);
@@ -35,7 +36,7 @@ interface OrganizationFormProps {
 
 const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<number>(5);
   const [locations, setLocations] = useState<Location[]>([]);
   const [phones, setPhones] = useState<Phone[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
@@ -57,7 +58,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
 
   const formSteps = [
     {
-      title: 'Basic Information',
+      title: 'Basic',
       content: (
         <Form form={form} variant="filled">
           <Form.Item
@@ -279,7 +280,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
       ),
     },
     {
-      title: 'Location Information',
+      title: 'Location',
       content: (
         <CollapsibleFormSelectTable
           formLabel="Add a new Location"
@@ -301,7 +302,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
       ),
     },
     {
-      title: 'Phone Information',
+      title: 'Phone',
       content: (
         <CollapsibleFormSelectTable
           formLabel="Add a new Phone"
@@ -321,7 +322,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
       ),
     },
     {
-      title: 'Contact Information',
+      title: 'Contact',
       content: (
         <CollapsibleFormSelectTable
           formLabel="Add a new Contact"
@@ -343,7 +344,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
       ),
     },
     {
-      title: 'Program Information',
+      title: 'Program',
       content: (
         <CollapsibleFormSelectTable
           formLabel="Add a new Program"
@@ -366,7 +367,12 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
     },
     {
       title: 'Schedule',
-      content: <RegularScheduleForm parentForm={form} />,
+      content: (
+        <div>
+          <RegularScheduleForm parentForm={form} />
+          <HolidayScheduleForm />
+        </div>
+      ),
     },
   ];
 

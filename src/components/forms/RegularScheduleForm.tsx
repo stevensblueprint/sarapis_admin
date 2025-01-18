@@ -198,9 +198,17 @@ const RegularScheduleForm = ({ parentForm }: RegularScheduleFormProps) => {
     },
   ];
   return (
-    <Form form={form}>
-      <Table columns={columns} dataSource={data} pagination={false} bordered />
-    </Form>
+    <div>
+      <h1 className="text-lg">Regular Schedule</h1>
+      <Form form={form}>
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          bordered
+        />
+      </Form>
+    </div>
   );
 };
 

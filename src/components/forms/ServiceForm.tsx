@@ -22,6 +22,7 @@ import ContactForm from './ContactForm';
 import { contactTableColumns } from '../../data/ContactData';
 import Location from '../../interface/model/Location';
 import RegularScheduleForm from './RegularScheduleForm';
+import HolidayScheduleForm from './HolidayScheduleForm';
 
 const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
@@ -326,6 +327,7 @@ const ServiceForm = () => {
       content: (
         <div>
           <RegularScheduleForm parentForm={form} />
+          <HolidayScheduleForm />
         </div>
       ),
     },
