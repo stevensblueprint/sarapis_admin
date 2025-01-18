@@ -1,19 +1,16 @@
 import { useState } from 'react';
 import Organization from '../../interface/model/Organization';
-import {
-  Button,
-  Collapse,
-  Form,
-  Input,
-  Modal,
-  Select,
-  Steps,
-  Upload,
-} from 'antd';
+import { Button, Form, Input, Modal, Select, Steps, Upload } from 'antd';
 import { legalStatusOptions } from '../../data/OrganizationsData';
 
 import { UploadChangeParam } from 'antd/es/upload';
-import { CaretRightOutlined, UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
+import CollapsibleFormTable from '../CollapsibleFormTable';
+import Location from '../../interface/model/Location';
+import { getAllLocations } from '../../api/lib/locations';
+import Response from '../../interface/Response';
+import { locationTableColumns } from '../../data/LocationData';
+import LocationForm from './LocationForm';
 
 const normFile = (e: UploadChangeParam) => {
   console.log('Upload event:', e);
@@ -29,8 +26,22 @@ interface OrganizationFormProps {
 
 const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [locations, setLocations] = useState<Location[]>([]);
   const [form] = Form.useForm();
+
+  useState(() => {
+    const fetchAllLocations = async () => {
+      try {
+        const response = await getAllLocations();
+        const data = response.data as Response<Location[]>;
+        setLocations(data.contents);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchAllLocations();
+  });
 
   const formSteps = [
     {
@@ -258,21 +269,23 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
     {
       title: 'Location Information',
       content: (
-        <div>
-          <Collapse
-            bordered={true}
-            expandIcon={({ isActive }) => (
-              <CaretRightOutlined rotate={isActive ? 90 : 0} />
-            )}
-            items={[
-              {
-                key: '1',
-                label: 'Add a new Location',
-                children: <div></div>,
-              },
-            ]}
-          />
-        </div>
+        <CollapsibleFormTable
+          formLabel="Add a new Location"
+          selectLabel="Select an existing Location"
+          customForm={
+            <LocationForm parentForm={form} setLocations={setLocations} />
+          }
+          parentForm={form}
+          dropdownLabel="Location Name"
+          dropdownName="location Name"
+          dropdownPlaceholder="Select a Location"
+          emptyText="Locations"
+          options={locations.map((location) => {
+            return { value: location.id, label: location.name };
+          })}
+          tableColumns={locationTableColumns || []}
+          dataSource={locations}
+        />
       ),
     },
   ];
