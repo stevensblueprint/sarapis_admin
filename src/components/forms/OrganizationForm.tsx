@@ -17,6 +17,9 @@ import { phoneTableColumns } from '../../data/PhoneData';
 import Program from '../../interface/model/Program';
 import ProgramForm from './ProgramForm';
 import { programTableColumns } from '../../data/ServicesData';
+import ContactForm from './ContactForm';
+import Contact from '../../interface/model/Contact';
+import { contactTableColumns } from '../../data/ContactData';
 
 const normFile = (e: UploadChangeParam) => {
   console.log('Upload event:', e);
@@ -36,6 +39,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
   const [locations, setLocations] = useState<Location[]>([]);
   const [phones, setPhones] = useState<Phone[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [form] = Form.useForm();
 
   useState(() => {
@@ -313,6 +317,28 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
           })}
           tableColumns={phoneTableColumns || []}
           dataSource={phones}
+        />
+      ),
+    },
+    {
+      title: 'Contact Information',
+      content: (
+        <CollapsibleFormTable
+          formLabel="Add a new Contact"
+          selectLabel="Select an existing Contact"
+          customForm={
+            <ContactForm parentForm={form} setContacts={setContacts} />
+          }
+          parentForm={form}
+          dropdownLabel="Contact Name"
+          dropdownName="Contact Name"
+          dropdownPlaceholder="Select a Contact"
+          emptyText="Contacts"
+          options={contacts.map((contact) => {
+            return { value: contact.id, label: contact.name };
+          })}
+          tableColumns={contactTableColumns || []}
+          dataSource={contacts}
         />
       ),
     },
