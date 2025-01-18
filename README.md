@@ -31,7 +31,7 @@ Blueprint1#
 ```
 
 The website hits a locally running instance of the backend server. You will need to
-bootstrap the backend locally. You can follow the instructions (here)[https://github.com/stevensblueprint/orservice/blob/main/README.md]
+bootstrap the backend locally. You can follow the instructions [here](https://github.com/stevensblueprint/orservice/blob/main/README.md)
 to initialize the service.
 
 The website uses some env variables, for security reason the `.env`
