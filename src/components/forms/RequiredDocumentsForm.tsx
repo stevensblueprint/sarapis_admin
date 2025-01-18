@@ -18,7 +18,7 @@ import { documentTypeOptions } from '../../data/RequiredDocumentsData';
 
 interface RequiredDocumentFormProps {
   parentForm: FormInstance;
-  setRequiredDocument: React.Dispatch<React.SetStateAction<RequiredDocument>>;
+  setRequiredDocument: React.Dispatch<React.SetStateAction<RequiredDocument[]>>;
 }
 
 const RequiredDocumentForm = ({
@@ -33,7 +33,7 @@ const RequiredDocumentForm = ({
       const response = await createRequiredDocument(values);
       console.log(response);
       parentForm.setFieldValue('requiredDocuments', response.data);
-      setRequiredDocument(response.data);
+      setRequiredDocument((prev) => [...prev, response.data]);
       form.resetFields();
     } catch (error) {
       if (error instanceof RequiredDocumentError) {

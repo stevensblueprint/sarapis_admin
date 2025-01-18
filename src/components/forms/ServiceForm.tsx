@@ -8,12 +8,19 @@ import Program from '../../interface/model/Program';
 import { getAllPrograms } from '../../api/lib/programs';
 import { programTableColumns } from '../../data/ServicesData';
 import CollapsibleFormSelectTable from '../CollapsibleFormSelectTable';
+import RequiredDocument from '../../interface/model/RequiredDocument';
+import CollapsibleFormTable from '../CollapsibleFormTable';
+import RequiredDocumentForm from './RequiredDocumentsForm';
+import { requiredDocumentsTableColumns } from '../../data/RequiredDocumentsData';
 
 const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(3);
+  const [currentStep, setCurrentStep] = useState<number>(4);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
+  const [requiredDocuments, setRequiredDocuments] = useState<
+    RequiredDocument[]
+  >([]);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -216,6 +223,23 @@ const ServiceForm = () => {
           })}
           tableColumns={programTableColumns || []}
           dataSource={programs}
+        />
+      ),
+    },
+    {
+      title: 'Required Documents',
+      content: (
+        <CollapsibleFormTable
+          formLabel="Add a new Required Document"
+          customForm={
+            <RequiredDocumentForm
+              parentForm={form}
+              setRequiredDocument={setRequiredDocuments}
+            />
+          }
+          emptyText="Required Documents"
+          tableColumns={requiredDocumentsTableColumns || []}
+          dataSource={requiredDocuments}
         />
       ),
     },

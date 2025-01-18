@@ -1,3 +1,6 @@
+import { TableProps } from 'antd';
+import RequiredDocument from '../interface/model/RequiredDocument';
+
 export const documentTypeOptions = [
   { value: 'proofOfIncome', label: 'Proof of Income' },
   { value: 'utilityBill', label: 'Utility Bill' },
@@ -29,3 +32,22 @@ export const documentTypeOptions = [
     label: 'Immigration/Refugee/Asylum Status',
   },
 ];
+
+export const requiredDocumentsTableColumns: TableProps<RequiredDocument>['columns'] =
+  [
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+    },
+    {
+      title: 'URL',
+      dataIndex: 'url',
+      key: 'url',
+    },
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+    },
+  ];
