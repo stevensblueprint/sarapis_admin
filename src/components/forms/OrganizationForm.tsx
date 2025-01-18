@@ -35,7 +35,7 @@ interface OrganizationFormProps {
 
 const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(2);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [locations, setLocations] = useState<Location[]>([]);
   const [phones, setPhones] = useState<Phone[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);

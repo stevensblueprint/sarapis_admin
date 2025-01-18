@@ -7,7 +7,7 @@ const Map = () => {
       className="m-8"
     >
       <MapContainer
-        center={[51.505, -0.09]}
+        center={[40.7128, -74.006]}
         zoom={13}
         scrollWheelZoom={false}
         style={{ height: '100%', width: '100%' }}
