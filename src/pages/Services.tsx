@@ -19,6 +19,7 @@ import Map from '../components/Map';
 import { Service } from '../interface/model/Service';
 import Navbar from '../components/Navbar';
 import Response from '../interface/Response';
+import EmptyData from '../components/EmptyData';
 
 const Services: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);
@@ -132,7 +133,7 @@ const Services: React.FC = () => {
               return <ServiceCard key={service.id} service={service} />;
             })
           ) : (
-            <p>No services available</p>
+            <EmptyData text="No services found" />
           )}
         </div>
         <div className="basis-1/3 grow-0">
