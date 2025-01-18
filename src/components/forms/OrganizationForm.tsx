@@ -11,6 +11,9 @@ import { getAllLocations } from '../../api/lib/locations';
 import Response from '../../interface/Response';
 import { locationTableColumns } from '../../data/LocationData';
 import LocationForm from './LocationForm';
+import PhoneForm from './PhoneForm';
+import Phone from '../../interface/model/Phone';
+import { phoneTableColumns } from '../../data/PhoneData';
 
 const normFile = (e: UploadChangeParam) => {
   console.log('Upload event:', e);
@@ -26,8 +29,9 @@ interface OrganizationFormProps {
 
 const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<number>(2);
   const [locations, setLocations] = useState<Location[]>([]);
+  const [phones, setPhones] = useState<Phone[]>([]);
   const [form] = Form.useForm();
 
   useState(() => {
@@ -285,6 +289,26 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
           })}
           tableColumns={locationTableColumns || []}
           dataSource={locations}
+        />
+      ),
+    },
+    {
+      title: 'Phone Information',
+      content: (
+        <CollapsibleFormTable
+          formLabel="Add a new Phone"
+          selectLabel="Select an existing Phone"
+          customForm={<PhoneForm parentForm={form} setPhones={setPhones} />}
+          parentForm={form}
+          dropdownLabel="Phone Number"
+          dropdownName="Phone Number"
+          dropdownPlaceholder="Select a Phone"
+          emptyText="Phones"
+          options={phones.map((phone) => {
+            return { value: phone.id, label: phone.number };
+          })}
+          tableColumns={phoneTableColumns || []}
+          dataSource={phones}
         />
       ),
     },
