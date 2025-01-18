@@ -1,9 +1,16 @@
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../auth/AuthContext';
 
 const Navbar = () => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const onClick = async () => {
+    await logout();
+    navigate('/');
+  };
+
   return (
     <div className="flex flex-row pt-5 px-5 justify-end gap-8">
       <p>
@@ -14,7 +21,7 @@ const Navbar = () => {
       </p>
       <p>
         {isAuthenticated ? (
-          <Link to="/">Logout</Link>
+          <a onClick={onClick}>Logout</a>
         ) : (
           <Link to="/login">Login</Link>
         )}
