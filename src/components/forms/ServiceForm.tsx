@@ -21,10 +21,11 @@ import { phoneTableColumns } from '../../data/PhoneData';
 import ContactForm from './ContactForm';
 import { contactTableColumns } from '../../data/ContactData';
 import Location from '../../interface/model/Location';
+import RegularScheduleForm from './RegularScheduleForm';
 
 const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(4);
+  const [currentStep, setCurrentStep] = useState<number>(8);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
   const [requiredDocuments, setRequiredDocuments] = useState<
@@ -43,6 +44,7 @@ const ServiceForm = () => {
         data.contents?.forEach((program) => {
           setPrograms((prev) => [...prev, program]);
         });
+        setPrograms(data.contents || []);
       } catch (error) {
         console.error(error);
       }
@@ -51,14 +53,14 @@ const ServiceForm = () => {
       try {
         const response = await getAllOrganizations();
         const data = response.data as Response<Organization[]>;
-        setOrganizations(data.contents);
+        setOrganizations(data.contents || []);
       } catch (error) {
         console.error(error);
       }
     };
     fetchPrograms();
     fetchOrganizations();
-  });
+  }, []);
 
   const formSteps = [
     {
@@ -317,6 +319,14 @@ const ServiceForm = () => {
           tableColumns={contactTableColumns || []}
           dataSource={contacts}
         />
+      ),
+    },
+    {
+      title: 'Schedule Information',
+      content: (
+        <div>
+          <RegularScheduleForm />
+        </div>
       ),
     },
   ];
