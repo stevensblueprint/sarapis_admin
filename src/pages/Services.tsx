@@ -32,13 +32,13 @@ const Services: React.FC = () => {
       try {
         const response = await getAllServices();
         const data = response.data as Response<Service[]>;
-        setServices((prev) => [...prev, ...data.contents]);
+        setServices(data.contents);
       } catch (error) {
         console.error(error);
       }
     };
     fetchOrganizations();
-  }, [services]);
+  }, []);
 
   const onChangeTypesOfService: CascaderProps<
     Option,

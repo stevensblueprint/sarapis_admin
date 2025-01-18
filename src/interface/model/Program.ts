@@ -6,6 +6,7 @@ interface Program {
   name: string;
   alternateName: string;
   description: string;
+  organizationId: string;
   attributes: Attribute[];
   metadata: Metadata[];
 }

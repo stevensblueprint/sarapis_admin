@@ -2,7 +2,6 @@ import Funding from './Funding';
 import Contact from './Contact';
 import Phone from './Phone';
 import Location from './Location';
-import Program from './Program';
 import OrganizationIdentifier from './OrganizationIdentifier';
 import Attribute from './Attribute';
 import Metadata from './Metadata';
@@ -27,7 +26,6 @@ interface Organization {
   contacts: Contact[];
   phones: Phone[];
   locations: Location[];
-  programs: Program[];
   organizationIdentifiers: OrganizationIdentifier[];
   attributes: Attribute[];
   metadata: Metadata[];

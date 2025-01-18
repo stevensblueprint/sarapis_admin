@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
+  Alert,
   Button,
   Collapse,
+  Empty,
   Form,
   Input,
   Modal,
@@ -11,14 +13,63 @@ import {
   Table,
   TableProps,
 } from 'antd';
+import type { FormProps } from 'antd';
 import { Link } from 'react-router-dom';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { ProgramTableDataType } from '../data/HomeData';
+import { createProgram, getAllPrograms } from '../api/lib/programs';
+import Program from '../interface/model/Program';
+import Response from '../interface/Response';
+import { ProgramError } from '../api/lib/programs';
 
 const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(3);
+  const [programs, setPrograms] = useState<ProgramTableDataType[]>([]);
+  const [programFormError, setProgramFormError] = useState<string>('');
   const [form] = Form.useForm();
+  const [programForm] = Form.useForm();
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const response = await getAllPrograms();
+        const data = response.data as Response<Program[]>;
+        data.contents?.forEach((program) => {
+          setPrograms((prev) => [
+            ...prev,
+            {
+              id: program.id,
+              key: program.id,
+              name: program.name,
+              alternateName: program.alternateName,
+              description: program.description,
+            },
+          ]);
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPrograms();
+  });
+
+  const onFinishProgramForm: FormProps<Program>['onFinish'] = async (
+    values
+  ) => {
+    try {
+      const response = await createProgram(values);
+      console.log(response.data);
+      programForm.resetFields();
+    } catch (error) {
+      if (error instanceof ProgramError) {
+        setProgramFormError(error.message);
+      } else {
+        setProgramFormError('An unexpected error occurred');
+      }
+    }
+  };
+
   const programTableColumns: TableProps<ProgramTableDataType>['columns'] = [
     {
       title: 'Name',
@@ -218,16 +269,100 @@ const ServiceForm = () => {
               <CaretRightOutlined rotate={isActive ? 90 : 0} />
             )}
             items={[
-              { key: '1', label: 'Add a new program', children: <div> </div> },
+              {
+                key: '1',
+                label: 'Add a new program',
+                children: (
+                  <div>
+                    {programFormError && (
+                      <Alert
+                        message={programFormError}
+                        type="error"
+                        closable
+                        onClose={() => setProgramFormError('')}
+                        className="my-5"
+                      />
+                    )}
+                    <Form
+                      form={programForm}
+                      variant="filled"
+                      onFinish={onFinishProgramForm}
+                    >
+                      <Form.Item
+                        label="Program Name"
+                        name="name"
+                        rules={[{ required: true, message: 'Required field!' }]}
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        label="Alternate Name"
+                        name="alternateName"
+                        rules={[{ required: true, message: 'Required field!' }]}
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        label="Description"
+                        name="description"
+                        rules={[{ required: true, message: 'Required field!' }]}
+                      >
+                        <Input.TextArea />
+                      </Form.Item>
+                      <Form.Item>
+                        <Space
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                          }}
+                        >
+                          <Button type="primary" htmlType="submit">
+                            Submit
+                          </Button>
+                          <Button
+                            htmlType="button"
+                            onClick={() => programForm.resetFields()}
+                          >
+                            Reset
+                          </Button>
+                        </Space>
+                      </Form.Item>
+                    </Form>
+                  </div>
+                ),
+              },
               {
                 key: '2',
                 label: 'Add an existing program',
-                children: <div> </div>,
+                children: (
+                  <div>
+                    <Form form={form} variant="filled">
+                      <Form.Item
+                        label="Program Name"
+                        name="Program Name"
+                        rules={[{ required: true, message: 'Required field!' }]}
+                      >
+                        <Select
+                          showSearch
+                          placeholder="Select a Program"
+                          options={[{ value: '1', label: 'Program' }]}
+                        />
+                      </Form.Item>
+                    </Form>
+                  </div>
+                ),
               },
             ]}
           />
-          <Table columns={programTableColumns} pagination={{ pageSize: 5 }} />{' '}
-          {/* TODO: Add dataSource */}
+          <Table
+            columns={programTableColumns}
+            pagination={{ pageSize: 5 }}
+            dataSource={programs}
+            locale={{
+              emptyText: <Empty description="No Programs Available" />,
+            }}
+            className="mt-10"
+          />
         </div>
       ),
     },
