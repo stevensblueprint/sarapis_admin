@@ -3,10 +3,6 @@ import { Button, Form, Input, Modal, Select, Steps } from 'antd';
 import Response from '../../interface/Response';
 import Organization from '../../interface/model/Organization';
 import { getAllOrganizations } from '../../api/lib/organizations';
-import ProgramForm from './ProgramForm';
-import Program from '../../interface/model/Program';
-import { getAllPrograms } from '../../api/lib/programs';
-import { programTableColumns } from '../../data/ServicesData';
 import CollapsibleFormSelectTable from '../CollapsibleFormSelectTable';
 import RequiredDocument from '../../interface/model/RequiredDocument';
 import CollapsibleFormTable from '../CollapsibleFormTable';
@@ -28,7 +24,6 @@ const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(8);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [programs, setPrograms] = useState<Program[]>([]);
   const [requiredDocuments, setRequiredDocuments] = useState<
     RequiredDocument[]
   >([]);
@@ -38,18 +33,6 @@ const ServiceForm = () => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    const fetchPrograms = async () => {
-      try {
-        const response = await getAllPrograms();
-        const data = response.data as Response<Program[]>;
-        data.contents?.forEach((program) => {
-          setPrograms((prev) => [...prev, program]);
-        });
-        setPrograms(data.contents || []);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     const fetchOrganizations = async () => {
       try {
         const response = await getAllOrganizations();
@@ -59,7 +42,6 @@ const ServiceForm = () => {
         console.error(error);
       }
     };
-    fetchPrograms();
     fetchOrganizations();
   }, []);
 
@@ -217,28 +199,6 @@ const ServiceForm = () => {
             />
           </Form.Item>
         </Form>
-      ),
-    },
-    {
-      title: 'Program',
-      content: (
-        <CollapsibleFormSelectTable
-          formLabel="Add a new Program"
-          customForm={
-            <ProgramForm parentForm={form} setPrograms={setPrograms} />
-          }
-          parentForm={form}
-          selectLabel="Add an existing Program"
-          dropdownLabel="Program Name"
-          dropdownName="Program Name"
-          dropdownPlaceholder="Select a Program"
-          emptyText="Programs"
-          options={programs.map((program) => {
-            return { value: program.id, label: program.name };
-          })}
-          tableColumns={programTableColumns || []}
-          dataSource={programs}
-        />
       ),
     },
     {

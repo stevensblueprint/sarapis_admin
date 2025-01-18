@@ -13,9 +13,6 @@ import LocationForm from './LocationForm';
 import PhoneForm from './PhoneForm';
 import Phone from '../../interface/model/Phone';
 import { phoneTableColumns } from '../../data/PhoneData';
-import Program from '../../interface/model/Program';
-import ProgramForm from './ProgramForm';
-import { programTableColumns } from '../../data/ServicesData';
 import ContactForm from './ContactForm';
 import Contact from '../../interface/model/Contact';
 import { contactTableColumns } from '../../data/ContactData';
@@ -39,7 +36,6 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
   const [currentStep, setCurrentStep] = useState<number>(5);
   const [locations, setLocations] = useState<Location[]>([]);
   const [phones, setPhones] = useState<Phone[]>([]);
-  const [programs, setPrograms] = useState<Program[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [form] = Form.useForm();
 
@@ -340,28 +336,6 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
           })}
           tableColumns={contactTableColumns || []}
           dataSource={contacts}
-        />
-      ),
-    },
-    {
-      title: 'Program',
-      content: (
-        <CollapsibleFormSelectTable
-          formLabel="Add a new Program"
-          selectLabel="Select an existing Program"
-          customForm={
-            <ProgramForm parentForm={form} setPrograms={setPrograms} />
-          }
-          parentForm={form}
-          dropdownLabel="Program Name"
-          dropdownName="Program Name"
-          dropdownPlaceholder="Select a Program"
-          emptyText="Programs"
-          options={programs.map((program) => {
-            return { value: program.id, label: program.name };
-          })}
-          tableColumns={programTableColumns || []}
-          dataSource={programs}
         />
       ),
     },
