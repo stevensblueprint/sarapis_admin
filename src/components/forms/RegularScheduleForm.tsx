@@ -1,4 +1,11 @@
-import { Checkbox, Form, Table, TableProps, TimePicker } from 'antd';
+import {
+  Checkbox,
+  Form,
+  FormInstance,
+  Table,
+  TableProps,
+  TimePicker,
+} from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 
@@ -42,7 +49,11 @@ const initialData: DaySchedule[] = daysOfWeek.map((day) => ({
   is24hours: false,
 }));
 
-const RegularScheduleForm = () => {
+interface RegularScheduleFormProps {
+  parentForm: FormInstance;
+}
+
+const RegularScheduleForm = ({ parentForm }: RegularScheduleFormProps) => {
   const [data, setData] = useState<DaySchedule[]>(initialData);
   const [form] = Form.useForm();
 
@@ -62,6 +73,7 @@ const RegularScheduleForm = () => {
     day,
     field,
   }: HandleCheckBoxChangeParams) => {
+    parentForm.setFieldValue('regularSchedule', data);
     setData((prev) =>
       prev.map((item) => {
         if (item.day === day) {

@@ -19,6 +19,7 @@ import { programTableColumns } from '../../data/ServicesData';
 import ContactForm from './ContactForm';
 import Contact from '../../interface/model/Contact';
 import { contactTableColumns } from '../../data/ContactData';
+import RegularScheduleForm from './RegularScheduleForm';
 
 const normFile = (e: UploadChangeParam) => {
   console.log('Upload event:', e);
@@ -34,7 +35,7 @@ interface OrganizationFormProps {
 
 const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   const [locations, setLocations] = useState<Location[]>([]);
   const [phones, setPhones] = useState<Phone[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
@@ -363,6 +364,10 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
         />
       ),
     },
+    {
+      title: 'Schedule',
+      content: <RegularScheduleForm parentForm={form} />,
+    },
   ];
 
   const next = () => {
@@ -437,7 +442,8 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
         open={showModal}
         onCancel={handleCancel}
         footer={modalFooter()}
-        width={800}
+        centered
+        width={'80%'}
       >
         <div className="mb-8">
           <Steps
@@ -445,7 +451,9 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
             items={formSteps.map((step) => ({ title: step.title }))}
           />
         </div>
-        <div>{formSteps[currentStep].content}</div>
+        <div className="flex flex-row justify-center">
+          {formSteps[currentStep].content}
+        </div>
       </Modal>
     </div>
   );

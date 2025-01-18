@@ -64,9 +64,9 @@ const ServiceForm = () => {
 
   const formSteps = [
     {
-      title: 'Basic Information',
+      title: 'Basic',
       content: (
-        <Form form={form} variant="filled">
+        <Form form={form} variant="filled" size="large">
           <Form.Item
             label="Service Name"
             name="Service Name"
@@ -148,7 +148,7 @@ const ServiceForm = () => {
       ),
     },
     {
-      title: 'Language Information',
+      title: 'Language',
       content: (
         <Form form={form} variant="filled">
           <Form.Item
@@ -179,7 +179,7 @@ const ServiceForm = () => {
       ),
     },
     {
-      title: 'Application Information',
+      title: 'Application',
       content: (
         <Form form={form} variant="filled">
           <Form.Item
@@ -219,7 +219,7 @@ const ServiceForm = () => {
       ),
     },
     {
-      title: 'Program Information',
+      title: 'Program',
       content: (
         <CollapsibleFormSelectTable
           formLabel="Add a new Program"
@@ -241,7 +241,7 @@ const ServiceForm = () => {
       ),
     },
     {
-      title: 'Required Documents',
+      title: 'Documents',
       content: (
         <CollapsibleFormTable
           formLabel="Add a new Required Document"
@@ -258,7 +258,7 @@ const ServiceForm = () => {
       ),
     },
     {
-      title: 'Location Information',
+      title: 'Location',
       content: (
         <CollapsibleFormSelectTable
           formLabel="Add a new Location"
@@ -280,7 +280,7 @@ const ServiceForm = () => {
       ),
     },
     {
-      title: 'Phone Information',
+      title: 'Phone',
       content: (
         <CollapsibleFormSelectTable
           formLabel="Add a new Phone"
@@ -300,7 +300,7 @@ const ServiceForm = () => {
       ),
     },
     {
-      title: 'Contact Information',
+      title: 'Contact',
       content: (
         <CollapsibleFormSelectTable
           formLabel="Add a new Contact"
@@ -322,10 +322,10 @@ const ServiceForm = () => {
       ),
     },
     {
-      title: 'Schedule Information',
+      title: 'Schedule',
       content: (
         <div>
-          <RegularScheduleForm />
+          <RegularScheduleForm parentForm={form} />
         </div>
       ),
     },
@@ -386,7 +386,6 @@ const ServiceForm = () => {
   const showShowServiceModal = () => setShowServiceModal(true);
   const handleCancel = () => {
     setShowServiceModal(false);
-    form.resetFields();
     setCurrentStep(0);
   };
   return (
@@ -399,7 +398,8 @@ const ServiceForm = () => {
         open={showServiceModal}
         onCancel={handleCancel}
         footer={modalFooter()}
-        width={800}
+        centered
+        width={'80%'}
       >
         <div className="mb-8">
           <Steps
@@ -407,7 +407,9 @@ const ServiceForm = () => {
             items={formSteps.map((step) => ({ title: step.title }))}
           />
         </div>
-        <div>{formSteps[currentStep].content}</div>
+        <div className="flex flex-row justify-center">
+          {formSteps[currentStep].content}
+        </div>
       </Modal>
     </div>
   );
