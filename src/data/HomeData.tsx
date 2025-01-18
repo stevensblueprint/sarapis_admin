@@ -93,3 +93,11 @@ export const items: MenuProps['items'] = [
     key: '1',
   },
 ];
+
+export interface ProgramTableDataType {
+  id: string;
+  key: string;
+  name: string;
+  alternateName: string;
+  description: string;
+}
