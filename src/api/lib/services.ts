@@ -1,20 +1,15 @@
 import { AxiosResponse, AxiosError } from 'axios';
-import { RequestParamsI } from '../../interface/Request';
+import getApiClient from '../apiClient';
 
 interface ServiceError extends Error {
   statusCode?: number;
 }
 
-export const getAllServices = async (
-  request: ({ method, uri, body }: RequestParamsI) => Promise<AxiosResponse>
-): Promise<AxiosResponse> => {
+const apiClient = getApiClient('http://localhost:8080');
+
+export const getAllServices = async (): Promise<AxiosResponse> => {
   try {
-    const response = await request({
-      method: 'GET',
-      uri: '/api/services',
-      body: {},
-    });
-    return response;
+    return await apiClient.get('/api/services');
   } catch (error) {
     const serviceError: ServiceError = new Error(
       (error as Error).message || 'Failed to fetch services'
@@ -29,16 +24,10 @@ export const getAllServices = async (
 };
 
 export const getTextSearchServices = async (
-  request: ({ method, uri, body }: RequestParamsI) => Promise<AxiosResponse>,
   query: string
 ): Promise<AxiosResponse> => {
   try {
-    const response = await request({
-      method: 'GET',
-      uri: `/api/services?query=${query}`,
-      body: {},
-    });
-    return response;
+    return await apiClient.get(`/api/services?query=${query}`);
   } catch (error) {
     const serviceError: ServiceError = new Error(
       (error as Error).message || 'Failed to fetch services'

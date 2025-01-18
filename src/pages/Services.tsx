@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useAuthenticatedClient } from '../hooks/useAuthenticatedClient';
 import { getAllServices, getTextSearchServices } from '../api/lib/services';
 import type { CascaderProps, AutoCompleteProps } from 'antd';
 import { Cascader, Dropdown, Space, AutoComplete, Button } from 'antd';
@@ -25,12 +24,11 @@ const Services: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
-  const client = useAuthenticatedClient();
 
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
-        const response = await getAllServices(client);
+        const response = await getAllServices();
         const data = response.data as Response<Service[]>;
         setServices((prev) => [...prev, ...data.contents]);
       } catch (error) {
@@ -38,7 +36,7 @@ const Services: React.FC = () => {
       }
     };
     fetchOrganizations();
-  }, [client]);
+  }, [services]);
 
   const onChangeTypesOfService: CascaderProps<
     Option,
@@ -58,7 +56,7 @@ const Services: React.FC = () => {
   };
 
   const getPanelValue = async (searchText: string) => {
-    const response = await getTextSearchServices(client, searchText);
+    const response = await getTextSearchServices(searchText);
     setOptions(
       response.data.map((service: Service) => ({ value: service.name }))
     );
@@ -129,9 +127,13 @@ const Services: React.FC = () => {
       </div>
       <div className="flex flex-row">
         <div className="basis-2/3">
-          {services.map((service) => {
-            return <ServiceCard key={service.id} service={service} />;
-          })}
+          {services.length > 0 ? (
+            services.map((service) => {
+              return <ServiceCard key={service.id} service={service} />;
+            })
+          ) : (
+            <p>No services available</p>
+          )}
         </div>
         <div className="basis-1/3 grow-0">
           <Map />

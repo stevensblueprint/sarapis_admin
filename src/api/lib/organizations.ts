@@ -1,9 +1,11 @@
 import { AxiosResponse, AxiosError } from 'axios';
-import { RequestParamsI } from '../../interface/Request';
+import getApiClient from '../apiClient';
 
 interface OrganizationError extends Error {
   statusCode?: number;
 }
+
+const apiClient = getApiClient('http://localhost:8080');
 
 /**
  * Fetches all organizations from the API
@@ -11,16 +13,9 @@ interface OrganizationError extends Error {
  * @returns Promise resolving to the API response
  * @throws {OrganizationError} When the API request fails
  */
-export const getAllOrganizations = async (
-  request: ({ method, uri, body }: RequestParamsI) => Promise<AxiosResponse>
-): Promise<AxiosResponse> => {
+export const getAllOrganizations = async (): Promise<AxiosResponse> => {
   try {
-    const response = await request({
-      method: 'GET',
-      uri: '/api/organizations',
-      body: {},
-    });
-    return response;
+    return await apiClient.get('/api/organizations');
   } catch (error) {
     const organizationError: OrganizationError = new Error(
       (error as Error).message || 'Failed to fetch organizations'
