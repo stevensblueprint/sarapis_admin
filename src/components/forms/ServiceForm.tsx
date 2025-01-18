@@ -16,13 +16,13 @@ import {
 import type { FormProps } from 'antd';
 import { Link } from 'react-router-dom';
 import { CaretRightOutlined } from '@ant-design/icons';
-import { ProgramTableDataType } from '../data/ServicesData';
-import { createProgram, getAllPrograms } from '../api/lib/programs';
-import Program from '../interface/model/Program';
-import Response from '../interface/Response';
-import { ProgramError } from '../api/lib/programs';
-import Organization from '../interface/model/Organization';
-import { getAllOrganizations } from '../api/lib/organizations';
+import { ProgramTableDataType } from '../../data/ServicesData';
+import { createProgram, getAllPrograms } from '../../api/lib/programs';
+import Program from '../../interface/model/Program';
+import Response from '../../interface/Response';
+import { ProgramError } from '../../api/lib/programs';
+import Organization from '../../interface/model/Organization';
+import { getAllOrganizations } from '../../api/lib/organizations';
 
 const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);

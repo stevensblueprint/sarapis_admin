@@ -1,7 +1,27 @@
 import { useState } from 'react';
-import Organization from '../interface/model/Organization';
-import { Button, Form, Input, Modal, Select, Steps } from 'antd';
-import { legalStatusOptions } from '../data/OrganizationsData';
+import Organization from '../../interface/model/Organization';
+import {
+  Button,
+  Collapse,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Steps,
+  Upload,
+} from 'antd';
+import { legalStatusOptions } from '../../data/OrganizationsData';
+
+import { UploadChangeParam } from 'antd/es/upload';
+import { CaretRightOutlined, UploadOutlined } from '@ant-design/icons';
+
+const normFile = (e: UploadChangeParam) => {
+  console.log('Upload event:', e);
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e?.fileList;
+};
 
 interface OrganizationFormProps {
   organizations: Organization[];
@@ -148,7 +168,9 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
                 message: 'Please input the URI!',
               },
             ]}
-          ></Form.Item>
+          >
+            <Input />
+          </Form.Item>
           <Form.Item
             label="Year Incorporated"
             name="yearIncorporated"
@@ -196,7 +218,61 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
           >
             <Input />
           </Form.Item>
+          <Form.Item
+            label="Funding"
+            name="funding"
+            rules={[
+              {
+                required: true,
+                message: 'Please input the funding!',
+              },
+            ]}
+          >
+            <Input.TextArea />
+          </Form.Item>
+          <Form.Item
+            label="Logo"
+            name="logo"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+          >
+            <Upload name="logo" action="/upload.do" listType="picture">
+              <Button icon={<UploadOutlined />}>Click to upload</Button>
+            </Upload>
+          </Form.Item>
+          <Form.Item
+            label="Logo URL"
+            name="logoUrl"
+            rules={[
+              {
+                type: 'url',
+                message: 'Please input a valid URL!',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
         </Form>
+      ),
+    },
+    {
+      title: 'Location Information',
+      content: (
+        <div>
+          <Collapse
+            bordered={true}
+            expandIcon={({ isActive }) => (
+              <CaretRightOutlined rotate={isActive ? 90 : 0} />
+            )}
+            items={[
+              {
+                key: '1',
+                label: 'Add a new Location',
+                children: <div></div>,
+              },
+            ]}
+          />
+        </div>
       ),
     },
   ];

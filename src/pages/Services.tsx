@@ -20,7 +20,7 @@ import { Service } from '../interface/model/Service';
 import Navbar from '../components/Navbar';
 import Response from '../interface/Response';
 import EmptyData from '../components/EmptyData';
-import ServiceForm from '../components/ServiceForm';
+import ServiceForm from '../components/forms/ServiceForm';
 
 const Services: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);

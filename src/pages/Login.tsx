@@ -1,9 +1,10 @@
-import { Form, type FormProps, Input, Button } from 'antd';
+import { Form, type FormProps, Input, Button, Flex, Checkbox } from 'antd';
 import Navbar from '../components/Navbar';
 import { useContext } from 'react';
 import { AuthContext } from '../auth/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CognitoUserSession } from 'amazon-cognito-identity-js';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
 type FieldType = {
   email?: string;
@@ -32,11 +33,9 @@ const Login = () => {
       <Navbar />
       <div className="flex justify-center items-center h-screen">
         <Form
-          name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
+          name="login"
           initialValues={{ remember: true }}
+          style={{ maxWidth: 500 }}
           onFinish={onFinish}
           autoComplete="off"
         >
@@ -48,26 +47,33 @@ const Login = () => {
               { type: 'email', message: 'Please input a valid email address!' },
             ]}
           >
-            <Input />
+            <Input prefix={<UserOutlined />} placeholder="Email" />
           </Form.Item>
 
           <Form.Item<FieldType>
             label="Password"
             name="password"
-            rules={[
-              { required: true, message: 'Please input your password!' },
-              {
-                min: 8,
-                message: 'Password must be at least 8 characters long!',
-              },
-            ]}
+            rules={[{ required: true, message: 'Please input your password!' }]}
           >
-            <Input.Password />
+            <Input.Password
+              prefix={<LockOutlined />}
+              type="password"
+              placeholder="Password"
+            />
           </Form.Item>
 
-          <Form.Item label={null}>
+          <Form.Item>
+            <Flex justify="space-between" align="center">
+              <Form.Item name="remember" valuePropName="checked" noStyle>
+                <Checkbox>Remember me</Checkbox>
+              </Form.Item>
+              <Link to="/reset-password">Forgot password</Link>
+            </Flex>
+          </Form.Item>
+
+          <Form.Item>
             <Button type="primary" htmlType="submit">
-              Login
+              Log in
             </Button>
           </Form.Item>
         </Form>

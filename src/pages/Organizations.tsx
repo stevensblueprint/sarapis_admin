@@ -28,7 +28,7 @@ import {
 import Response from '../interface/Response';
 import OrganizationCard from '../components/OrganizationCard';
 import EmptyData from '../components/EmptyData';
-import OrganizationForm from '../components/OrganizationForm';
+import OrganizationForm from '../components/forms/OrganizationForm';
 
 const Organizations = () => {
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
