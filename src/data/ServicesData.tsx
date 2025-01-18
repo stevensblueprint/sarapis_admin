@@ -1,4 +1,6 @@
-import type { MenuProps } from 'antd';
+import { Space, TableProps, type MenuProps } from 'antd';
+import { Link } from 'react-router-dom';
+import Program from '../interface/model/Program';
 
 export interface Option {
   value: string | number;
@@ -101,3 +103,38 @@ export interface ProgramTableDataType {
   alternateName: string;
   description: string;
 }
+
+export const programTableColumns: TableProps<Program>['columns'] = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+    render: (text, record) => (
+      <Link
+        to={`/services/${record.id}`}
+        className="text-blue-500 hover:underline"
+      >
+        {text}
+      </Link>
+    ),
+  },
+  {
+    title: 'Alternate Name',
+    dataIndex: 'alternateName',
+    key: 'alternateName',
+  },
+  {
+    title: 'Description',
+    dataIndex: 'description',
+    key: 'description',
+  },
+  {
+    title: 'Actions',
+    key: 'actions',
+    render: () => (
+      <Space size="middle">
+        <a>Delete</a> {/* TODO: Handle Delete */}
+      </Space>
+    ),
+  },
+];

@@ -1,32 +1,19 @@
 import { useEffect, useState } from 'react';
-import {
-  Button,
-  Collapse,
-  Empty,
-  Form,
-  Input,
-  Modal,
-  Select,
-  Space,
-  Steps,
-  Table,
-  TableProps,
-} from 'antd';
-import { Link } from 'react-router-dom';
-import { CaretRightOutlined } from '@ant-design/icons';
-import { ProgramTableDataType } from '../../data/ServicesData';
-import { getAllPrograms } from '../../api/lib/programs';
-import Program from '../../interface/model/Program';
+import { Button, Form, Input, Modal, Select, Steps } from 'antd';
 import Response from '../../interface/Response';
 import Organization from '../../interface/model/Organization';
 import { getAllOrganizations } from '../../api/lib/organizations';
 import ProgramForm from './ProgramForm';
+import Program from '../../interface/model/Program';
+import { getAllPrograms } from '../../api/lib/programs';
+import CollapsibleFormTable from '../CollapsibleFormTable';
+import { programTableColumns } from '../../data/ServicesData';
 
 const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(3);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [programs, setPrograms] = useState<ProgramTableDataType[]>([]);
+  const [programs, setPrograms] = useState<Program[]>([]);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -35,16 +22,7 @@ const ServiceForm = () => {
         const response = await getAllPrograms();
         const data = response.data as Response<Program[]>;
         data.contents?.forEach((program) => {
-          setPrograms((prev) => [
-            ...prev,
-            {
-              id: program.id,
-              key: program.id,
-              name: program.name,
-              alternateName: program.alternateName,
-              description: program.description,
-            },
-          ]);
+          setPrograms((prev) => [...prev, program]);
         });
       } catch (error) {
         console.error(error);
@@ -59,44 +37,9 @@ const ServiceForm = () => {
         console.error(error);
       }
     };
-    fetchOrganizations();
     fetchPrograms();
+    fetchOrganizations();
   });
-
-  const programTableColumns: TableProps<ProgramTableDataType>['columns'] = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => (
-        <Link
-          to={`/services/${record.id}`}
-          className="text-blue-500 hover:underline"
-        >
-          {text}
-        </Link>
-      ),
-    },
-    {
-      title: 'Alternate Name',
-      dataIndex: 'alternateName',
-      key: 'alternateName',
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-    },
-    {
-      title: 'Actions',
-      key: 'actions',
-      render: () => (
-        <Space size="middle">
-          <a>Delete</a> {/* TODO: Handle Delete */}
-        </Space>
-      ),
-    },
-  ];
 
   const formSteps = [
     {
@@ -257,51 +200,23 @@ const ServiceForm = () => {
     {
       title: 'Program Information',
       content: (
-        <div>
-          <Collapse
-            bordered={true}
-            expandIcon={({ isActive }) => (
-              <CaretRightOutlined rotate={isActive ? 90 : 0} />
-            )}
-            items={[
-              {
-                key: '1',
-                label: 'Add a new program',
-                children: <ProgramForm parentForm={form} />,
-              },
-              {
-                key: '2',
-                label: 'Add an existing program',
-                children: (
-                  <div>
-                    <Form form={form} variant="filled">
-                      <Form.Item
-                        label="Program Name"
-                        name="Program Name"
-                        rules={[{ required: true, message: 'Required field!' }]}
-                      >
-                        <Select
-                          showSearch
-                          placeholder="Select a Program"
-                          options={[{ value: '1', label: 'Program' }]}
-                        />
-                      </Form.Item>
-                    </Form>
-                  </div>
-                ),
-              },
-            ]}
-          />
-          <Table
-            columns={programTableColumns}
-            pagination={{ pageSize: 5 }}
-            dataSource={programs}
-            locale={{
-              emptyText: <Empty description="No Programs Available" />,
-            }}
-            className="mt-10"
-          />
-        </div>
+        <CollapsibleFormTable
+          formLabel="Add a new Program"
+          customForm={
+            <ProgramForm parentForm={form} setPrograms={setPrograms} />
+          }
+          parentForm={form}
+          selectLabel="Add an existing Program"
+          dropdownLabel="Program Name"
+          dropdownName="Program Name"
+          dropdownPlaceholder="Select a Program"
+          emptyText="Programs"
+          options={programs.map((program) => {
+            return { value: program.id, label: program.name };
+          })}
+          tableColumns={programTableColumns || []}
+          dataSource={programs}
+        />
       ),
     },
   ];

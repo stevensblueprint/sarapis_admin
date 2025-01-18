@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { JSX, useState } from 'react';
 import {
   Alert,
   Button,
@@ -13,9 +13,13 @@ import Program from '../../interface/model/Program';
 
 interface ProgramFormProps {
   parentForm: FormInstance;
+  setPrograms: React.Dispatch<React.SetStateAction<Program[]>>;
 }
 
-const ProgramForm = ({ parentForm }: ProgramFormProps) => {
+const ProgramForm = ({
+  parentForm,
+  setPrograms,
+}: ProgramFormProps): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [form] = Form.useForm();
 
@@ -24,6 +28,7 @@ const ProgramForm = ({ parentForm }: ProgramFormProps) => {
       const response = await createProgram(values);
       console.log(response);
       parentForm.setFieldValue('programs', response.data);
+      setPrograms((prev) => [...prev, response.data]);
       form.resetFields();
     } catch (error) {
       if (error instanceof ProgramError) {
