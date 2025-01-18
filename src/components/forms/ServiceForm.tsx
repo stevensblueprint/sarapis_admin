@@ -6,8 +6,8 @@ import { getAllOrganizations } from '../../api/lib/organizations';
 import ProgramForm from './ProgramForm';
 import Program from '../../interface/model/Program';
 import { getAllPrograms } from '../../api/lib/programs';
-import CollapsibleFormTable from '../CollapsibleFormTable';
 import { programTableColumns } from '../../data/ServicesData';
+import CollapsibleFormSelectTable from '../CollapsibleFormSelectTable';
 
 const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
@@ -200,7 +200,7 @@ const ServiceForm = () => {
     {
       title: 'Program Information',
       content: (
-        <CollapsibleFormTable
+        <CollapsibleFormSelectTable
           formLabel="Add a new Program"
           customForm={
             <ProgramForm parentForm={form} setPrograms={setPrograms} />

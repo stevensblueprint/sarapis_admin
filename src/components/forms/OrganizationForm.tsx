@@ -2,10 +2,9 @@ import { useState } from 'react';
 import Organization from '../../interface/model/Organization';
 import { Button, Form, Input, Modal, Select, Steps, Upload } from 'antd';
 import { legalStatusOptions } from '../../data/OrganizationsData';
-
 import { UploadChangeParam } from 'antd/es/upload';
 import { UploadOutlined } from '@ant-design/icons';
-import CollapsibleFormTable from '../CollapsibleFormTable';
+import CollapsibleFormSelectTable from '../CollapsibleFormSelectTable';
 import Location from '../../interface/model/Location';
 import { getAllLocations } from '../../api/lib/locations';
 import Response from '../../interface/Response';
@@ -281,7 +280,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
     {
       title: 'Location Information',
       content: (
-        <CollapsibleFormTable
+        <CollapsibleFormSelectTable
           formLabel="Add a new Location"
           selectLabel="Select an existing Location"
           customForm={
@@ -303,7 +302,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
     {
       title: 'Phone Information',
       content: (
-        <CollapsibleFormTable
+        <CollapsibleFormSelectTable
           formLabel="Add a new Phone"
           selectLabel="Select an existing Phone"
           customForm={<PhoneForm parentForm={form} setPhones={setPhones} />}
@@ -323,7 +322,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
     {
       title: 'Contact Information',
       content: (
-        <CollapsibleFormTable
+        <CollapsibleFormSelectTable
           formLabel="Add a new Contact"
           selectLabel="Select an existing Contact"
           customForm={
@@ -345,7 +344,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
     {
       title: 'Program Information',
       content: (
-        <CollapsibleFormTable
+        <CollapsibleFormSelectTable
           formLabel="Add a new Program"
           selectLabel="Select an existing Program"
           customForm={

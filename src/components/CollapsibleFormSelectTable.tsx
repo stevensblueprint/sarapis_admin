@@ -4,7 +4,7 @@ import { Collapse, Empty, Form, FormInstance, Select, Table } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
 import { ColumnsType } from 'antd/es/table';
 
-interface CollapsibleFormTableProps<T> {
+interface CollapsibleFormSelectTableProps<T> {
   formLabel: string;
   selectLabel: string;
   customForm: JSX.Element;
@@ -18,7 +18,7 @@ interface CollapsibleFormTableProps<T> {
   dataSource: T[];
 }
 
-const CollapsibleFormTable = <T,>({
+const CollapsibleFormSelectTable = <T,>({
   formLabel,
   selectLabel,
   customForm,
@@ -30,7 +30,7 @@ const CollapsibleFormTable = <T,>({
   options,
   tableColumns,
   dataSource,
-}: CollapsibleFormTableProps<T>) => {
+}: CollapsibleFormSelectTableProps<T>) => {
   return (
     <div>
       <Collapse
@@ -80,4 +80,4 @@ const CollapsibleFormTable = <T,>({
   );
 };
 
-export default CollapsibleFormTable;
+export default CollapsibleFormSelectTable;
