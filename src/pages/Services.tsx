@@ -13,7 +13,7 @@ import {
   sortByOptions,
   resulsPerPageOptions,
   items,
-} from '../data/HomeData';
+} from '../data/ServicesData';
 import ServiceCard from '../components/ServiceCard';
 import Map from '../components/Map';
 import { Service } from '../interface/model/Service';
@@ -28,7 +28,7 @@ const Services: React.FC = () => {
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
 
   useEffect(() => {
-    const fetchOrganizations = async () => {
+    const fetchServices = async () => {
       try {
         const response = await getAllServices();
         const data = response.data as Response<Service[]>;
@@ -37,7 +37,7 @@ const Services: React.FC = () => {
         console.error(error);
       }
     };
-    fetchOrganizations();
+    fetchServices();
   }, []);
 
   const onChangeTypesOfService: CascaderProps<

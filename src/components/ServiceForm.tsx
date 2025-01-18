@@ -16,7 +16,7 @@ import {
 import type { FormProps } from 'antd';
 import { Link } from 'react-router-dom';
 import { CaretRightOutlined } from '@ant-design/icons';
-import { ProgramTableDataType } from '../data/HomeData';
+import { ProgramTableDataType } from '../data/ServicesData';
 import { createProgram, getAllPrograms } from '../api/lib/programs';
 import Program from '../interface/model/Program';
 import Response from '../interface/Response';
