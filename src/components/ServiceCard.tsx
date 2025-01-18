@@ -1,18 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Card } from 'antd';
+import { Service } from '../interface/model/Service';
 
 interface ServiceCardProps {
-  service: {
-    id: number;
-    name: string;
-    organizationId: number;
-    organizationName: string;
-    description: string;
-    location: string[];
-    phone?: string | null;
-    serviceCategory?: string | null;
-    serviceEligibility?: string[] | null;
-  };
+  service: Service;
 }
 
 const ServiceCard = ({ service }: ServiceCardProps) => {
@@ -26,24 +17,19 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
       <div className="text-xl">
         <p>
           Organization:
-          <Link to={`/organization/${service.organizationId}`}>
-            {' ' + service.organizationName}
+          <Link to={`/organization/${service.organization.id}`}>
+            {' ' + service.organization.name}
           </Link>
         </p>
         <p>{service.description}</p>
-        {service.phone && <p>{service.phone}</p>}
-        {service.location && <p>{service.location}</p>}
-        {service.serviceCategory && (
-          <p>
-            <strong>Service Catergory:</strong> {service.serviceCategory}
-          </p>
-        )}
-        {service.serviceEligibility && (
-          <p>
-            <strong>Service Eligibility:</strong>{' '}
-            {service.serviceEligibility.join(', ')}
-          </p>
-        )}
+        {service.phones.map((phone) => {
+          return <p key={phone.id}>{phone.number}</p>;
+        })}
+        {service.serviceAtLocations.map((serviceAtLocation) => {
+          return (
+            <p key={serviceAtLocation.id}>{serviceAtLocation.location.name}</p>
+          );
+        })}
       </div>
     </Card>
   );

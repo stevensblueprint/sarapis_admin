@@ -12,7 +12,6 @@ import {
   Option,
   typesOfServicesOptions,
   sortByOptions,
-  servicesList,
   resulsPerPageOptions,
   items,
 } from '../data/HomeData';
@@ -20,8 +19,10 @@ import ServiceCard from '../components/ServiceCard';
 import Map from '../components/Map';
 import { Service } from '../interface/model/Service';
 import Navbar from '../components/Navbar';
+import Response from '../interface/Response';
 
 const Services: React.FC = () => {
+  const [services, setServices] = useState<Service[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
   const client = useAuthenticatedClient();
@@ -30,7 +31,8 @@ const Services: React.FC = () => {
     const fetchOrganizations = async () => {
       try {
         const response = await getAllServices(client);
-        console.log(response);
+        const data = response.data as Response<Service[]>;
+        setServices((prev) => [...prev, ...data.contents]);
       } catch (error) {
         console.error(error);
       }
@@ -127,7 +129,7 @@ const Services: React.FC = () => {
       </div>
       <div className="flex flex-row">
         <div className="basis-2/3">
-          {servicesList.map((service) => {
+          {services.map((service) => {
             return <ServiceCard key={service.id} service={service} />;
           })}
         </div>

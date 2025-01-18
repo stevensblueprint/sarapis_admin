@@ -6,7 +6,7 @@ interface Response<T> {
   firstPage: boolean;
   lastPage: boolean;
   empty: boolean;
-  contents: T[];
+  contents: T;
 }
 
 export default Response;

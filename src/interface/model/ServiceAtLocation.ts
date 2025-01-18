@@ -4,6 +4,7 @@ import Schedule from './Schedule';
 import Attribute from './Attribute';
 import Metadata from './Metadata';
 import Contact from './Contact';
+import Location from './Location';
 
 interface ServiceAtLocation {
   id: string;
