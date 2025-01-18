@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-  Alert,
   Button,
   Collapse,
   Empty,
@@ -13,25 +12,22 @@ import {
   Table,
   TableProps,
 } from 'antd';
-import type { FormProps } from 'antd';
 import { Link } from 'react-router-dom';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { ProgramTableDataType } from '../../data/ServicesData';
-import { createProgram, getAllPrograms } from '../../api/lib/programs';
+import { getAllPrograms } from '../../api/lib/programs';
 import Program from '../../interface/model/Program';
 import Response from '../../interface/Response';
-import { ProgramError } from '../../api/lib/programs';
 import Organization from '../../interface/model/Organization';
 import { getAllOrganizations } from '../../api/lib/organizations';
+import ProgramForm from './ProgramForm';
 
 const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(3);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [programs, setPrograms] = useState<ProgramTableDataType[]>([]);
-  const [programFormError, setProgramFormError] = useState<string>('');
   const [form] = Form.useForm();
-  const [programForm] = Form.useForm();
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -66,22 +62,6 @@ const ServiceForm = () => {
     fetchOrganizations();
     fetchPrograms();
   });
-
-  const onFinishProgramForm: FormProps<Program>['onFinish'] = async (
-    values
-  ) => {
-    try {
-      const response = await createProgram(values);
-      console.log(response.data);
-      programForm.resetFields();
-    } catch (error) {
-      if (error instanceof ProgramError) {
-        setProgramFormError(error.message);
-      } else {
-        setProgramFormError('An unexpected error occurred');
-      }
-    }
-  };
 
   const programTableColumns: TableProps<ProgramTableDataType>['columns'] = [
     {
@@ -287,64 +267,7 @@ const ServiceForm = () => {
               {
                 key: '1',
                 label: 'Add a new program',
-                children: (
-                  <div>
-                    {programFormError && (
-                      <Alert
-                        message={programFormError}
-                        type="error"
-                        closable
-                        onClose={() => setProgramFormError('')}
-                        className="my-5"
-                      />
-                    )}
-                    <Form
-                      form={programForm}
-                      variant="filled"
-                      onFinish={onFinishProgramForm}
-                    >
-                      <Form.Item
-                        label="Program Name"
-                        name="name"
-                        rules={[{ required: true, message: 'Required field!' }]}
-                      >
-                        <Input />
-                      </Form.Item>
-                      <Form.Item
-                        label="Alternate Name"
-                        name="alternateName"
-                        rules={[{ required: true, message: 'Required field!' }]}
-                      >
-                        <Input />
-                      </Form.Item>
-                      <Form.Item
-                        label="Description"
-                        name="description"
-                        rules={[{ required: true, message: 'Required field!' }]}
-                      >
-                        <Input.TextArea />
-                      </Form.Item>
-                      <Form.Item>
-                        <Space
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                          }}
-                        >
-                          <Button type="primary" htmlType="submit">
-                            Submit
-                          </Button>
-                          <Button
-                            htmlType="button"
-                            onClick={() => programForm.resetFields()}
-                          >
-                            Reset
-                          </Button>
-                        </Space>
-                      </Form.Item>
-                    </Form>
-                  </div>
-                ),
+                children: <ProgramForm parentForm={form} />,
               },
               {
                 key: '2',
