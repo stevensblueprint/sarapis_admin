@@ -12,6 +12,15 @@ import RequiredDocument from '../../interface/model/RequiredDocument';
 import CollapsibleFormTable from '../CollapsibleFormTable';
 import RequiredDocumentForm from './RequiredDocumentsForm';
 import { requiredDocumentsTableColumns } from '../../data/RequiredDocumentsData';
+import Phone from '../../interface/model/Phone';
+import Contact from '../../interface/model/Contact';
+import LocationForm from './LocationForm';
+import { locationTableColumns } from '../../data/LocationData';
+import PhoneForm from './PhoneForm';
+import { phoneTableColumns } from '../../data/PhoneData';
+import ContactForm from './ContactForm';
+import { contactTableColumns } from '../../data/ContactData';
+import Location from '../../interface/model/Location';
 
 const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
@@ -21,6 +30,9 @@ const ServiceForm = () => {
   const [requiredDocuments, setRequiredDocuments] = useState<
     RequiredDocument[]
   >([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [phones, setPhones] = useState<Phone[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -240,6 +252,70 @@ const ServiceForm = () => {
           emptyText="Required Documents"
           tableColumns={requiredDocumentsTableColumns || []}
           dataSource={requiredDocuments}
+        />
+      ),
+    },
+    {
+      title: 'Location Information',
+      content: (
+        <CollapsibleFormSelectTable
+          formLabel="Add a new Location"
+          selectLabel="Select an existing Location"
+          customForm={
+            <LocationForm parentForm={form} setLocations={setLocations} />
+          }
+          parentForm={form}
+          dropdownLabel="Location Name"
+          dropdownName="location Name"
+          dropdownPlaceholder="Select a Location"
+          emptyText="Locations"
+          options={locations.map((location) => {
+            return { value: location.id, label: location.name };
+          })}
+          tableColumns={locationTableColumns || []}
+          dataSource={locations}
+        />
+      ),
+    },
+    {
+      title: 'Phone Information',
+      content: (
+        <CollapsibleFormSelectTable
+          formLabel="Add a new Phone"
+          selectLabel="Select an existing Phone"
+          customForm={<PhoneForm parentForm={form} setPhones={setPhones} />}
+          parentForm={form}
+          dropdownLabel="Phone Number"
+          dropdownName="Phone Number"
+          dropdownPlaceholder="Select a Phone"
+          emptyText="Phones"
+          options={phones.map((phone) => {
+            return { value: phone.id, label: phone.number };
+          })}
+          tableColumns={phoneTableColumns || []}
+          dataSource={phones}
+        />
+      ),
+    },
+    {
+      title: 'Contact Information',
+      content: (
+        <CollapsibleFormSelectTable
+          formLabel="Add a new Contact"
+          selectLabel="Select an existing Contact"
+          customForm={
+            <ContactForm parentForm={form} setContacts={setContacts} />
+          }
+          parentForm={form}
+          dropdownLabel="Contact Name"
+          dropdownName="Contact Name"
+          dropdownPlaceholder="Select a Contact"
+          emptyText="Contacts"
+          options={contacts.map((contact) => {
+            return { value: contact.id, label: contact.name };
+          })}
+          tableColumns={contactTableColumns || []}
+          dataSource={contacts}
         />
       ),
     },
