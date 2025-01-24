@@ -21,7 +21,7 @@ const Login = () => {
     try {
       const result = await login(values.email!, values.password!);
       if (result && result instanceof CognitoUserSession) {
-        navigate('/services');
+        navigate('/services`');
       }
     } catch (error) {
       console.error(error);
