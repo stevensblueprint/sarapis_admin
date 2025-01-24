@@ -22,7 +22,7 @@ import HolidayScheduleForm from './HolidayScheduleForm';
 
 const ServiceForm = () => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(8);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [requiredDocuments, setRequiredDocuments] = useState<
     RequiredDocument[]
