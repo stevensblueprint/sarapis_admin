@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Organization from '../../interface/model/Organization';
-import { Button, Form, Input, Modal, Select, Steps, Upload } from 'antd';
+import { Button, Form, FormProps, Input, Modal, Select, Steps, Upload } from 'antd';
 import { legalStatusOptions } from '../../data/OrganizationsData';
 import { UploadChangeParam } from 'antd/es/upload';
 import { UploadOutlined } from '@ant-design/icons';
@@ -18,6 +18,7 @@ import Contact from '../../interface/model/Contact';
 import { contactTableColumns } from '../../data/ContactData';
 import RegularScheduleForm from './RegularScheduleForm';
 import HolidayScheduleForm from './HolidayScheduleForm';
+import { createOrganization } from '../../api/lib/organizations.ts';
 
 const normFile = (e: UploadChangeParam) => {
   console.log('Upload event:', e);
@@ -52,11 +53,42 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
     fetchAllLocations();
   });
 
+  const onFinish: FormProps<Organization>['onFinish'] = async () => {
+    try {
+      const values = form.getFieldsValue(true) as Organization;
+      const organization = {
+        name: values.name,
+        alternateName: values.alternateName,
+        description: values.description,
+        email: values.email,
+        website: values.uri,
+        taxStatus: values.taxStatus,
+        yearIncorporated: values.yearIncorporated,
+        legalStatus: values.legalStatus
+      }
+      const response = await createOrganization(organization as Organization);
+      console.log(response);
+      form.resetFields();
+      setCurrentStep(0);
+      setShowModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const formSteps = [
     {
       title: 'Basic',
       content: (
-        <Form form={form} variant="filled">
+        <Form form={form} variant="filled" initialValues={{
+          name: "Test",
+          description: "Test description",
+          email: "test@test.com",
+          yearIncorporated: 2004,
+          alternateName: "Test Alternate Name",
+          funding: "$1200"
+        }} onFinish={onFinish}
+        >
           <Form.Item
             label="Organization Name"
             name="name"
@@ -194,24 +226,24 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
           <Form.Item
             label="Year Incorporated"
             name="yearIncorporated"
-            rules={[
-              {
-                required: true,
-                message: 'Please input the year incorporated!',
-              },
-              {
-                type: 'number',
-                message: 'Please input a valid number!',
-              },
-              {
-                min: 1900,
-                message: 'Please input a valid year!',
-              },
-              {
-                max: new Date().getFullYear(),
-                message: 'Please input a valid year!',
-              },
-            ]}
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: 'Please input the year incorporated!',
+            //   },
+            //   {
+            //     type: 'number',
+            //     message: 'Please input a valid number!',
+            //   },
+            //   {
+            //     min: 1900,
+            //     message: 'Please input a valid year!',
+            //   },
+            //   {
+            //     max: new Date().getFullYear(),
+            //     message: 'Please input a valid year!',
+            //   },
+            // ]}
           >
             <Input />
           </Form.Item>
@@ -360,18 +392,6 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmit = async () => {
-    try {
-      const values = await form.validateFields();
-      console.log(values);
-      setShowModal(false);
-      form.resetFields();
-      setCurrentStep(0);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleCancel = () => {
     setShowModal(false);
     form.resetFields();
@@ -400,7 +420,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
       );
     } else {
       items.push(
-        <Button key="submit" type="primary" onClick={handleSubmit}>
+        <Button key="submit" type="primary" onClick={form.submit}>
           Submit
         </Button>
       );

@@ -38,7 +38,6 @@ const handleApiError = (error: unknown, defaultMessage: string): never => {
 
 /**
  * Fetches all organizations from the API
- * @param request - Authenticated request function
  * @returns Promise resolving to the API response
  * @throws {OrganizationError} When the API request fails
  */
@@ -52,14 +51,29 @@ export const getAllOrganizations = async (): Promise<
 
 /**
  * Fetches organizations by search query
- * @param query - Search query
+ * @param search - Search query
  * @returns Promise resolving to the API response
  * @throws {OrganizationError} When the API request fails
  */
 export const getTextSearchOrganizations = async (
-  query: string
+  search: string
 ): Promise<AxiosResponse<Organization[]>> => {
   return apiClient
-    .get(`${API_BASE_URL}?query=${query}`)
+    .get(`${API_BASE_URL}?search=${search}`)
     .catch((error) => handleApiError(error, 'Failed to fetch organizations'));
 };
+
+/**
+ * Creates a new organization
+ * @param data Organization data to create
+ * @returns Promise containing the response with created organization data
+ * @throws {ProgramError} If the request fails
+ */
+export const createOrganization = async (
+  data: Organization
+): Promise<AxiosResponse<Organization>> => {
+  return apiClient
+    .post(API_BASE_URL, data)
+    .catch((error) => handleApiError(error, 'Failed to create organization'));
+};
+
