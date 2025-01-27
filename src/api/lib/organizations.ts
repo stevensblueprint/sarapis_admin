@@ -76,4 +76,3 @@ export const createOrganization = async (
     .post(API_BASE_URL, data)
     .catch((error) => handleApiError(error, 'Failed to create organization'));
 };
-
