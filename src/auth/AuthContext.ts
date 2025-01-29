@@ -19,5 +19,6 @@ export const AuthContext = createContext<AuthContextType>({
   method: 'cognito',
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
-  register: () => {},
+  register: () => Promise.resolve(),
+  confirmRegistrationAndLogin: () => Promise.resolve(),
 });
