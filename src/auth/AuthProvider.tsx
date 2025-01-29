@@ -113,16 +113,14 @@ export interface AuthContextType extends State {
     email: string,
     password: string,
     firstName: string,
-    lastName: string,
+    lastName: string
   ) => Promise<void>;
   confirmRegistrationAndLogin: (
     email: string,
     password: string,
     verificationCode: string
   ) => Promise<CognitoUserSession | { message: string } | void>;
-  resendVerificationCode: (
-    email: string,
-  ) => Promise<void>;
+  resendVerificationCode: (email: string) => Promise<void>;
 }
 
 const handlers: { [key: string]: (state: State, action: Action) => State } = {
@@ -326,7 +324,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
           return;
         }
 
-        // log in user to grant session once email is verified 
+        // log in user to grant session once email is verified
         const authDetails = new AuthenticationDetails({
           Username: email,
           Password: password,
@@ -348,9 +346,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       });
     });
   };
-  const resendVerificationCode = async (
-    email: string
-  ): Promise<void> => {
+  const resendVerificationCode = async (email: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       const user = new CognitoUser({
         Username: email,
@@ -360,13 +356,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
       user.resendConfirmationCode((err) => {
         if (err) {
           reject(err);
-        }
-        else {
+        } else {
           resolve();
         }
       });
     });
-  }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -376,7 +371,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         logout,
         register,
         confirmRegistrationAndLogin,
-        resendVerificationCode
+        resendVerificationCode,
       }}
     >
       {children}

@@ -21,5 +21,5 @@ export const AuthContext = createContext<AuthContextType>({
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
   confirmRegistrationAndLogin: () => Promise.resolve(),
-  resendVerificationCode: () => Promise.resolve()
+  resendVerificationCode: () => Promise.resolve(),
 });
