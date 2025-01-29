@@ -120,6 +120,9 @@ export interface AuthContextType extends State {
     password: string,
     verificationCode: string
   ) => Promise<CognitoUserSession | { message: string } | void>;
+  resendVerificationCode: (
+    email: string,
+  ) => Promise<void>;
 }
 
 const handlers: { [key: string]: (state: State, action: Action) => State } = {
@@ -345,6 +348,25 @@ export function AuthProvider({ children }: PropsWithChildren) {
       });
     });
   };
+  const resendVerificationCode = async (
+    email: string
+  ): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const user = new CognitoUser({
+        Username: email,
+        Pool: UserPool,
+      });
+
+      user.resendConfirmationCode((err) => {
+        if (err) {
+          reject(err);
+        }
+        else {
+          resolve();
+        }
+      });
+    });
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -353,7 +375,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
         login,
         logout,
         register,
-        confirmRegistrationAndLogin
+        confirmRegistrationAndLogin,
+        resendVerificationCode
       }}
     >
       {children}
