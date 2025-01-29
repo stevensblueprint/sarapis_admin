@@ -35,7 +35,7 @@ const Register = () => {
       );
       setFormData(values);
       setEmailVerificationStep(true);
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -51,7 +51,7 @@ const Register = () => {
       if (session && session instanceof CognitoUserSession) {
         navigate('/organizations');
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -59,7 +59,7 @@ const Register = () => {
     setResendingCode(true);
     try {
       await resendVerificationCode(formData.email!);
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
     }
   };
