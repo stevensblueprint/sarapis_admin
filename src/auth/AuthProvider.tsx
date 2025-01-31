@@ -114,7 +114,13 @@ export interface AuthContextType extends State {
     password: string,
     firstName: string,
     lastName: string
-  ) => void;
+  ) => Promise<void>;
+  confirmRegistrationAndLogin: (
+    email: string,
+    password: string,
+    verificationCode: string
+  ) => Promise<CognitoUserSession | { message: string } | void>;
+  resendVerificationCode: (email: string) => Promise<void>;
 }
 
 const handlers: { [key: string]: (state: State, action: Action) => State } = {
@@ -272,32 +278,90 @@ export function AuthProvider({ children }: PropsWithChildren) {
       dispatch({ type: 'LOGOUT' });
     }
   };
-
-  const register = (
+  const register = async (
     email: string,
     password: string,
     firstName: string,
     lastName: string
-  ) => {
-    UserPool.signUp(
-      email,
-      password,
-      [
-        new CognitoUserAttribute({ Name: 'email', Value: email }),
-        new CognitoUserAttribute({
-          Name: 'name',
-          Value: `${firstName} ${lastName}`,
-        }),
-      ],
-      [],
-      (err) => {
-        if (err) {
-          throw err;
+  ): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      UserPool.signUp(
+        email,
+        password,
+        [
+          new CognitoUserAttribute({ Name: 'email', Value: email }),
+          new CognitoUserAttribute({
+            Name: 'name',
+            Value: `${firstName} ${lastName}`,
+          }),
+        ],
+        [],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
         }
-      }
-    );
+      );
+    });
   };
 
+  const confirmRegistrationAndLogin = async (
+    email: string,
+    password: string,
+    verificationCode: string
+  ): Promise<CognitoUserSession> => {
+    return new Promise((resolve, reject) => {
+      const user = new CognitoUser({
+        Username: email,
+        Pool: UserPool,
+      });
+
+      user.confirmRegistration(verificationCode, true, (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        // log in user to grant session once email is verified
+        const authDetails = new AuthenticationDetails({
+          Username: email,
+          Password: password,
+        });
+
+        user.authenticateUser(authDetails, {
+          onSuccess: (session) => {
+            SessionManager.storeSession(session);
+            dispatch({
+              type: 'AUTHENTICATE',
+              payload: { isAuthenticated: true, user },
+            });
+            resolve(session);
+          },
+          onFailure: (err) => {
+            reject(err);
+          },
+        });
+      });
+    });
+  };
+  const resendVerificationCode = async (email: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const user = new CognitoUser({
+        Username: email,
+        Pool: UserPool,
+      });
+
+      user.resendConfirmationCode((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -306,6 +370,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
         login,
         logout,
         register,
+        confirmRegistrationAndLogin,
+        resendVerificationCode,
       }}
     >
       {children}
