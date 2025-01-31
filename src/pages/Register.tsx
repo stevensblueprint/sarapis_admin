@@ -111,23 +111,29 @@ const Register = () => {
               name="password"
               rules={[
                 { required: true, message: 'Please enter your password.' },
-                { min: 8, message: 'Password must be at least 8 characters long.' },
+                {
+                  min: 8,
+                  message: 'Password must be at least 8 characters long.',
+                },
                 {
                   pattern: /[A-Z]/,
-                  message: 'Password must contain at least one uppercase letter.'
+                  message:
+                    'Password must contain at least one uppercase letter.',
                 },
                 {
                   pattern: /[a-z]/,
-                  message: 'Password must contain at least one lowercase letter.'
+                  message:
+                    'Password must contain at least one lowercase letter.',
                 },
                 {
                   pattern: /[0-9]/,
-                  message: 'Password must contain at least one number.'
+                  message: 'Password must contain at least one number.',
                 },
                 {
                   pattern: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
-                  message: 'Password must contain at least one special character.'
-                }
+                  message:
+                    'Password must contain at least one special character.',
+                },
               ]}
             >
               <Input.Password placeholder="******" />
@@ -152,9 +158,8 @@ const Register = () => {
                 },
                 {
                   pattern: /^[0-9]{6}$/,
-                  message: 'Verification code must be exactly 6 digits. '
-
-                }
+                  message: 'Verification code must be exactly 6 digits. ',
+                },
               ]}
             >
               <Input placeholder="123456" />
