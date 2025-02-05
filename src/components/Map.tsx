@@ -1,6 +1,23 @@
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { Service } from '../interface/model/Service';
 
-const Map = () => {
+interface MapProps {
+  services: Service[];
+}
+interface MapInfo {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+}
+const Map = ({ services }: MapProps) => {
+
+  const mapInfoList: MapInfo[] = services.flatMap(service =>
+    service.serviceAtLocations.map(serviceAtLocation => {
+      const { id, name, latitude, longitude } = serviceAtLocation.location;
+      return { id, name, latitude, longitude };
+    })
+  );
   return (
     <div
       style={{ height: '100vh', borderRadius: '15px', overflow: 'hidden' }}
@@ -16,6 +33,13 @@ const Map = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        {mapInfoList.map((location: MapInfo) => (
+          <Marker key={location.id} position={[location.latitude, location.longitude]}>
+            <Popup>
+              Name: {location.name}
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
     </div>
   );
