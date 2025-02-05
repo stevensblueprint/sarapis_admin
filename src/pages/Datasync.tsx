@@ -12,7 +12,7 @@ const Datasync = () => {
           <Title className="mb-4" level={3}>
             Data Source
           </Title>
-          <Button>Add Source</Button>
+          <Button type="primary">Add Source</Button>
         </div>
         <ImportDataSourceTable dataSource={null} />
       </div>
