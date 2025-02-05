@@ -4,6 +4,7 @@ import Services from './pages/Services';
 import Organizations from './pages/Organizations';
 import Login from './pages/Login';
 import ProtectedRoute from './auth/ProtectedRoute';
+import Datasync from './pages/Datasync';
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const App: React.FC = () => {
           element={<ProtectedRoute element={<Organizations />} />}
         />
         <Route path="/login" element={<Login />} />
+        <Route path="/datasync" element={<Datasync />} />
       </Routes>
     </BrowserRouter>
   );
