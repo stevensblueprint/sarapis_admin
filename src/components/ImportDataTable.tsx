@@ -1,4 +1,4 @@
-import ImportHistory from '../interface/model/ImportHistory';
+import ImportData from '../interface/model/ImportData';
 import { Table } from 'antd';
 
 const columns = [
@@ -15,20 +15,16 @@ const columns = [
     dataIndex: 'source',
   },
   {
-    title: 'Auto',
-    dataIndex: 'auto',
-  },
-  {
     title: 'Status',
     dataIndex: 'status',
   },
 ];
 
-interface ImportHistoryProps {
-  dataSource: ImportHistory[] | null;
+interface ImportDataProps {
+  dataSource: ImportData[] | null;
 }
 
-const ImportHistoryTable = ({ dataSource }: ImportHistoryProps) => {
+const ImportDataTable = ({ dataSource }: ImportDataProps) => {
   return (
     <div>
       <Table dataSource={dataSource} columns={columns} />
@@ -36,4 +32,4 @@ const ImportHistoryTable = ({ dataSource }: ImportHistoryProps) => {
   );
 };
 
-export default ImportHistoryTable;
+export default ImportDataTable;

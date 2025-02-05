@@ -1,6 +1,6 @@
-import { Table, Button, Typography } from 'antd';
-import ImportDataSourceTable from '../components/ImportDataSourceTable';
-import ImportHistoryTable from '../components/ImportHistoryTable';
+import { Button, Typography } from 'antd';
+import ExportDataTable from '../components/ExportDataTable';
+import ImportDataTable from '../components/ImportDataTable';
 
 const { Title } = Typography;
 
@@ -10,17 +10,20 @@ const Datasync = () => {
       <div className="m-10">
         <div className="flex flex-row justify-between">
           <Title className="mb-4" level={3}>
-            Data Source
+            Import Data
           </Title>
-          <Button type="primary">Add Source</Button>
+          <Button type="primary">Add Sources</Button>
         </div>
-        <ImportDataSourceTable dataSource={null} />
+        <ImportDataTable dataSource={null} />
       </div>
       <div className="m-10">
-        <Title className="mb-4" level={3}>
-          Import History
-        </Title>
-        <ImportHistoryTable dataSource={null} />
+        <div className="flex flex-row justify-between">
+          <Title className="mb-4" level={3}>
+            Export Data
+          </Title>
+          <Button type="primary">Download</Button>
+        </div>
+        <ExportDataTable dataSource={null} />
       </div>
     </div>
   );

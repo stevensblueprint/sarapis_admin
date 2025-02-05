@@ -1,10 +1,10 @@
-import ImportDataSource from '../interface/model/ImportDataSource';
+import ExportData from '../interface/model/ExportData';
 import { Table } from 'antd';
 
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
+    title: 'ID',
+    dataIndex: 'id',
   },
   {
     title: 'Format',
@@ -13,10 +13,6 @@ const columns = [
   {
     title: 'Mode',
     dataIndex: 'mode',
-  },
-  {
-    title: 'Auto',
-    dataIndex: 'auto',
   },
   {
     title: 'Last Import',
@@ -28,11 +24,11 @@ const columns = [
   },
 ];
 
-interface ImportDataSourceProps {
-  dataSource: ImportDataSource[] | null;
+interface ExportDataProps {
+  dataSource: ExportData[] | null;
 }
 
-const ImportDataSourceTable = ({ dataSource }: ImportDataSourceProps) => {
+const ExportDataTable = ({ dataSource }: ExportDataProps) => {
   return (
     <div>
       <Table dataSource={dataSource} columns={columns} />
@@ -40,4 +36,4 @@ const ImportDataSourceTable = ({ dataSource }: ImportDataSourceProps) => {
   );
 };
 
-export default ImportDataSourceTable;
+export default ExportDataTable;
