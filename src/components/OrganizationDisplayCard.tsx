@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Tabs } from 'antd';
+import { Card } from 'antd';
 
 // The Left Column Top Card
 const OrganizationDisplayCard: React.FC = () => {
