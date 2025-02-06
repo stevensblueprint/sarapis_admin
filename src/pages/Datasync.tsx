@@ -1,6 +1,6 @@
 import { Button, Typography } from 'antd';
-import ExportDataTable from '../components/ExportDataTable';
-import ImportDataTable from '../components/ImportDataTable';
+import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
+import DatasyncTable from '../components/DatasyncTable';
 
 const { Title } = Typography;
 
@@ -10,20 +10,19 @@ const Datasync = () => {
       <div className="m-10">
         <div className="flex flex-row justify-between">
           <Title className="mb-4" level={3}>
-            Import Data
+            Data Sync
           </Title>
-          <Button type="primary">Add Sources</Button>
+          <div>
+            <Button
+              type="primary"
+              shape="round"
+              className="mr-2"
+              icon={<PlusOutlined />}
+            />
+            <Button type="primary" shape="round" icon={<DownloadOutlined />} />
+          </div>
         </div>
-        <ImportDataTable dataSource={null} />
-      </div>
-      <div className="m-10">
-        <div className="flex flex-row justify-between">
-          <Title className="mb-4" level={3}>
-            Export Data
-          </Title>
-          <Button type="primary">Download</Button>
-        </div>
-        <ExportDataTable dataSource={null} />
+        <DatasyncTable dataSource={null} />
       </div>
     </div>
   );
