@@ -1,4 +1,4 @@
-import { AutoComplete, Button, Dropdown, Space, Layout } from 'antd';
+import { AutoComplete, Button, Dropdown, Space, Layout, Card } from 'antd';
 
 import Navbar from '../components/Navbar';
 
@@ -54,9 +54,24 @@ const OrganizationLayout: React.FC = () => {
             <div style={{ flex: '1 1 400px', minWidth: '350px' }}>
               <OrganizationDisplayCard />
               <OrganizationTabs />
-              {/* Google Map Embed */}
             </div>
             <div style={{ flex: '1 1 400px', minHeight: '300px' }}>
+              {/* Placeholder for Non-profit Logo */}
+              <Card
+              bordered
+              style={{
+                flex: '1 1 400px',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                // Used to make content centered
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
+                <div>
+                <img src ="https://placehold.co/500x300" ></img>
+                </div>
+              </Card>
+              {/* Google Map Embed */}
               <iframe
                 title="A Wider Circle Map"
                 width="100%"
