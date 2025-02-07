@@ -58,17 +58,18 @@ const OrganizationLayout: React.FC = () => {
             <div style={{ flex: '1 1 400px', minHeight: '300px' }}>
               {/* Placeholder for Non-profit Logo */}
               <Card
-              bordered
-              style={{
-                flex: '1 1 400px',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                // Used to make content centered
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}>
+                bordered
+                style={{
+                  flex: '1 1 400px',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                  // Used to make content centered
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
                 <div>
-                <img src ="https://placehold.co/500x300" ></img>
+                  <img src="https://placehold.co/500x300"></img>
                 </div>
               </Card>
               {/* Google Map Embed */}
