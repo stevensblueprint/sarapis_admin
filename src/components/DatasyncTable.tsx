@@ -5,18 +5,22 @@ const columns = [
   {
     title: 'ID',
     dataIndex: 'id',
+    width: 150,
   },
   {
     title: 'Request Type',
     dataIndex: 'request_type',
+    width: 150,
   },
   {
     title: 'Timestamp',
     dataIndex: 'timestamp',
+    width: 150,
   },
   {
     title: 'Format',
     dataIndex: 'format',
+    width: 150,
   },
   {
     title: 'Files',
@@ -25,6 +29,7 @@ const columns = [
   {
     title: 'Size',
     dataIndex: 'size',
+    width: 150,
   },
 ];
 
