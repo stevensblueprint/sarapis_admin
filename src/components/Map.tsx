@@ -14,8 +14,8 @@ interface MapInfo {
 const Map = ({ services }: MapProps) => {
   const [popupClicked, setPopupClicked] = useState<string | null>(null);
 
-  const mapInfoList: MapInfo[] = services.flatMap(service =>
-    service.serviceAtLocations.map(serviceAtLocation => {
+  const mapInfoList: MapInfo[] = services.flatMap((service) =>
+    service.serviceAtLocations.map((serviceAtLocation) => {
       const { id, name, latitude, longitude } = serviceAtLocation.location;
       return { id, name, latitude, longitude };
     })
@@ -41,30 +41,29 @@ const Map = ({ services }: MapProps) => {
             position={[location.latitude, location.longitude]}
             eventHandlers={{
               mouseover: (event) => {
-                event.target.openPopup(); // Always open on hover
+                event.target.openPopup();
               },
               mouseout: (event) => {
                 if (popupClicked !== location.id) {
-                  event.target.closePopup(); // Only close if it's not clicked
+                  event.target.closePopup();
                 }
               },
               click: () => {
-                setPopupClicked(location.id); // Keep popup open when clicked
-              }
+                setPopupClicked(location.id);
+              },
             }}
           >
             <Popup
-              eventHandlers={
-                {
-                  remove: () => setPopupClicked(null)
-                }
-              }>
+              eventHandlers={{
+                remove: () => setPopupClicked(null),
+              }}
+            >
               Name: {location.name}
             </Popup>
           </Marker>
         ))}
       </MapContainer>
-    </div >
+    </div>
   );
 };
 export default Map;
