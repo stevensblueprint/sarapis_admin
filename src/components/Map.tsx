@@ -1,5 +1,6 @@
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { Service } from '../interface/model/Service';
+import { useState } from 'react';
 
 interface MapProps {
   services: Service[];
@@ -11,6 +12,7 @@ interface MapInfo {
   longitude: number;
 }
 const Map = ({ services }: MapProps) => {
+  const [popupClicked, setPopupClicked] = useState<string | null>(null);
 
   const mapInfoList: MapInfo[] = services.flatMap(service =>
     service.serviceAtLocations.map(serviceAtLocation => {
@@ -34,14 +36,35 @@ const Map = ({ services }: MapProps) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {mapInfoList.map((location: MapInfo) => (
-          <Marker key={location.id} position={[location.latitude, location.longitude]}>
-            <Popup>
+          <Marker
+            key={location.id}
+            position={[location.latitude, location.longitude]}
+            eventHandlers={{
+              mouseover: (event) => {
+                event.target.openPopup(); // Always open on hover
+              },
+              mouseout: (event) => {
+                if (popupClicked !== location.id) {
+                  event.target.closePopup(); // Only close if it's not clicked
+                }
+              },
+              click: () => {
+                setPopupClicked(location.id); // Keep popup open when clicked
+              }
+            }}
+          >
+            <Popup
+              eventHandlers={
+                {
+                  remove: () => setPopupClicked(null)
+                }
+              }>
               Name: {location.name}
             </Popup>
           </Marker>
         ))}
       </MapContainer>
-    </div>
+    </div >
   );
 };
 export default Map;
