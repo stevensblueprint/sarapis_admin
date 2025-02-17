@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { getAllServices, getTextSearchServices } from '../api/lib/services';
 import type { CascaderProps, AutoCompleteProps } from 'antd';
-import { Cascader, Dropdown, Space, AutoComplete, Button } from 'antd';
+import { Cascader, Dropdown, Space, AutoComplete, Button, Input } from 'antd';
 import {
   ShareAltOutlined,
   DownloadOutlined,
   DownOutlined,
+  AimOutlined,
 } from '@ant-design/icons';
 import {
   Option,
@@ -28,6 +29,25 @@ const Services: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
+
+  const getUserLocation = () => {
+    if ('geolocation' in navigator) {
+      // check for it geoLocation is avaliable
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          let latitude = position.coords.latitude;
+          let longitude = position.coords.longitude;
+          console.log('Latitude:', latitude);
+          console.log('Latitude:', longitude);
+        },
+        (error) => {
+          console.log('Error in getting location', error);
+        }
+      );
+    } else {
+      console.error('Geolocation may not be supported by this browser.');
+    }
+  };
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -86,6 +106,19 @@ const Services: React.FC = () => {
           placeholder="Search for Location"
           className="h-12 w-80"
         />
+        <Input
+          placeholder="Search for Location"
+          className="h-12 w-80"
+          suffix={
+            <Button
+              type="text"
+              onClick={getUserLocation}
+              className="h-12 w-80"
+              icon={<AimOutlined />}
+            />
+          }
+        />
+
         <Button type="primary" className="h-12">
           Search
         </Button>
