@@ -35,8 +35,8 @@ const Services: React.FC = () => {
       // check for it geoLocation is avaliable
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          let latitude = position.coords.latitude;
-          let longitude = position.coords.longitude;
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
           console.log('Latitude:', latitude);
           console.log('Latitude:', longitude);
         },
