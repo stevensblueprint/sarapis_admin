@@ -103,21 +103,20 @@ const Services: React.FC = () => {
           options={options}
           onSelect={onSelectSearch}
           onSearch={(text) => getPanelValue(text)}
-          placeholder="Search for Location"
           className="h-12 w-80"
-        />
-        <Input
-          placeholder="Search for Location"
-          className="h-12 w-80"
-          suffix={
-            <Button
-              type="text"
-              onClick={getUserLocation}
-              className="h-12 w-80"
-              icon={<AimOutlined />}
-            />
-          }
-        />
+        >
+          <Input
+            placeholder="Search for Location"
+            className="h-12 w-80"
+            suffix={
+              <Button
+                type="text"
+                onClick={getUserLocation}
+                icon={<AimOutlined />}
+              />
+            }
+          />
+        </AutoComplete>
 
         <Button type="primary" className="h-12">
           Search
