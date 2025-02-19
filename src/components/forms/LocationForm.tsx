@@ -8,6 +8,7 @@ import {
   Input,
   Select,
   Space,
+  InputNumber,
 } from 'antd';
 import { LocationError, createLocation } from '../../api/lib/locations';
 import Location from '../../interface/model/Location';
@@ -15,7 +16,6 @@ import { Service } from '../../interface/model/Service';
 import Response from '../../interface/Response';
 import { getAllServices } from '../../api/lib/services';
 import { stateList } from '../../data/Common';
-import { adaCompliantOptions } from '../../data/LocationData';
 
 interface LocationFormProps {
   parentForm: FormInstance;
@@ -47,6 +47,7 @@ const LocationForm = ({
 
   const onFinish: FormProps<Location>['onFinish'] = async (values) => {
     try {
+      console.log(values);
       const response = await createLocation(values);
       console.log(response);
       parentForm.setFieldValue('locations', response.data);
@@ -80,11 +81,7 @@ const LocationForm = ({
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          label="Location Alternate Name"
-          name="alternateName"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
+        <Form.Item label="Location Alternate Name" name="alternateName">
           <Input />
         </Form.Item>
         <Form.Item
@@ -101,11 +98,7 @@ const LocationForm = ({
         >
           <Input.TextArea />
         </Form.Item>
-        <Form.Item
-          label="Location Service"
-          name="service"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
+        <Form.Item label="Location Service" name="service">
           <Select
             showSearch
             placeholder="Select a Service"
@@ -144,12 +137,9 @@ const LocationForm = ({
         <Form.Item
           label="Zip Code"
           name="zip"
-          rules={[
-            { required: true, message: 'Required field!' },
-            { type: 'number' },
-          ]}
+          rules={[{ required: true, message: 'Required field!' }]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
         <Form.Item
           label="Location Details"
@@ -157,17 +147,6 @@ const LocationForm = ({
           rules={[{ required: true, message: 'Required field!' }]}
         >
           <Input />
-        </Form.Item>
-        <Form.Item
-          label="ADA Compliant"
-          name="adaCompliant"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Select
-            showSearch
-            placeholder="Select an Option"
-            options={adaCompliantOptions}
-          />
         </Form.Item>
         <Form.Item>
           <Space

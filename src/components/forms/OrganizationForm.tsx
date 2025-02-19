@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import Organization from '../../interface/model/Organization';
-import { Button, Form, Input, Modal, Select, Steps, Upload } from 'antd';
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Steps,
+  Upload,
+} from 'antd';
 import { legalStatusOptions } from '../../data/OrganizationsData';
 import { UploadChangeParam } from 'antd/es/upload';
 import { UploadOutlined } from '@ant-design/icons';
@@ -69,16 +78,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            label="Parent Organization"
-            name="parentOrganization"
-            rules={[
-              {
-                required: true,
-                message: 'Please input the parent organization!',
-              },
-            ]}
-          >
+          <Form.Item label="Parent Organization" name="parentOrganization">
             <Select
               showSearch
               placeholder="Select a parent organization"
@@ -132,66 +132,6 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
             <Input />
           </Form.Item>
           <Form.Item
-            label="Facebook URL"
-            name="facebookUrl"
-            rules={[
-              {
-                required: true,
-                message: 'Please input the Facebook URL!',
-              },
-              {
-                type: 'url',
-                message: 'Please input a valid URL!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Twitter URL"
-            name="twitterUrl"
-            rules={[
-              {
-                required: true,
-                message: 'Please input the Twitter URL!',
-              },
-              {
-                type: 'url',
-                message: 'Please input a valid URL!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Instagram URL"
-            name="instagramUrl"
-            rules={[
-              {
-                required: true,
-                message: 'Please input the instagram URL!',
-              },
-              {
-                type: 'url',
-                message: 'Please input a valid URL!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="URI"
-            name="uri"
-            rules={[
-              {
-                required: true,
-                message: 'Please input the URI!',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
             label="Year Incorporated"
             name="yearIncorporated"
             rules={[
@@ -201,19 +141,13 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
               },
               {
                 type: 'number',
-                message: 'Please input a valid number!',
-              },
-              {
                 min: 1900,
-                message: 'Please input a valid year!',
-              },
-              {
                 max: new Date().getFullYear(),
                 message: 'Please input a valid year!',
               },
             ]}
           >
-            <Input />
+            <InputNumber min={1900} max={new Date().getFullYear()} />
           </Form.Item>
           <Form.Item
             label="Legal Status"

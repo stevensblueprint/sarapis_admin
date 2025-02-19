@@ -5,6 +5,7 @@ import Organizations from './pages/Organizations';
 import OrganizationLayout from './pages/OrganizationLayout';
 import Login from './pages/Login';
 import ProtectedRoute from './auth/ProtectedRoute';
+import Register from './pages/Register';
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
           element={<ProtectedRoute element={<OrganizationLayout />} />}
         />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
