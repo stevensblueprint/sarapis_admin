@@ -31,22 +31,30 @@ const Services: React.FC = () => {
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
 
   const getUserLocation = () => {
-    if ('geolocation' in navigator) {
-      // check for it geoLocation is avaliable
+    if (!navigator.geolocation) {
+      const error = new Error('Geolocation is not supported by this browser.');
+      console.error(error.message);
+      return Promise.reject(error);
+    }
+    return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-          console.log('Latitude:', latitude);
-          console.log('Latitude:', longitude);
+        ({ coords: { latitude, longitude } }) => {
+          console.log(`Latitude: ${latitude}`);
+          console.log(`Longitude: ${longitude}`);
+          resolve({ latitude, longitude });
         },
         (error) => {
-          console.log('Error in getting location', error);
+          // Check for if permission is denied
+          if (error.code === error.PERMISSION_DENIED) {
+            const permissionError = new Error('Location request was denied.');
+            console.error(permissionError.message);
+            return reject(permissionError);
+          }
+          console.error('Error getting location:', error);
+          reject(error);
         }
       );
-    } else {
-      console.error('Geolocation may not be supported by this browser.');
-    }
+    });
   };
 
   useEffect(() => {
