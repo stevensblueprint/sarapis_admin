@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { getAllServices, getTextSearchServices } from '../api/lib/services';
 import type { CascaderProps, AutoCompleteProps } from 'antd';
-import { Cascader, Dropdown, Space, AutoComplete, Button } from 'antd';
+import { Cascader, Dropdown, Space, AutoComplete, Button, Input } from 'antd';
 import {
   ShareAltOutlined,
   DownloadOutlined,
   DownOutlined,
+  AimOutlined,
 } from '@ant-design/icons';
 import {
   Option,
@@ -28,6 +29,33 @@ const Services: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
+
+  const getUserLocation = () => {
+    if (!navigator.geolocation) {
+      const error = new Error('Geolocation is not supported by this browser.');
+      console.error(error.message);
+      return Promise.reject(error);
+    }
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        ({ coords: { latitude, longitude } }) => {
+          console.log(`Latitude: ${latitude}`);
+          console.log(`Longitude: ${longitude}`);
+          resolve({ latitude, longitude });
+        },
+        (error) => {
+          // Check for if permission is denied
+          if (error.code === error.PERMISSION_DENIED) {
+            const permissionError = new Error('Location request was denied.');
+            console.error(permissionError.message);
+            return reject(permissionError);
+          }
+          console.error('Error getting location:', error);
+          reject(error);
+        }
+      );
+    });
+  };
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -83,9 +111,21 @@ const Services: React.FC = () => {
           options={options}
           onSelect={onSelectSearch}
           onSearch={(text) => getPanelValue(text)}
-          placeholder="Search for Location"
           className="h-12 w-80"
-        />
+        >
+          <Input
+            placeholder="Search for Location"
+            className="h-12 w-80"
+            suffix={
+              <Button
+                type="text"
+                onClick={getUserLocation}
+                icon={<AimOutlined />}
+              />
+            }
+          />
+        </AutoComplete>
+
         <Button type="primary" className="h-12">
           Search
         </Button>
