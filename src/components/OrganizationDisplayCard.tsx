@@ -1,18 +1,19 @@
-import React from 'react';
 import { Card } from 'antd';
+import Organization from '../interface/model/Organization';
+
+interface OrganizationDisplayCard {
+  organization: Organization;
+}
 
 // The Left Column Top Card
-const OrganizationDisplayCard: React.FC = () => {
+const OrganizationDisplayCard = () => {
   return (
     <Card
       title={<span style={{ fontSize: '2rem' }}>A Wider Circle</span>}
       bordered
-      style={{
-        flex: '1 1 400px',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-      }}
+      className="shadow-lg flex-[1_1_400]"
     >
-      <div style={{ fontSize: '1rem', color: '#333' }}>
+      <div className="text-[1rem] text-333">
         <p>
           A Wider Circle’s efforts focus on the provision of basic need items,
           workforce development, wraparound support, and neighborhood

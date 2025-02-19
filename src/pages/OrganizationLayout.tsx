@@ -11,13 +11,13 @@ import {
 } from '@ant-design/icons';
 import OrganizationDisplayCard from '../components/OrganizationDisplayCard';
 import OrganizationTabs from '../components/OrganizationTabs';
+import Map from '../components/Map';
 const { Content } = Layout;
 const OrganizationLayout: React.FC = () => {
   return (
     <>
       <Navbar />
       {/* PLACE HOLDER SEARCH BAR*/}
-      {/* TO DO: Add search bar that links back to "Organizations" page with search query */}
       <div className="flex flex-row justify-center gap-10 p-5">
         <AutoComplete
           placeholder="Search organizations"
@@ -31,11 +31,11 @@ const OrganizationLayout: React.FC = () => {
       {/* Share and Download Buttons, added "mr-10" to add space between browser edge and download*/}
       <div className="basis-1/3 flex flex-row justify-end gap-4 mr-10">
         <div className="flex flex-row justify-center items-center gap-2">
-          <ShareAltOutlined style={{ fontSize: '18px' }} />
+          <ShareAltOutlined className="text-[18px]" />
           <p className="text-lg">Share</p>
         </div>
         <div className="flex flex-row justify-center items-center gap-2">
-          <DownloadOutlined style={{ fontSize: '18px' }} />
+          <DownloadOutlined className="text-[18px]" />
           <Dropdown menu={{ items }} trigger={['click']}>
             <a onClick={(e) => e.preventDefault()}>
               <Space>
@@ -47,40 +47,27 @@ const OrganizationLayout: React.FC = () => {
         </div>
       </div>
 
-      <Layout style={{ minHeight: '100vh', background: '#fff' }}>
-        <Content style={{ margin: '2rem' }}>
-          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+      <Layout className="min-h-screen bg-[#fff]">
+        <Content className="m-[2rem]">
+          <div className="flex gap-[2rem] flex-nowrap">
             {/* Left Column: Organization Display Card */}
-            <div style={{ flex: '1 1 400px', minWidth: '350px' }}>
+            <div className="flex-1 min-w-[350px]">
               <OrganizationDisplayCard />
               <OrganizationTabs />
             </div>
-            <div style={{ flex: '1 1 400px', minHeight: '300px' }}>
+            {/* Right Column: Logo and Map */}
+            <div className="flex-1 min-w-[300px]">
               {/* Placeholder for Non-profit Logo */}
               <Card
                 bordered
-                style={{
-                  flex: '1 1 400px',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                  // Used to make content centered
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
+                className="flex-1 shadow-md flex justify-center items-center"
               >
                 <div>
                   <img src="https://placehold.co/500x300"></img>
                 </div>
               </Card>
               {/* Google Map Embed */}
-              <iframe
-                title="A Wider Circle Map"
-                width="100%"
-                height="100%"
-                style={{ border: 0, minHeight: '300px' }}
-                src="https://www.google.com/maps/embed/v1/place?q=A+Wider+Circle+9159+Brookville+Rd+Silver+Spring+MD+20910&key=YOUR_API_KEY"
-                allowFullScreen
-              />
+              <Map />
             </div>
           </div>
         </Content>
