@@ -12,7 +12,7 @@ import {
 import OrganizationDisplayCard from '../components/OrganizationDisplayCard';
 import OrganizationTabs from '../components/OrganizationTabs';
 import Map from '../components/Map';
-import { aWiderCircle } from '../data/DummyData';
+import { aWiderCircle, servicesData } from '../data/DummyData';
 const { Content } = Layout;
 const OrganizationLayout: React.FC = () => {
   return (
@@ -67,7 +67,7 @@ const OrganizationLayout: React.FC = () => {
                 </div>
               </Card>
               {/* Map Embed */}
-              <Map />
+              <Map services={servicesData} />
             </div>
           </div>
         </Content>
