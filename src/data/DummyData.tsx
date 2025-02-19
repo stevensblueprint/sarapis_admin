@@ -2,41 +2,6 @@ import Organization from '../interface/model/Organization';
 import { Service } from '../interface/model/Service';
 import Location from '../interface/model/Location';
 
-export const aWiderCircle: Organization = {
-  id: '1',
-  name: 'A Wider Circle',
-  alternateName: 'AWC',
-  description:
-    'A Wider Circle’s efforts focus on the provision of basic need items, workforce development, wraparound support, and neighborhood revitalization. These four components work in concert to create lasting change in the lives of those we serve. A Wider Circle says no to nobody! Anyone in need of help can find it here.',
-  email: 'contact@awidercircle.org',
-  website: 'https://awidercircle.org/',
-  additionalWebsites: [],
-  taxStatus: '501(c)(3)',
-  taxId: '52-2270919',
-  yearIncorporated: 2001,
-  legalStatus: 'Nonprofit',
-  logo: 'https://placehold.co/500x300', // Placeholder logo
-  uri: 'https://awidercircle.org/',
-  parentOrganization: null,
-  funding: [],
-  contacts: [],
-  phones: [{ number: '(301) 608-3508', type: 'main', language: 'English' }],
-  locations: [
-    {
-      address: '9159 Brookville Rd, Silver Spring, MD 20910',
-      city: 'Silver Spring',
-      state: 'MD',
-      zip: '20910',
-      country: 'USA',
-      latitude: 38.9907,
-      longitude: -77.032,
-    },
-  ],
-  organizationIdentifiers: [],
-  attributes: [],
-  metadata: [],
-};
-
 export const locationsData: Location[] = [
   {
     id: '1',
@@ -283,6 +248,51 @@ export const locationsData: Location[] = [
     metadata: [],
   },
 ];
+
+export const aWiderCircle: Organization = {
+  id: '1',
+  name: 'A Wider Circle',
+  alternateName: 'AWC',
+  description:
+    'A Wider Circle’s efforts focus on the provision of basic need items, workforce development, wraparound support, and neighborhood revitalization. These four components work in concert to create lasting change in the lives of those we serve. A Wider Circle says no to nobody! Anyone in need of help can find it here.',
+  email: 'contact@awidercircle.org',
+  website: 'https://awidercircle.org/',
+  additionalWebsites: [],
+  taxStatus: '501(c)(3)',
+  taxId: '52-2270919',
+  yearIncorporated: 2001,
+  legalStatus: 'Nonprofit',
+  logo: 'https://placehold.co/500x300', // Placeholder logo
+  uri: 'https://awidercircle.org/',
+  parentOrganization: null,
+  funding: [],
+  contacts: [],
+  phones: [
+    {
+      id: '1',
+      number: '(301) 608-3508',
+      extension: '101',
+      type: 'Main',
+      description: 'Main contact line',
+      languages: [
+        {
+          id: '1',
+          name: 'English',
+          code: 'en',
+          note: 'Primary language',
+          attributes: [],
+          metadata: [],
+        },
+      ],
+      attributes: [],
+      metadata: [],
+    },
+  ],
+  locations: locationsData,
+  organizationIdentifiers: [],
+  attributes: [],
+  metadata: [],
+};
 
 export const servicesData: Service[] = [
   {
