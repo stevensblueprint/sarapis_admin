@@ -12,12 +12,12 @@ import {
 import OrganizationDisplayCard from '../components/OrganizationDisplayCard';
 import OrganizationTabs from '../components/OrganizationTabs';
 import Map from '../components/Map';
+import { aWiderCircle } from '../data/DummyData';
 const { Content } = Layout;
 const OrganizationLayout: React.FC = () => {
   return (
     <>
       <Navbar />
-      {/* PLACE HOLDER SEARCH BAR*/}
       <div className="flex flex-row justify-center gap-10 p-5">
         <AutoComplete
           placeholder="Search organizations"
@@ -28,7 +28,7 @@ const OrganizationLayout: React.FC = () => {
         </Button>
       </div>
 
-      {/* Share and Download Buttons, added "mr-10" to add space between browser edge and download*/}
+      {/* Share and Download Buttons*/}
       <div className="basis-1/3 flex flex-row justify-end gap-4 mr-10">
         <div className="flex flex-row justify-center items-center gap-2">
           <ShareAltOutlined className="text-[18px]" />
@@ -52,21 +52,21 @@ const OrganizationLayout: React.FC = () => {
           <div className="flex gap-[2rem] flex-nowrap">
             {/* Left Column: Organization Display Card */}
             <div className="flex-1 min-w-[350px]">
-              <OrganizationDisplayCard />
+              <OrganizationDisplayCard organization={aWiderCircle} />
               <OrganizationTabs />
             </div>
             {/* Right Column: Logo and Map */}
             <div className="flex-1 min-w-[300px]">
-              {/* Placeholder for Non-profit Logo */}
+              {/* Non-profit Logo */}
               <Card
                 bordered
                 className="flex-1 shadow-md flex justify-center items-center"
               >
                 <div>
-                  <img src="https://placehold.co/500x300"></img>
+                  <img src={aWiderCircle.logo}></img>
                 </div>
               </Card>
-              {/* Google Map Embed */}
+              {/* Map Embed */}
               <Map />
             </div>
           </div>
