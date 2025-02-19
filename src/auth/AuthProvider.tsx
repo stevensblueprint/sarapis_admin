@@ -8,7 +8,7 @@ import {
 import { AuthContext, State, initialState } from './AuthContext';
 import { useCallback, useEffect, useReducer, PropsWithChildren } from 'react';
 import axios from 'axios';
-import { CognitoJwtVerifier } from "aws-jwt-verify";
+import { CognitoJwtVerifier } from 'aws-jwt-verify';
 
 export const UserPool = new CognitoUserPool({
   UserPoolId: process.env.REACT_APP_USER_POOL_ID || '',
@@ -64,7 +64,7 @@ export class SessionManager {
   private static verifier = CognitoJwtVerifier.create({
     userPoolId: process.env.REACT_APP_USER_POOL_ID || '',
     clientId: process.env.REACT_APP_CLIENT_ID || '',
-    tokenUse: "id",
+    tokenUse: 'id',
   });
 
   static async isSessionValid(): Promise<boolean> {
