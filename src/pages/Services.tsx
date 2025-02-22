@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react';
 import { getAllServices, getTextSearchServices } from '../api/lib/services';
 import type { CascaderProps, AutoCompleteProps } from 'antd';
-import { Cascader, Dropdown, Space, AutoComplete, Button, Input } from 'antd';
+import {
+  Cascader,
+  Dropdown,
+  Space,
+  AutoComplete,
+  Button,
+  Input,
+  Alert,
+} from 'antd';
 import {
   ShareAltOutlined,
   DownloadOutlined,
@@ -29,6 +37,17 @@ const Services: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [animateAlert, setAnimateAlert] = useState<boolean>(false);
+
+  const onClose = () => {
+    setAnimateAlert(false);
+    setTimeout(() => setShowAlert(false), 500);
+  };
+  const triggerAlert = () => {
+    setShowAlert(true);
+    setAnimateAlert(true);
+  };
 
   const getUserLocation = () => {
     if (!navigator.geolocation) {
@@ -48,6 +67,7 @@ const Services: React.FC = () => {
           if (error.code === error.PERMISSION_DENIED) {
             const permissionError = new Error('Location request was denied.');
             console.error(permissionError.message);
+            triggerAlert();
             return reject(permissionError);
           }
           console.error('Error getting location:', error);
@@ -96,9 +116,26 @@ const Services: React.FC = () => {
 
   const onSelectSearch = (data: string) => setSearchText(data);
 
+  const alertFormatting = `
+  fixed top-10 left-1/2 transform -translate-x-1/2 w-1/3 z-[1000] rounded-lg
+  transition-all duration-500 ease-in-out
+  ${animateAlert ? 'opacity-100' : 'opacity-0'};`;
+
   return (
     <>
       <Navbar />
+      {showAlert && (
+        <div className={alertFormatting}>
+          <Alert
+            message="Error"
+            description="Location Request was denied."
+            type="error"
+            closable
+            onClose={onClose}
+          />
+        </div>
+      )}
+
       <div className="flex flex-row justify-evenly gap-10 p-5">
         <AutoComplete
           options={options}
@@ -125,7 +162,6 @@ const Services: React.FC = () => {
             }
           />
         </AutoComplete>
-
         <Button type="primary" className="h-12">
           Search
         </Button>
