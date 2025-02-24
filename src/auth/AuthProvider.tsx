@@ -234,7 +234,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
       }
     } else {
       const isRefreshed = await SessionManager.refreshSession();
-      if (!isRefreshed) {
+      if (isRefreshed) {
+        try {
+          await getSession();
+        } catch {
+          SessionManager.clearSession();
+        }
+      } else {
         dispatch({
           type: 'AUTHENTICATE',
           payload: { isAuthenticated: false, user: null },

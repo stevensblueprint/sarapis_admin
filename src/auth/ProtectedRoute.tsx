@@ -24,7 +24,8 @@ const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
       </div>
     );
   }
-  return isAuthenticated ? element : <Navigate to="/login" />;
+
+  return isAuthenticated && sessionValid ? element : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;
