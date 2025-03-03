@@ -21,8 +21,10 @@ import Navbar from '../components/Navbar';
 import Response from '../interface/Response';
 import EmptyData from '../components/EmptyData';
 import ServiceForm from '../components/forms/ServiceForm';
+import { SampleServiceData } from '../data/SampleServiceData';
 
 const Services: React.FC = () => {
+  const sampleServiceArray: Service[] = [SampleServiceData];
   const [services, setServices] = useState<Service[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
@@ -139,7 +141,7 @@ const Services: React.FC = () => {
           )}
         </div>
         <div className="basis-1/3 grow-0">
-          <Map />
+          <Map services={sampleServiceArray} />
         </div>
       </div>
       <div className="flex flex-row justify-start p-10">
