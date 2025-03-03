@@ -38,13 +38,11 @@ const handleApiError = (error: unknown, defaultMessage: string): never => {
 };
 
 /**
- * Fetches all datasync sources from the API
- * @returns Promise containing the response with datasync sources
+ * Fetches all source csv's (zipped) from the API
+ * @returns Promise containing the response with source csv's
  * @throws {DatasyncError} If the request fails
  */
-export const getAllFiles = async (): Promise<
-  AxiosResponse<Response<DatasyncSource[]>>
-> => {
+export const getAllFiles = async (): Promise<AxiosResponse<Response<File>>> => {
   return apiClient
     .get(API_BASE_URL)
     .catch((error) => handleApiError(error, "Failed to fetch source csv's"));
@@ -55,7 +53,8 @@ export const getAllFiles = async (): Promise<
  * @param data datasync source to add
  * @returns Promise containing the response with created datasync source
  * @throws {DatasyncError} If the request fails
- */
+ * Not yet implemented
+
 export const addNewFiles = async (
   data: DatasyncSource
 ): Promise<AxiosResponse<DatasyncSource>> => {
@@ -63,3 +62,4 @@ export const addNewFiles = async (
     .post(API_BASE_URL, data)
     .catch((error) => handleApiError(error, 'Failed to create location'));
 };
+ */
