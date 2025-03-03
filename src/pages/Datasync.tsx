@@ -27,11 +27,24 @@ const Datasync = () => {
       setDownloadStatus('DOWNLOADING');
       const response = await getAllFiles();
       const data = response.data as Response<File>;
+
+      if (data.contents) {
+        const dataContents = data.contents;
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataContents);
+        link.download = 'datasync_export.zip';
+        link.click();
+      }
       setDownloadStatus('DONE');
-      // TODO: download returned file to local computer
+      setTimeout(() => {
+        setDownloadStatus('IDLE');
+      }, 3000);
     } catch (error) {
       setDownloadStatus('ERROR');
       console.log(error);
+      setTimeout(() => {
+        setDownloadStatus('IDLE');
+      }, 3000);
     }
   };
 
@@ -110,6 +123,7 @@ const Datasync = () => {
               className="mr-2"
               icon={<PlusOutlined />}
             />
+            {/* TODO: add modal for upload that allows user to either drag and drop or select files from computer */}
             <Button
               type="primary"
               shape="round"
