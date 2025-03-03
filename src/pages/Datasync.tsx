@@ -1,5 +1,11 @@
 import { Button, Typography, Modal } from 'antd';
-import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  DownloadOutlined,
+  PlusOutlined,
+  LoadingOutlined,
+  CheckOutlined,
+  WarningOutlined,
+} from '@ant-design/icons';
 import { getAllFiles, addNewFiles } from '../api/lib/datasync';
 import Response from '../interface/Response';
 import DatasyncTable from '../components/DatasyncTable';
@@ -8,20 +14,37 @@ import { useRef, useState } from 'react';
 
 const { Title, Text } = Typography;
 
-type DownloadStatus = 'IDLE' | 'LOADING' | 'DONE' | 'ERROR';
+type DownloadStatus = 'IDLE' | 'DOWNLOADING' | 'DONE' | 'ERROR';
 
 const Datasync = () => {
+  const [downloadStatus, setDownloadStatus] = useState<DownloadStatus>('IDLE');
   const [uploadData, setUploadData] = useState<DatasyncSource[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const getFiles = async () => {
     try {
+      setDownloadStatus('DOWNLOADING');
       const response = await getAllFiles();
       const data = response.data as Response<File>;
-      return data;
+      setDownloadStatus('DONE');
+      // TODO: download returned file to local computer
     } catch (error) {
+      setDownloadStatus('ERROR');
       console.log(error);
+    }
+  };
+
+  const getDownloadButtonImage = () => {
+    switch (downloadStatus) {
+      case 'IDLE':
+        return <DownloadOutlined />;
+      case 'DOWNLOADING':
+        return <LoadingOutlined />;
+      case 'DONE':
+        return <CheckOutlined />;
+      case 'ERROR':
+        return <WarningOutlined />;
     }
   };
 
@@ -90,8 +113,8 @@ const Datasync = () => {
             <Button
               type="primary"
               shape="round"
-              icon={<DownloadOutlined />}
-              onClick={getFiles()}
+              icon={getDownloadButtonImage()}
+              onClick={getFiles}
             />
           </div>
         </div>
