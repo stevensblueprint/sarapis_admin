@@ -1,17 +1,22 @@
-import { Button, Typography } from 'antd';
-import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Typography, Modal } from 'antd';
+import {
+  DownloadOutlined,
+  PlusOutlined,
+  SyncOutlined,
+} from '@ant-design/icons';
 import DatasyncTable from '../components/DatasyncTable';
 import DatasyncSource from '../interface/model/DatasyncSource';
 import { useRef, useState } from 'react';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const Datasync = () => {
   const [uploadData, setUploadData] = useState<DatasyncSource[]>([]);
   const [files, setFiles] = useState<File[]>([]);
+  const [loadingStatus, setLoadingStatus] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleButtonClick = () => {
+  const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
 
@@ -67,13 +72,18 @@ const Datasync = () => {
               style={{ display: 'none' }}
             />
             <Button
-              onClick={handleButtonClick}
+              onClick={handleUploadClick}
               type="primary"
               shape="round"
               className="mr-2"
               icon={<PlusOutlined />}
             />
-            <Button type="primary" shape="round" icon={<DownloadOutlined />} />
+            <Button
+              type="primary"
+              shape="round"
+              icon={<DownloadOutlined />}
+              loading
+            />
           </div>
         </div>
         <DatasyncTable dataSource={uploadData} />
