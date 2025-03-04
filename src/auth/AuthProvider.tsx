@@ -8,6 +8,7 @@ import {
 import { AuthContext, State, initialState } from './AuthContext';
 import { useCallback, useEffect, useReducer, PropsWithChildren } from 'react';
 import axios from 'axios';
+import { CognitoJwtVerifier } from 'aws-jwt-verify';
 
 export const UserPool = new CognitoUserPool({
   UserPoolId: process.env.REACT_APP_USER_POOL_ID || '',
@@ -60,14 +61,21 @@ export class SessionManager {
     const tokenString = localStorage.getItem(this.TOKEN_KEY);
     return tokenString ? JSON.parse(tokenString) : null;
   }
+  private static verifier = CognitoJwtVerifier.create({
+    userPoolId: process.env.REACT_APP_USER_POOL_ID || '',
+    clientId: process.env.REACT_APP_CLIENT_ID || '',
+    tokenUse: 'id',
+  });
 
-  static isSessionValid(): boolean {
+  static async isSessionValid(): Promise<boolean> {
     const tokens = this.getStoredTokens();
-    if (!tokens) {
-      return false;
-    }
-    // TODO: Check if the token is expired
-    return true;
+    return this.verifier
+      .verify(tokens.idToken)
+      .then(() => true)
+      .catch((e) => {
+        console.error('Invalid token', e);
+        return false;
+      });
   }
 
   static setupAxiosInterceptors() {
@@ -215,7 +223,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   );
 
   const initial = useCallback(async () => {
-    if (SessionManager.isSessionValid()) {
+    if (await SessionManager.isSessionValid()) {
       try {
         await getSession();
       } catch {
@@ -223,7 +231,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
       }
     } else {
       const isRefreshed = await SessionManager.refreshSession();
-      if (!isRefreshed) {
+      if (isRefreshed) {
+        try {
+          await getSession();
+        } catch {
+          SessionManager.clearSession();
+        }
+      } else {
         dispatch({
           type: 'AUTHENTICATE',
           payload: { isAuthenticated: false, user: null },
