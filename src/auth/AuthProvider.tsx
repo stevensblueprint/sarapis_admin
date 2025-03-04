@@ -69,16 +69,12 @@ export class SessionManager {
 
   static async isSessionValid(): Promise<boolean> {
     const tokens = this.getStoredTokens();
-    if (!tokens) {
-      return false;
-    }
-    try {
-      await this.verifier.verify(tokens.idToken);
-      return true;
-    } catch (e) {
-      console.error('Invalid token', e);
-      return false;
-    }
+    return this.verifier.verify(tokens.idToken)
+      .then(() => true)
+      .catch(e => {
+        console.error('Invalid token', e);
+        return false;
+      });
   }
 
   static setupAxiosInterceptors() {
