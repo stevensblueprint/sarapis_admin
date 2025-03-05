@@ -75,7 +75,8 @@ const Datasync = () => {
 
   const handleUploadedData = (newFiles: File[]) => {
     const now: Date = new Date();
-    const currentTime: string = now.toLocaleTimeString();
+    const currentTime: string =
+      now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
     const fileNames: string[] = [];
     let fileSizes = 0;
 
@@ -91,11 +92,14 @@ const Datasync = () => {
 
     const newDataSource: DatasyncSource = {
       id: '0',
+      uuid: 'test user',
       request_type: 'Import',
+      status: 'Failed',
       timestamp: currentTime,
       format: 'CSV',
-      files: fileNames.join(', '),
+      file_names: fileNames.join(', '),
       size: convertedFileSizes,
+      status_message: 'files did not upload successfully',
     };
 
     setUploadData([newDataSource]);
