@@ -5,7 +5,7 @@ const columns = [
   {
     title: 'ID',
     dataIndex: 'id',
-    width: 150,
+    width: 100,
   },
   {
     title: 'Request Type',
@@ -13,9 +13,14 @@ const columns = [
     width: 150,
   },
   {
+    title: 'Status',
+    dataIndex: 'status',
+    width: 130,
+  },
+  {
     title: 'Timestamp',
     dataIndex: 'timestamp',
-    width: 150,
+    width: 200,
   },
   {
     title: 'Format',
