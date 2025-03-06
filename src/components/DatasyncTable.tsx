@@ -1,4 +1,4 @@
-import DatasyncSource from '../interface/model/DatasyncSource';
+import DatasyncSource from '../interface/model/Datasync';
 import { Table, Modal, TableProps } from 'antd';
 import { useState } from 'react';
 

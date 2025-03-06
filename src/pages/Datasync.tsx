@@ -7,10 +7,15 @@ import {
   WarningOutlined,
   DeleteOutlined,
 } from '@ant-design/icons';
-import { getAllFiles, addNewFiles } from '../api/lib/datasync';
+import {
+  getAllFiles,
+  addNewFiles,
+  getAllActions,
+  deleteFiles,
+} from '../api/lib/datasync';
 import Response from '../interface/Response';
 import DatasyncTable from '../components/DatasyncTable';
-import DatasyncSource from '../interface/model/DatasyncSource';
+import DatasyncSource from '../interface/model/Datasync';
 import { useRef, useState } from 'react';
 
 const { Title, Text } = Typography;
