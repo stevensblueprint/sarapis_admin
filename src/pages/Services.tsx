@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEffect, useState } from 'react';
 import { getAllServices, getTextSearchServices } from '../api/lib/services';
 import type { CascaderProps, AutoCompleteProps, SelectProps } from 'antd';
