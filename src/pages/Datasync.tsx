@@ -22,10 +22,17 @@ const Datasync = () => {
   const [uploadData, setUploadData] = useState<DatasyncSource[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [deleteButtonStatus, setDeleteButtonStatus] = useState<boolean>(true);
+  const [idsToDelete, setIdsToDelete] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleRowsSelected = (isRowSelected: boolean) => {
-    setDeleteButtonStatus(isRowSelected);
+  const handleRowsSelected = (rowsSelected: string[]) => {
+    setIdsToDelete(rowsSelected);
+    console.log(rowsSelected);
+    if (rowsSelected.length > 0) {
+      setDeleteButtonStatus(false);
+    } else {
+      setDeleteButtonStatus(true);
+    }
   };
 
   const getFiles = async () => {

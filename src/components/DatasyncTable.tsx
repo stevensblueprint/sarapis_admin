@@ -9,8 +9,8 @@ const DatasyncTable = ({
   dataSource,
   rowsSelected,
 }: {
-  dataSource: DatasyncSource[] | null;
-  rowsSelected: (isRowSelected: boolean) => void;
+  dataSource: DatasyncSource[] | undefined;
+  rowsSelected: (rowsSelected: string[]) => void;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -87,14 +87,15 @@ const DatasyncTable = ({
     },
   ];
 
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    setSelectedRowKeys(newSelectedRowKeys);
-    rowsSelected(selectedRowKeys.length > 0);
-  };
-
   const rowSelection: TableRowSelection<DatasyncSource> = {
     selectedRowKeys,
-    onChange: onSelectChange,
+    onChange: (
+      selectedRowKeys: React.Key[],
+      selectedRows: DatasyncSource[]
+    ) => {
+      setSelectedRowKeys(selectedRowKeys);
+      rowsSelected(selectedRows.map((row) => row.id));
+    },
     getCheckboxProps: (record: DatasyncSource) => ({
       disabled: record.request_type === 'Export',
     }),
