@@ -15,7 +15,7 @@ import {
 } from '../api/lib/datasync';
 import Response from '../interface/Response';
 import DatasyncTable from '../components/DatasyncTable';
-import DatasyncSource from '../interface/model/Datasync';
+import DatasyncTableRow from '../interface/model/Datasync';
 import { useRef, useState } from 'react';
 
 const { Title, Text } = Typography;
@@ -24,7 +24,7 @@ type DownloadStatus = 'IDLE' | 'DOWNLOADING' | 'DONE' | 'ERROR';
 
 const Datasync = () => {
   const [downloadStatus, setDownloadStatus] = useState<DownloadStatus>('IDLE');
-  const [uploadData, setUploadData] = useState<DatasyncSource[]>([]);
+  const [actionHistory, setActionHistory] = useState<DatasyncTableRow[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [deleteButtonStatus, setDeleteButtonStatus] = useState<boolean>(true);
   const [idsToDelete, setIdsToDelete] = useState<string[]>([]);
@@ -43,7 +43,12 @@ const Datasync = () => {
   const getFiles = async () => {
     try {
       setDownloadStatus('DOWNLOADING');
-      const response = await getAllFiles();
+      const response = await getAllFiles({
+        uuid: 'test name',
+        time_range: 'test',
+        file_type: 'test',
+        tables: [],
+      });
       const data = response.data as Response<File>;
 
       if (data.contents) {
@@ -108,7 +113,7 @@ const Datasync = () => {
         ? (fileSizes / 1000).toFixed(2).toString() + ' KB'
         : (fileSizes / 1000000).toFixed(2).toString() + ' MB';
 
-    const newDataSource: DatasyncSource = {
+    const newDataSource: DatasyncTableRow = {
       id: '0',
       uuid: 'test user',
       request_type: 'Import',
@@ -120,7 +125,7 @@ const Datasync = () => {
       status_message: 'files did not upload successfully',
     };
 
-    setUploadData([newDataSource]);
+    setActionHistory([newDataSource]);
   };
 
   return (
@@ -131,13 +136,6 @@ const Datasync = () => {
             Data Sync
           </Title>
           <div>
-            <Button
-              type="primary"
-              shape="round"
-              className="mr-2"
-              icon={<DeleteOutlined />}
-              disabled={deleteButtonStatus}
-            />
             <input
               type="file"
               multiple
@@ -146,23 +144,30 @@ const Datasync = () => {
               style={{ display: 'none' }}
             />
             <Button
+              className="mr-2"
               onClick={handleUploadClick}
               type="primary"
               shape="round"
-              className="mr-2"
               icon={<PlusOutlined />}
             />
             {/* TODO: add modal for upload that allows user to either drag and drop or select files from computer */}
             <Button
+              className="mr-2"
               type="primary"
               shape="round"
               icon={getDownloadButtonImage()}
               onClick={getFiles}
             />
+            <Button
+              shape="round"
+              icon={<DeleteOutlined />}
+              disabled={deleteButtonStatus}
+              danger
+            />
           </div>
         </div>
         <DatasyncTable
-          dataSource={uploadData}
+          dataSource={actionHistory}
           rowsSelected={handleRowsSelected}
         />
       </div>

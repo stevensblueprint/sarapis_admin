@@ -1,4 +1,4 @@
-interface DatasyncSource {
+interface DatasyncTableRow {
   id: string; // Given by database
   uuid: string; // Who initiated the action
   request_type: string; // Import or Export
@@ -10,4 +10,4 @@ interface DatasyncSource {
   size: string; // Size of the dataset
 }
 
-export default DatasyncSource;
+export default DatasyncTableRow;

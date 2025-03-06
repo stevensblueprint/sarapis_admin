@@ -1,4 +1,4 @@
-import DatasyncSource from '../interface/model/Datasync';
+import DatasyncTableRow from '../interface/model/Datasync';
 import { Table, Modal, TableProps } from 'antd';
 import { useState } from 'react';
 
@@ -9,7 +9,7 @@ const DatasyncTable = ({
   dataSource,
   rowsSelected,
 }: {
-  dataSource: DatasyncSource[] | undefined;
+  dataSource: DatasyncTableRow[] | undefined;
   rowsSelected: (rowsSelected: string[]) => void;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,7 +43,7 @@ const DatasyncTable = ({
       title: 'Status',
       dataIndex: 'status',
       width: 130,
-      render: (status: string, record: DatasyncSource) => {
+      render: (status: string, record: DatasyncTableRow) => {
         return status !== 'Success' ? (
           <div>
             <span
@@ -87,16 +87,16 @@ const DatasyncTable = ({
     },
   ];
 
-  const rowSelection: TableRowSelection<DatasyncSource> = {
+  const rowSelection: TableRowSelection<DatasyncTableRow> = {
     selectedRowKeys,
     onChange: (
       selectedRowKeys: React.Key[],
-      selectedRows: DatasyncSource[]
+      selectedRows: DatasyncTableRow[]
     ) => {
       setSelectedRowKeys(selectedRowKeys);
       rowsSelected(selectedRows.map((row) => row.id));
     },
-    getCheckboxProps: (record: DatasyncSource) => ({
+    getCheckboxProps: (record: DatasyncTableRow) => ({
       disabled: record.request_type === 'Export',
     }),
   };
