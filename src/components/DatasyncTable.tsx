@@ -1,13 +1,19 @@
 import DatasyncSource from '../interface/model/DatasyncSource';
-import { Table, Modal } from 'antd';
+import { Table, Modal, TableProps } from 'antd';
 import { useState } from 'react';
+
+type TableRowSelection<T extends object = object> =
+  TableProps<T>['rowSelection'];
 
 const DatasyncTable = ({
   dataSource,
+  rowsSelected,
 }: {
   dataSource: DatasyncSource[] | null;
+  rowsSelected: (isRowSelected: boolean) => void;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -81,9 +87,26 @@ const DatasyncTable = ({
     },
   ];
 
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+    rowsSelected(selectedRowKeys.length > 0);
+  };
+
+  const rowSelection: TableRowSelection<DatasyncSource> = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+    getCheckboxProps: (record: DatasyncSource) => ({
+      disabled: record.request_type === 'Export',
+    }),
+  };
+
   return (
     <div>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table
+        rowSelection={rowSelection}
+        dataSource={dataSource}
+        columns={columns}
+      />
     </div>
   );
 };

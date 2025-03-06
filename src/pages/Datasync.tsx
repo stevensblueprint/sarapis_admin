@@ -5,6 +5,7 @@ import {
   LoadingOutlined,
   CheckOutlined,
   WarningOutlined,
+  DeleteOutlined,
 } from '@ant-design/icons';
 import { getAllFiles, addNewFiles } from '../api/lib/datasync';
 import Response from '../interface/Response';
@@ -20,7 +21,12 @@ const Datasync = () => {
   const [downloadStatus, setDownloadStatus] = useState<DownloadStatus>('IDLE');
   const [uploadData, setUploadData] = useState<DatasyncSource[]>([]);
   const [files, setFiles] = useState<File[]>([]);
+  const [deleteButtonStatus, setDeleteButtonStatus] = useState<boolean>(true);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleRowsSelected = (isRowSelected: boolean) => {
+    setDeleteButtonStatus(isRowSelected);
+  };
 
   const getFiles = async () => {
     try {
@@ -113,6 +119,13 @@ const Datasync = () => {
             Data Sync
           </Title>
           <div>
+            <Button
+              type="primary"
+              shape="round"
+              className="mr-2"
+              icon={<DeleteOutlined />}
+              disabled={deleteButtonStatus}
+            />
             <input
               type="file"
               multiple
@@ -136,7 +149,10 @@ const Datasync = () => {
             />
           </div>
         </div>
-        <DatasyncTable dataSource={uploadData} />
+        <DatasyncTable
+          dataSource={uploadData}
+          rowsSelected={handleRowsSelected}
+        />
       </div>
     </div>
   );
