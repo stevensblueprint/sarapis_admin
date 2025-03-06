@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getAllServices, getTextSearchServices } from '../api/lib/services';
-import type { CascaderProps, AutoCompleteProps } from 'antd';
-import { Cascader, Dropdown, Space, AutoComplete, Button } from 'antd';
+import type { CascaderProps, AutoCompleteProps, SelectProps } from 'antd';
+import { Cascader, Dropdown, Space, AutoComplete, Button, Select } from 'antd';
 import {
   ShareAltOutlined,
   DownloadOutlined,
@@ -51,11 +51,11 @@ const Services: React.FC = () => {
     console.log(searchText);
   };
 
-  const onChangeSortBy: CascaderProps<Option>['onChange'] = (value) => {
+  const onChangeSortBy: SelectProps<Option>['onChange'] = (value) => {
     console.log(value);
   };
 
-  const onChangeResultsPerPage: CascaderProps<Option>['onChange'] = (value) => {
+  const onChangeResultsPerPage: SelectProps<Option>['onChange'] = (value) => {
     console.log(value);
   };
 
@@ -71,7 +71,7 @@ const Services: React.FC = () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-row justify-evenly gap-10 p-5">
+      <div className="flex flex-row justify-center gap-10 p-5">
         <AutoComplete
           options={options}
           onSelect={onSelectSearch}
@@ -97,17 +97,20 @@ const Services: React.FC = () => {
             onChange={onChangeTypesOfService}
             multiple
             placeholder="Types of Services"
+            className="h-10"
           />
-          <Cascader
+          <Select
             options={sortByOptions}
             onChange={onChangeSortBy}
             placeholder="Sort By"
+            style={{ width: 220 }}
             className="h-10"
           />
-          <Cascader
+          <Select
             options={resulsPerPageOptions}
             onChange={onChangeResultsPerPage}
             placeholder="Results Per Page"
+            style={{ width: 160 }}
             className="h-10"
           />
           <ServiceForm />
