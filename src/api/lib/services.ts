@@ -14,7 +14,7 @@ export class ServiceError extends Error {
   }
 }
 
-const API_BASE_URL = '/api/services';
+const API_BASE_URL = '/services';
 const apiClient = getApiClient(process.env.REACT_APP_API_BASE_URL || '');
 
 const handleApiError = (error: unknown, defaultMessage: string): never => {

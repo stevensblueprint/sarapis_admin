@@ -1,6 +1,16 @@
 import { JSX } from 'react';
-import { CaretRightOutlined } from '@ant-design/icons';
-import { Collapse, Empty, Form, FormInstance, Select, Table } from 'antd';
+import { CaretRightOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  Collapse,
+  Empty,
+  Form,
+  FormInstance,
+  Select,
+  Table,
+  Button,
+  Row,
+  Col,
+} from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
 import { ColumnsType } from 'antd/es/table';
 
@@ -15,7 +25,8 @@ interface CollapsibleFormSelectTableProps<T> {
   parentForm: FormInstance;
   options: DefaultOptionType[];
   tableColumns: ColumnsType<T>;
-  dataSource: T[];
+  data: T[];
+  setter: React.Dispatch<React.SetStateAction<T[]>>;
 }
 
 const CollapsibleFormSelectTable = <T,>({
@@ -29,8 +40,24 @@ const CollapsibleFormSelectTable = <T,>({
   parentForm,
   options,
   tableColumns,
-  dataSource,
+  data,
 }: CollapsibleFormSelectTableProps<T>) => {
+  const handleAddClick = async () => {
+    try {
+      console.log(parentForm);
+      const values = await parentForm.validateFields([dropdownName]);
+      const selectedOption =
+        typeof values[dropdownName] === 'object'
+          ? values[dropdownName].value
+          : values[dropdownName];
+      if (selectedOption) {
+        parentForm.resetFields([dropdownName]);
+      }
+    } catch (error) {
+      console.error('Validation failed:', error);
+    }
+  };
+
   return (
     <div>
       <Collapse
@@ -48,29 +75,46 @@ const CollapsibleFormSelectTable = <T,>({
             key: '2',
             label: selectLabel,
             children: (
-              <div>
-                <Form form={parentForm}>
-                  <Form.Item
-                    label={dropdownLabel}
-                    name={dropdownName}
-                    rules={[{ required: true, message: 'Required field!' }]}
-                  >
-                    <Select
-                      showSearch
-                      placeholder={dropdownPlaceholder}
-                      options={options}
-                    />
-                  </Form.Item>
-                </Form>
-              </div>
+              <Form form={parentForm}>
+                <Form.Item
+                  label={dropdownLabel}
+                  name={dropdownName}
+                  rules={[{ required: true, message: 'Required field!' }]}
+                >
+                  <Row gutter={8}>
+                    <Col flex="auto">
+                      <Form.Item
+                        name={dropdownName}
+                        rules={[{ required: true, message: 'Required field!' }]}
+                        style={{ margin: 0 }}
+                      >
+                        <Select
+                          showSearch
+                          placeholder={dropdownPlaceholder}
+                          options={options}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col>
+                      <Button icon={<PlusOutlined />} onClick={handleAddClick}>
+                        Add
+                      </Button>
+                    </Col>
+                  </Row>
+                </Form.Item>
+              </Form>
             ),
           },
         ]}
       />
       <Table
+        rowKey={(_, index) => index as number}
         pagination={{ pageSize: 5 }}
-        columns={tableColumns}
-        dataSource={dataSource}
+        columns={tableColumns.map((column, index) => ({
+          ...column,
+          key: column.key || index.toString(),
+        }))}
+        dataSource={data}
         locale={{
           emptyText: <Empty description={`No ${emptyText} available`} />,
         }}

@@ -7,18 +7,25 @@ import Attribute from './Attribute';
 import Metadata from './Metadata';
 import Accessibility from './Accessibility';
 
+export enum LocationType {
+  virtual = 'virtual',
+  physical = 'physical',
+  postal = 'postal',
+}
+
 interface Location {
   id: string;
-  locationType: string;
-  url: string;
-  name: string;
-  alternateName: string;
-  description: string;
-  transportation: string;
+  organizationId?: string | null;
+  locationType: LocationType | string;
+  url?: string | null;
+  name?: string | null;
+  alternateName?: string | null;
+  description?: string | null;
+  transportation?: string | null;
   latitude: number;
   longitude: number;
-  externalIdentifier: string;
-  externalIdentifierType: string;
+  externalIdentifier?: string | null;
+  externalIdentifierType?: string | null;
   languages: Language[];
   addresses: Address[];
   contacts: Contact[];

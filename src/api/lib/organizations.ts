@@ -14,7 +14,7 @@ export class OrganizationError extends Error {
   }
 }
 
-const API_BASE_URL = '/api/organizations';
+const API_BASE_URL = '/organizations';
 const apiClient = getApiClient(process.env.REACT_APP_API_BASE_URL || '');
 
 const handleApiError = (error: unknown, defaultMessage: string): never => {
