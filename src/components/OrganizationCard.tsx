@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Organization from '../interface/model/Organization';
 import { Card, Col } from 'antd';
 
@@ -8,10 +9,12 @@ interface OrganizationCardProps {
 const OrganizationCard = ({ organization }: OrganizationCardProps) => {
   return (
     <Col span={7}>
-      <Card title={organization.name}>
-        <p>{organization.description}</p>
-        <p>Number of Services: {organization.services.length}</p>
-      </Card>
+      <Link to={`/organizations/${organization.id}`}>
+        <Card title={organization.name} hoverable>
+          <p>{organization.description}</p>
+          <p>Number of Services: {organization.services.length}</p>
+        </Card>
+      </Link>
     </Col>
   );
 };
