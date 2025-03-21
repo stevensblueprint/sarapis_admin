@@ -63,3 +63,17 @@ export const getTextSearchOrganizations = async (
     .get(`${API_BASE_URL}?query=${query}`)
     .catch((error) => handleApiError(error, 'Failed to fetch organizations'));
 };
+
+/**
+ * Fetches an organization by its ID
+ * @param id - Organization ID
+ * @returns Promise resolving to the API response
+ * @throws {OrganizationError} When the API request fails
+ */
+export const getOrganizationById = async (
+  id: string
+): Promise<AxiosResponse<Organization>> => {
+  return apiClient
+    .get(`${API_BASE_URL}/${id}`)
+    .catch((error) => handleApiError(error, 'Failed to fetch organization'));
+};
