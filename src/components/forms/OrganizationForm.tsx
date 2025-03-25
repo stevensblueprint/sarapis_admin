@@ -229,10 +229,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
             label: location.name,
           }))}
           tableColumns={locationTableColumns || []}
-          setter={setLocations}
-          data={locations.filter(
-            (location) => location.organizationId === form.getFieldValue('id')
-          )}
+          dataSource={locations}
         />
       ),
     },
@@ -253,8 +250,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
             label: phone.number,
           }))}
           tableColumns={phoneTableColumns || []}
-          setter={setPhones}
-          data={phones}
+          dataSource={phones}
         />
       ),
     },
@@ -277,8 +273,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
             label: contact.name,
           }))}
           tableColumns={contactTableColumns || []}
-          setter={setContacts}
-          data={contacts}
+          dataSource={contacts}
         />
       ),
     },
