@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import getApiClient from '../apiClient';
 import Response from '../../interface/Response';
 import DatasyncSource from '../../interface/model/Datasync';
+import { blob } from 'stream/consumers';
 
 export class DatasyncError extends Error {
   statusCode?: number;
@@ -43,13 +44,16 @@ const handleApiError = (error: unknown, defaultMessage: string): never => {
  * @throws {DatasyncError} If the request fails
  */
 export const getAllFiles = async (data: {
-  uuid: string;
-  time_range: string;
-  file_type: string;
-  tables: string[];
-}): Promise<AxiosResponse<Response<File>>> => {
+  format: string;
+  user_id: string;
+}): Promise<AxiosResponse<Blob>> => {
   return apiClient
-    .post(API_BASE_URL + '/export', data)
+    .post('/export', data, {
+      responseType: 'blob',
+      headers: {
+        Accept: 'application/zip',
+      },
+    })
     .catch((error) => handleApiError(error, "Failed to fetch source csv's"));
 };
 

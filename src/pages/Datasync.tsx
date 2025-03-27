@@ -44,20 +44,19 @@ const Datasync = () => {
     try {
       setDownloadStatus('DOWNLOADING');
       const response = await getAllFiles({
-        uuid: 'test name',
-        time_range: 'test',
-        file_type: 'test',
-        tables: [],
+        format: 'PDF',
+        user_id: 'test',
       });
-      const data = response.data as Response<File>;
+      const blob = new Blob([response.data], { type: 'application/zip' });
 
-      if (data.contents) {
-        const dataContents = data.contents;
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(dataContents);
-        link.download = 'datasync_export.zip';
-        link.click();
-      }
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'datasync_export.zip';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
       setDownloadStatus('DONE');
       setTimeout(() => {
         setDownloadStatus('IDLE');
@@ -116,8 +115,8 @@ const Datasync = () => {
     const newDataSource: DatasyncTableRow = {
       id: '0',
       uuid: 'test user',
-      request_type: 'Import',
-      status: 'Failed',
+      request_type: 'Export',
+      status: 'Success',
       timestamp: currentTime,
       format: 'CSV',
       file_names: fileNames.join(', '),
