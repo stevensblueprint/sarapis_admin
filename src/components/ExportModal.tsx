@@ -5,7 +5,6 @@ import {
   LoadingOutlined,
   CheckOutlined,
   WarningOutlined,
-  CloseOutlined,
 } from '@ant-design/icons';
 import { getAllFiles } from '../api/lib/datasync';
 import type { SelectProps } from 'antd';
@@ -37,6 +36,7 @@ const ExportModal = ({
   useEffect(() => {
     if (showModal) {
       setDateRange(null);
+      setSelectedTableOptions([]);
     }
   }, [showModal]);
 
