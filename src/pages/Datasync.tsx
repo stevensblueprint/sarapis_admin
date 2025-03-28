@@ -3,27 +3,15 @@ import { Button, Typography } from 'antd';
 import {
   DownloadOutlined,
   PlusOutlined,
-  LoadingOutlined,
-  CheckOutlined,
-  WarningOutlined,
   DeleteOutlined,
 } from '@ant-design/icons';
-import {
-  getAllFiles,
-  addNewFiles,
-  getAllActions,
-  deleteFiles,
-} from '../api/lib/datasync';
 import DatasyncTable from '../components/DatasyncTable';
 import DatasyncTableRow from '../interface/model/Datasync';
 import ExportModal from '../components/ExportModal';
 
-const { Title, Text } = Typography;
-
-type DownloadStatus = 'IDLE' | 'DOWNLOADING' | 'DONE' | 'ERROR';
+const { Title } = Typography;
 
 const Datasync = () => {
-  const [downloadStatus, setDownloadStatus] = useState<DownloadStatus>('IDLE');
   const [actionHistory, setActionHistory] = useState<DatasyncTableRow[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [deleteButtonStatus, setDeleteButtonStatus] = useState<boolean>(true);
@@ -38,49 +26,6 @@ const Datasync = () => {
       setDeleteButtonStatus(false);
     } else {
       setDeleteButtonStatus(true);
-    }
-  };
-
-  const getFiles = async () => {
-    try {
-      setDownloadStatus('DOWNLOADING');
-      const response = await getAllFiles({
-        format: 'PDF',
-        user_id: 'test',
-      });
-      const blob = new Blob([response.data], { type: 'application/zip' });
-
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'datasync_export.zip';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      setDownloadStatus('DONE');
-      setTimeout(() => {
-        setDownloadStatus('IDLE');
-      }, 3000);
-    } catch (error) {
-      setDownloadStatus('ERROR');
-      console.log(error);
-      setTimeout(() => {
-        setDownloadStatus('IDLE');
-      }, 3000);
-    }
-  };
-
-  const getDownloadButtonImage = () => {
-    switch (downloadStatus) {
-      case 'IDLE':
-        return <DownloadOutlined />;
-      case 'DOWNLOADING':
-        return <LoadingOutlined />;
-      case 'DONE':
-        return <CheckOutlined />;
-      case 'ERROR':
-        return <WarningOutlined />;
     }
   };
 
@@ -155,7 +100,7 @@ const Datasync = () => {
               className="mr-2"
               type="primary"
               shape="round"
-              icon={getDownloadButtonImage()}
+              icon={<DownloadOutlined />}
               onClick={() => setShowExportModal(true)}
             />
             <ExportModal
