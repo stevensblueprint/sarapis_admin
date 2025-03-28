@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Button, Typography, Modal } from 'antd';
+import { Button, Typography, Modal, DatePicker } from 'antd';
 
 const { Title } = Typography;
+const { RangePicker } = DatePicker;
 
 const ExportModal = ({
   showModal,
@@ -10,6 +11,18 @@ const ExportModal = ({
   showModal: boolean;
   closeModal: () => void;
 }) => {
+  const [dateRange, setDateRange] = useState<[string, string] | null>(null);
+
+  useEffect(() => {
+    if (showModal) {
+      setDateRange(null);
+    }
+  }, [showModal]);
+
+  const handleDateChange = (dates, dateString: [string, string]) => {
+    setDateRange(dateString);
+  };
+
   return (
     <div>
       <Modal
@@ -20,7 +33,10 @@ const ExportModal = ({
       >
         <div className="p-8">
           <Title level={4}>Time Range</Title>
-          <Title level={4}>Tables</Title>
+          <RangePicker onChange={handleDateChange} />
+          <Title level={4} className="mt-4">
+            Tables
+          </Title>
         </div>
       </Modal>
     </div>

@@ -14,7 +14,6 @@ import {
   getAllActions,
   deleteFiles,
 } from '../api/lib/datasync';
-import Response from '../interface/Response';
 import DatasyncTable from '../components/DatasyncTable';
 import DatasyncTableRow from '../interface/model/Datasync';
 import ExportModal from '../components/ExportModal';
