@@ -31,6 +31,7 @@ const ExportModal = ({
 
   const handleDateChange = (dates, dateString: [string, string]) => {
     setDateRange(dateString);
+    console.log(dateString);
   };
 
   const getButtonIcon = () => {
@@ -95,7 +96,7 @@ const ExportModal = ({
       >
         <div className="p-8">
           <Title level={4}>Time Range</Title>
-          <RangePicker onChange={handleDateChange} />
+          <RangePicker format="MMMM DD, YYYY" onChange={handleDateChange} />
           <Title level={4} className="mt-4">
             Tables
           </Title>
