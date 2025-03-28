@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+svg {
+  vertical-align: baseline;
+}
+
 /*
 @layer base {
   * {

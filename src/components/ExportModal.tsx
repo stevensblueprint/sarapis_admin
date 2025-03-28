@@ -55,7 +55,7 @@ const ExportModal = ({
       case 'IDLE':
         return <DownloadOutlined />;
       case 'DOWNLOADING':
-        return <LoadingOutlined className="mb-2" />;
+        return <LoadingOutlined />;
       case 'DONE':
         return <CheckOutlined />;
       case 'ERROR':
