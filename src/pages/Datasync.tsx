@@ -1,4 +1,5 @@
-import { Button, Typography, Modal } from 'antd';
+import { useRef, useState } from 'react';
+import { Button, Typography } from 'antd';
 import {
   DownloadOutlined,
   PlusOutlined,
@@ -16,7 +17,7 @@ import {
 import Response from '../interface/Response';
 import DatasyncTable from '../components/DatasyncTable';
 import DatasyncTableRow from '../interface/model/Datasync';
-import { useRef, useState } from 'react';
+import ExportModal from '../components/ExportModal';
 
 const { Title, Text } = Typography;
 
@@ -29,6 +30,7 @@ const Datasync = () => {
   const [deleteButtonStatus, setDeleteButtonStatus] = useState<boolean>(true);
   const [idsToDelete, setIdsToDelete] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   const handleRowsSelected = (rowsSelected: string[]) => {
     setIdsToDelete(rowsSelected);
@@ -134,7 +136,7 @@ const Datasync = () => {
           <Title className="mb-4" level={3}>
             Data Sync
           </Title>
-          <div>
+          <div className="flex flex-row">
             <input
               type="file"
               multiple
@@ -155,7 +157,11 @@ const Datasync = () => {
               type="primary"
               shape="round"
               icon={getDownloadButtonImage()}
-              onClick={getFiles}
+              onClick={() => setShowExportModal(true)}
+            />
+            <ExportModal
+              showModal={showExportModal}
+              closeModal={() => setShowExportModal(false)}
             />
             <Button
               shape="round"
