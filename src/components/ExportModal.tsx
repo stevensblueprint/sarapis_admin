@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Typography, Modal, DatePicker, Select } from 'antd';
+import { Button, Typography, Modal, DatePicker, Select, Dropdown } from 'antd';
 import {
   DownloadOutlined,
   LoadingOutlined,
@@ -7,7 +7,7 @@ import {
   WarningOutlined,
 } from '@ant-design/icons';
 import { getAllFiles } from '../api/lib/datasync';
-import type { SelectProps } from 'antd';
+import type { SelectProps, MenuProps } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 
 const { Title } = Typography;
@@ -38,6 +38,17 @@ const ExportModal = ({
   const [selectedTableOptions, setSelectedTableOptions] = useState<
     (string | number | null | undefined)[]
   >([]);
+
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: <a onClick={() => getFiles('CSV')}>CSV</a>,
+    },
+    {
+      key: '2',
+      label: <a onClick={() => getFiles('PDF')}>PDF</a>,
+    },
+  ];
 
   useEffect(() => {
     if (showModal) {
@@ -75,12 +86,12 @@ const ExportModal = ({
     }
   };
 
-  const getFiles = async () => {
+  const getFiles = async (format: string) => {
     try {
       console.log(selectedTableOptions);
       setDownloadStatus('DOWNLOADING');
       const response = await getAllFiles({
-        format: 'PDF',
+        format: format,
         user_id: 'test',
       });
       const blob = new Blob([response.data], { type: 'application/zip' });
@@ -113,15 +124,16 @@ const ExportModal = ({
         onCancel={closeModal}
         title="Export Data"
         footer={
-          <Button
-            type="primary"
-            loading={downloadStatus == 'DOWNLOADING'}
-            icon={getButtonIcon()}
-            onClick={getFiles}
-            disabled={dateRange == null || selectedTableOptions.length == 0}
-          >
-            Export
-          </Button>
+          <Dropdown menu={{ items }}>
+            <Button
+              type="primary"
+              loading={downloadStatus == 'DOWNLOADING'}
+              icon={getButtonIcon()}
+              disabled={dateRange == null || selectedTableOptions.length == 0}
+            >
+              Export
+            </Button>
+          </Dropdown>
         }
       >
         <div className="p-8">
