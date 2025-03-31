@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import { getAllFiles } from '../api/lib/datasync';
 import type { SelectProps, MenuProps } from 'antd';
-import dayjs, { Dayjs } from 'dayjs';
+import { Dayjs } from 'dayjs';
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -42,11 +42,11 @@ const ExportModal = ({
   const items: MenuProps['items'] = [
     {
       key: '1',
-      label: <a onClick={() => getFiles('CSV')}>CSV</a>,
+      label: <span onClick={() => getFiles('CSV')}>CSV</span>,
     },
     {
       key: '2',
-      label: <a onClick={() => getFiles('PDF')}>PDF</a>,
+      label: <span onClick={() => getFiles('PDF')}>PDF</span>,
     },
   ];
 
@@ -124,7 +124,10 @@ const ExportModal = ({
         onCancel={closeModal}
         title="Export Data"
         footer={
-          <Dropdown menu={{ items }}>
+          <Dropdown
+            menu={{ items }}
+            disabled={dateRange == null || selectedTableOptions.length == 0}
+          >
             <Button
               type="primary"
               loading={downloadStatus == 'DOWNLOADING'}
