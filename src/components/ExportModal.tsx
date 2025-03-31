@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import { getAllFiles } from '../api/lib/datasync';
 import type { SelectProps } from 'antd';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -28,7 +28,12 @@ const ExportModal = ({
   showModal: boolean;
   closeModal: () => void;
 }) => {
-  const [dateRange, setDateRange] = useState<[string, string] | null>(null);
+  const [dateRange, setDateRange] = useState<
+    [start: Dayjs | null, end: Dayjs | null] | null
+  >(null);
+  const [dateRangeString, setDateRangeString] = useState<
+    [string | null, string | null] | null
+  >(null);
   const [downloadStatus, setDownloadStatus] = useState<DownloadStatus>('IDLE');
   const [selectedTableOptions, setSelectedTableOptions] = useState<
     (string | number | null | undefined)[]
@@ -37,12 +42,18 @@ const ExportModal = ({
   useEffect(() => {
     if (showModal) {
       setDateRange(null);
+      setDateRangeString(null);
       setSelectedTableOptions([]);
     }
   }, [showModal]);
 
-  const handleDateChange = (dates, dateString: [string, string]) => {
-    setDateRange(dateString);
+  const handleDateChange = (
+    dates: [start: Dayjs | null, end: Dayjs | null] | null,
+    dateString: [string | null, string | null] | null
+  ) => {
+    setDateRange(dates);
+    setDateRangeString(dateString);
+    console.log(dateString);
   };
 
   const handleTableSelectChange = (
@@ -107,6 +118,7 @@ const ExportModal = ({
             loading={downloadStatus == 'DOWNLOADING'}
             icon={getButtonIcon()}
             onClick={getFiles}
+            disabled={dateRange == null || selectedTableOptions.length == 0}
           >
             Export
           </Button>
@@ -118,6 +130,7 @@ const ExportModal = ({
             className="w-[100%]"
             format="MMMM DD, YYYY"
             onChange={handleDateChange}
+            value={dateRange}
           />
           <div>
             <Title level={3} className="mt-8">
