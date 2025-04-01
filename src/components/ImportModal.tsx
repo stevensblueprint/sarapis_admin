@@ -23,6 +23,10 @@ const ImportModal = ({
     setFileList((prevFileList) => prevFileList.filter((_, i) => i !== index));
   };
 
+  const cancelUpload = () => {
+    setFileList([]);
+  };
+
   useEffect(() => {
     if (showModal) {
       setFileList([]);
@@ -35,9 +39,16 @@ const ImportModal = ({
         open={showModal}
         onCancel={closeModal}
         footer={
-          <Button type="primary" disabled={fileList.length == 0}>
-            Upload
-          </Button>
+          <div>
+            {fileList.length != 0 && (
+              <div className="flex flex-row justify-between">
+                <Button onClick={cancelUpload} danger>
+                  Cancel
+                </Button>
+                <Button type="primary">Upload</Button>
+              </div>
+            )}
+          </div>
         }
       >
         <div className="mt-8">
@@ -69,7 +80,7 @@ const ImportModal = ({
               <Title level={4} className="pl-4">
                 Upload Files
               </Title>
-              <div className="p-4 pr-0 flex flex-col gap-2 overflow-scroll max-h-[300px]">
+              <div className="p-4 pr-0 flex flex-col gap-2 overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] max-h-[300px]">
                 {fileList.map((file, index) => {
                   return (
                     <div
