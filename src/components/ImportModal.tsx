@@ -1,6 +1,7 @@
-import { Modal, Button, Typography, Upload, UploadFile, message } from 'antd';
+import { Modal, Button, Typography, Upload, UploadFile } from 'antd';
 import { useState, useEffect } from 'react';
 import type { UploadProps } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography;
 const { Dragger } = Upload;
@@ -61,9 +62,24 @@ const ImportModal = ({
           )}
           {fileList.length != 0 && (
             <div>
-              {fileList.map((file) => {
-                return <p>{file.originFileObj.name}</p>;
-              })}
+              <Title level={4} className="pl-4">
+                Upload Files
+              </Title>
+              <div className="p-4 pr-0 flex flex-col gap-2 overflow-scroll max-h-[300px]">
+                {fileList.map((file) => {
+                  return (
+                    <div className="flex flex-row justify-between items-center w-full">
+                      <p className="truncate">{file.originFileObj.name}</p>
+                      <Button
+                        type="text"
+                        shape="round"
+                        icon={<DeleteOutlined />}
+                        danger
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
