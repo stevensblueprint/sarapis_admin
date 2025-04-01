@@ -6,10 +6,8 @@ svg {
   vertical-align: baseline;
 }
 
-/*
 @layer base {
   * {
     outline: 1px solid red;
   }
 }
-*/
