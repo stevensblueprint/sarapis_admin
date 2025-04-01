@@ -19,6 +19,10 @@ const ImportModal = ({
     setFileList(fileList);
   };
 
+  const deleteFile = (index: number) => {
+    setFileList((prevFileList) => prevFileList.filter((_, i) => i !== index));
+  };
+
   useEffect(() => {
     if (showModal) {
       setFileList([]);
@@ -66,14 +70,18 @@ const ImportModal = ({
                 Upload Files
               </Title>
               <div className="p-4 pr-0 flex flex-col gap-2 overflow-scroll max-h-[300px]">
-                {fileList.map((file) => {
+                {fileList.map((file, index) => {
                   return (
-                    <div className="flex flex-row justify-between items-center w-full">
+                    <div
+                      className="flex flex-row justify-between items-center w-full"
+                      key={index}
+                    >
                       <p className="truncate">{file.originFileObj.name}</p>
                       <Button
                         type="text"
                         shape="round"
                         icon={<DeleteOutlined />}
+                        onClick={() => deleteFile(index)}
                         danger
                       />
                     </div>
