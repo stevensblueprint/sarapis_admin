@@ -124,15 +124,11 @@ const ExportModal = ({
         onCancel={closeModal}
         title="Export Data"
         footer={
-          <Dropdown
-            menu={{ items }}
-            disabled={dateRange == null || selectedTableOptions.length == 0}
-          >
+          <Dropdown menu={{ items }}>
             <Button
               type="primary"
               loading={downloadStatus == 'DOWNLOADING'}
               icon={getButtonIcon()}
-              disabled={dateRange == null || selectedTableOptions.length == 0}
             >
               Export
             </Button>
