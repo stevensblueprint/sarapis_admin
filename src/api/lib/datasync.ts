@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import getApiClient from '../apiClient';
 import Response from '../../interface/Response';
-import DatasyncSource from '../../interface/model/Datasync';
+import DatasyncTableRow from '../../interface/model/Datasync';
 import { blob } from 'stream/consumers';
 
 export class DatasyncError extends Error {
@@ -15,7 +15,6 @@ export class DatasyncError extends Error {
   }
 }
 
-const API_BASE_URL = '/api/datasync';
 const apiClient = getApiClient(process.env.REACT_APP_API_BASE_URL || '');
 
 const handleApiError = (error: unknown, defaultMessage: string): never => {
@@ -54,7 +53,7 @@ export const getAllFiles = async (data: {
         Accept: 'application/zip',
       },
     })
-    .catch((error) => handleApiError(error, "Failed to fetch source csv's"));
+    .catch((error) => handleApiError(error, 'Failed to fetch files'));
 };
 
 /**
@@ -63,38 +62,9 @@ export const getAllFiles = async (data: {
  * @throws {DatasyncError} If the request fails
  */
 export const getAllActions = async (): Promise<
-  AxiosResponse<Response<DatasyncSource[]>>
+  AxiosResponse<Response<DatasyncTableRow[]>>
 > => {
   return apiClient
-    .get(API_BASE_URL + '/export')
-    .catch((error) => handleApiError(error, "Failed to fetch source csv's"));
-};
-
-/**
- * Adds new datasync source
- * @param data datasync source to add
- * @returns Promise containing the response with created datasync source
- * @throws {DatasyncError} If the request fails
- * Not yet implemented
- */
-export const addNewFiles = async (data: {
-  files: File[];
-  uuid: string;
-}): Promise<AxiosResponse<DatasyncSource>> => {
-  return apiClient
-    .post(API_BASE_URL + '/import', data)
-    .catch((error) => handleApiError(error, 'Failed to create location'));
-};
-
-/**
- * Deletes files based on id
- * @param data ids of imports to delete
- * @throws {DatasyncError} If the request fails
- */
-export const deleteFiles = async (
-  data: string[]
-): Promise<AxiosResponse<Response<void>>> => {
-  return apiClient
-    .delete(API_BASE_URL, { data: data })
-    .catch((error) => handleApiError(error, "Failed to fetch source csv's"));
+    .get('/exchanges')
+    .catch((error) => handleApiError(error, 'Failed to fetch action history'));
 };
