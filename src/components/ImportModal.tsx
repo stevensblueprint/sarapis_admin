@@ -80,7 +80,7 @@ const ImportModal = ({
               <Title level={4} className="pl-4">
                 Upload Files
               </Title>
-              <div className="p-4 pr-0 flex flex-col gap-2 overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] max-h-[300px]">
+              <div className="p-4 pl-8 pr-4 flex flex-col gap-2 overflow-scroll rounded-lg bg-gray-100 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] max-h-[300px]">
                 {fileList.map((file, index) => {
                   return (
                     <div
@@ -89,7 +89,7 @@ const ImportModal = ({
                     >
                       <p className="truncate">{file.originFileObj.name}</p>
                       <Button
-                        type="text"
+                        className="!border-0 !shadow-none !bg-transparent"
                         shape="round"
                         icon={<DeleteOutlined />}
                         onClick={() => deleteFile(index)}
