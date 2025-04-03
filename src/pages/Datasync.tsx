@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Typography } from 'antd';
 import {
   DownloadOutlined,
@@ -9,10 +9,13 @@ import DatasyncTable from '../components/DatasyncTable';
 import DatasyncTableRow from '../interface/model/Datasync';
 import ExportModal from '../components/ExportModal';
 import ImportModal from '../components/ImportModal';
+import { getAllActions } from '../api/lib/datasync';
+import FileImport from '../interface/model/FileImport';
 
 const { Title } = Typography;
 
 const Datasync = () => {
+  const [actionHistory, setActionHistory] = useState<DatasyncTableRow[]>([]);
   const [deleteButtonStatus, setDeleteButtonStatus] = useState<boolean>(true);
   const [idsToDelete, setIdsToDelete] = useState<string[]>([]);
   const [showExportModal, setShowExportModal] = useState(false);
@@ -27,6 +30,42 @@ const Datasync = () => {
       setDeleteButtonStatus(true);
     }
   };
+
+  const getActionHistory = async () => {
+    try {
+      const response = await getAllActions();
+      const convertedActionHistory: DatasyncTableRow[] = [];
+
+      for (const item of response.data) {
+        const tableRow: DatasyncTableRow = {
+          id: item.id,
+          type: item.type == 'EXPORT' ? 'Export' : 'Import',
+          success: item.success,
+          error_message: item.error_message,
+          format: item.format,
+          size: item.size
+            ? item.size < 1000000
+              ? (item.size / 1000).toFixed(2).toString() + ' KB'
+              : (item.size / 1000000).toFixed(2).toString() + ' MB'
+            : '',
+          user_id: item.user_id,
+          file_imports: item.file_imports.map(
+            (file: FileImport) => file.file_name
+          ),
+        };
+
+        convertedActionHistory.push(tableRow);
+      }
+
+      setActionHistory(convertedActionHistory);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getActionHistory();
+  }, []);
 
   return (
     <div>
@@ -67,7 +106,10 @@ const Datasync = () => {
             />
           </div>
         </div>
-        <DatasyncTable dataSource={[]} rowsSelected={handleRowsSelected} />
+        <DatasyncTable
+          dataSource={actionHistory}
+          rowsSelected={handleRowsSelected}
+        />
       </div>
     </div>
   );

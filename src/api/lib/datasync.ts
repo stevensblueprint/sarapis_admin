@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import getApiClient from '../apiClient';
 import Response from '../../interface/Response';
-import DatasyncTableRow from '../../interface/model/Datasync';
+import Exchange from '../../interface/model/Exchange';
 import { blob } from 'stream/consumers';
 
 export class DatasyncError extends Error {
@@ -62,7 +62,7 @@ export const getAllFiles = async (data: {
  * @throws {DatasyncError} If the request fails
  */
 export const getAllActions = async (): Promise<
-  AxiosResponse<Response<DatasyncTableRow[]>>
+  AxiosResponse<Response<Exchange[]>>
 > => {
   return apiClient
     .get('/exchanges')

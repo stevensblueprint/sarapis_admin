@@ -64,7 +64,6 @@ const ExportModal = ({
   ) => {
     setDateRange(dates);
     setDateRangeString(dateString);
-    console.log(dateString);
   };
 
   const handleTableSelectChange = (
@@ -88,7 +87,6 @@ const ExportModal = ({
 
   const getFiles = async (format: string) => {
     try {
-      console.log(selectedTableOptions);
       setDownloadStatus('DOWNLOADING');
       const response = await getAllFiles({
         format: format,

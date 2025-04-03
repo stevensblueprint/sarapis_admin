@@ -1,6 +1,8 @@
 import DatasyncTableRow from '../interface/model/Datasync';
 import { Table, Modal, TableProps } from 'antd';
 import { useState } from 'react';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import FileImport from '../interface/model/FileImport';
 
 type TableRowSelection<T extends object = object> =
   TableProps<T>['rowSelection'];
@@ -12,15 +14,15 @@ const DatasyncTable = ({
   dataSource: DatasyncTableRow[] | undefined;
   rowsSelected: (rowsSelected: string[]) => void;
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [modalContent, setModalContent] = useState<string | null>(null);
 
-  const showModal = () => {
-    setIsModalOpen(true);
+  const showModal = (errorMessage: string) => {
+    setModalContent(errorMessage);
   };
 
   const handleCancel = () => {
-    setIsModalOpen(false);
+    setModalContent(null);
   };
 
   const columns = [
@@ -28,62 +30,67 @@ const DatasyncTable = ({
       title: 'ID',
       dataIndex: 'id',
       width: 100,
+      ellipsis: true,
     },
     {
       title: 'User',
-      dataIndex: 'uuid',
-      width: 150,
+      dataIndex: 'user_id',
+      width: 100,
+      ellipsis: true,
     },
     {
       title: 'Request Type',
-      dataIndex: 'request_type',
-      width: 150,
+      dataIndex: 'type',
+      width: 100,
+      ellipsis: true,
     },
     {
       title: 'Status',
-      dataIndex: 'status',
-      width: 130,
-      render: (status: string, record: DatasyncTableRow) => {
-        return status !== 'Success' ? (
-          <div>
-            <span
-              style={{ cursor: 'pointer', color: '#1890ff' }}
-              onClick={showModal}
-            >
-              {status}
-            </span>
-            <Modal
-              open={isModalOpen}
-              footer={null}
-              onCancel={handleCancel}
-              title="Error"
-            >
-              <p>{record.status_message}</p>
-            </Modal>
-          </div>
+      dataIndex: 'success',
+      width: 100,
+      ellipsis: true,
+      render: (success: boolean, record: DatasyncTableRow) => {
+        return success ? (
+          <p>Success</p>
         ) : (
-          <span>{status}</span>
+          <div
+            className="cursor-pointer"
+            onClick={() => showModal(record.error_message)}
+          >
+            <div className="flex flex-row gap-1">
+              <p className="text-red-500">Failed</p>
+              <InfoCircleOutlined />
+            </div>
+          </div>
         );
       },
     },
     {
       title: 'Timestamp',
       dataIndex: 'timestamp',
-      width: 200,
+      width: 150,
+      ellipsis: true,
     },
     {
       title: 'Format',
       dataIndex: 'format',
-      width: 150,
+      width: 100,
+      ellipsis: true,
     },
     {
       title: 'Files',
-      dataIndex: 'file_names',
+      dataIndex: 'file_imports',
+      ellipsis: true,
+      width: 300,
+      render: (file_imports: string[]) => {
+        return <p className="truncate">{file_imports.join(', ')}</p>;
+      },
     },
     {
       title: 'Size',
       dataIndex: 'size',
-      width: 150,
+      width: 100,
+      ellipsis: true,
     },
   ];
 
@@ -97,17 +104,27 @@ const DatasyncTable = ({
       rowsSelected(selectedRows.map((row) => row.id));
     },
     getCheckboxProps: (record: DatasyncTableRow) => ({
-      disabled: record.request_type === 'Export',
+      disabled: record.type === 'Export',
     }),
   };
 
   return (
-    <div>
+    <div className="w-full overflow-hidden">
       <Table
+        className="w-full"
         rowSelection={rowSelection}
         dataSource={dataSource}
         columns={columns}
+        rowKey="id"
       />
+      <Modal
+        open={modalContent !== null}
+        footer={null}
+        onCancel={handleCancel}
+        title="Error"
+      >
+        <p>{modalContent}</p>
+      </Modal>
     </div>
   );
 };
