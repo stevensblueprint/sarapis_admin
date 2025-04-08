@@ -35,7 +35,7 @@ const Datasync = () => {
       const response = await getAllActions();
       const convertedActionHistory: DatasyncTableRow[] = [];
 
-      for (const item of response.data['contents']) {
+      for (const item of [...response.data['contents']].reverse()) {
         const tableRow: DatasyncTableRow = {
           id: item.id,
           timestamp: item.timestamp,
@@ -50,7 +50,7 @@ const Datasync = () => {
             : '',
           user_id: item.user_id,
           file_imports: item.file_imports.map(
-            (file: FileImport) => file.file_name
+            (file: FileImport) => file.fileName
           ),
         };
 
@@ -84,7 +84,10 @@ const Datasync = () => {
             />
             <ImportModal
               showModal={showImportModal}
-              closeModal={() => setShowImportModal(false)}
+              closeModal={() => {
+                setShowImportModal(false);
+                getActionHistory();
+              }}
             ></ImportModal>
             {/* TODO: add modal for upload that allows user to either drag and drop or select files from computer */}
             <Button
@@ -96,7 +99,10 @@ const Datasync = () => {
             />
             <ExportModal
               showModal={showExportModal}
-              closeModal={() => setShowExportModal(false)}
+              closeModal={() => {
+                setShowExportModal(false);
+                getActionHistory();
+              }}
             />
             <Button
               shape="round"
