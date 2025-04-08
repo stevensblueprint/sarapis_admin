@@ -2,6 +2,7 @@ import FileImport from './FileImport';
 
 interface Exchange {
   id: string;
+  timestamp: string;
   type: string;
   success: boolean;
   error_message: string | null;

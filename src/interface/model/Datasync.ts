@@ -1,5 +1,6 @@
 interface DatasyncTableRow {
   id: string;
+  timestamp: string;
   type: string;
   success: boolean;
   error_message: string | null;

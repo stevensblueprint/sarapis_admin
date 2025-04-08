@@ -23,7 +23,6 @@ const Datasync = () => {
 
   const handleRowsSelected = (rowsSelected: string[]) => {
     setIdsToDelete(rowsSelected);
-    console.log(rowsSelected);
     if (rowsSelected.length > 0) {
       setDeleteButtonStatus(false);
     } else {
@@ -36,9 +35,10 @@ const Datasync = () => {
       const response = await getAllActions();
       const convertedActionHistory: DatasyncTableRow[] = [];
 
-      for (const item of response.data) {
+      for (const item of response.data['contents']) {
         const tableRow: DatasyncTableRow = {
           id: item.id,
+          timestamp: item.timestamp,
           type: item.type == 'EXPORT' ? 'Export' : 'Import',
           success: item.success,
           error_message: item.error_message,
