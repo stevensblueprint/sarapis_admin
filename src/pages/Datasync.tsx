@@ -11,8 +11,16 @@ import ExportModal from '../components/ExportModal';
 import ImportModal from '../components/ImportModal';
 import { getAllActions } from '../api/lib/datasync';
 import FileImport from '../interface/model/FileImport';
+import { ActionLog } from '../interface/model/Exchange';
 
 const { Title } = Typography;
+
+const formatFileSize = (size: number | null): string => {
+  if (!size) return '';
+  return size < 1000000
+    ? `${(size / 1000).toFixed(2)} KB`
+    : `${(size / 1000000).toFixed(2)} MB`;
+};
 
 const Datasync = () => {
   const [actionHistory, setActionHistory] = useState<DatasyncTableRow[]>([]);
@@ -31,35 +39,43 @@ const Datasync = () => {
   };
 
   const getActionHistory = async () => {
-    try {
-      const response = await getAllActions();
-      const convertedActionHistory: DatasyncTableRow[] = [];
+    setActionHistory([]);
 
-      for (const item of [...response.data['contents']].reverse()) {
-        const tableRow: DatasyncTableRow = {
+    try {
+      let page_number = 1;
+      let allRows: DatasyncTableRow[] = [];
+
+      while (true) {
+        const response = await getAllActions({ page: page_number - 1 });
+
+        const items: ActionLog[] = [...response.data.contents].reverse();
+
+        const rows: DatasyncTableRow[] = items.map((item) => ({
           id: item.id,
           timestamp: item.timestamp,
-          type: item.type == 'EXPORT' ? 'Export' : 'Import',
+          type: item.type === 'EXPORT' ? 'Export' : 'Import',
           success: item.success,
           error_message: item.error_message,
           format: item.format,
-          size: item.size
-            ? item.size < 1000000
-              ? (item.size / 1000).toFixed(2).toString() + ' KB'
-              : (item.size / 1000000).toFixed(2).toString() + ' MB'
-            : '',
+          size: formatFileSize(item.size),
           user_id: item.user_id,
           file_imports: item.file_imports.map(
-            (file: FileImport) => file.fileName
+            (file: FileImport) => file.file_name
           ),
-        };
+        }));
 
-        convertedActionHistory.push(tableRow);
+        allRows = [...allRows, ...rows];
+
+        if (response.data.totalPages === page_number) {
+          break;
+        } else {
+          page_number += 1;
+        }
       }
 
-      setActionHistory(convertedActionHistory);
+      setActionHistory(allRows);
     } catch (error) {
-      console.log(error);
+      console.error('Failed to fetch action history:', error);
     }
   };
 

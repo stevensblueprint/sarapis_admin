@@ -1,6 +1,6 @@
 import FileImport from './FileImport';
 
-interface Exchange {
+interface ActionLog {
   id: string;
   timestamp: string;
   type: string;
@@ -12,4 +12,15 @@ interface Exchange {
   file_imports: FileImport[];
 }
 
-export default Exchange;
+interface Exchange {
+  totalItems: number;
+  totalPages: number;
+  pageNumber: number;
+  size: number;
+  firstPage: string;
+  lastPage: string;
+  empty: boolean;
+  contents: ActionLog[];
+}
+
+export type { ActionLog, Exchange };

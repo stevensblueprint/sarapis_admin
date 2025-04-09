@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from 'axios';
 import getApiClient from '../apiClient';
 import Response from '../../interface/Response';
 import Exchange from '../../interface/model/Exchange';
-import { blob } from 'stream/consumers';
 
 export class DatasyncError extends Error {
   statusCode?: number;
@@ -62,10 +61,20 @@ export const getAllFiles = async (data: {
  * @returns Promise containing an array to populate the datasync table
  * @throws {DatasyncError} If the request fails
  */
-export const getAllActions = async (): Promise<
-  AxiosResponse<Response<Exchange[]>>
-> => {
+export const getAllActions = async (data?: {
+  userId?: string;
+  page?: number;
+  per_page?: number;
+}): Promise<AxiosResponse<Response<Exchange[]>>> => {
+  const params: Record<string, string | number | null> = {};
+
+  if (data) {
+    if (data.userId) params.userId = data.userId;
+    if (data.page !== undefined) params.page = data.page;
+    if (data.per_page !== undefined) params.per_page = data.per_page;
+  }
+
   return apiClient
-    .get('/exchanges')
+    .get('/exchanges', { params })
     .catch((error) => handleApiError(error, 'Failed to fetch action history'));
 };

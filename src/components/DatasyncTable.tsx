@@ -114,6 +114,7 @@ const DatasyncTable = ({
         className="w-full"
         rowSelection={rowSelection}
         dataSource={dataSource}
+        pagination={{ pageSize: 10 }}
         columns={columns}
         rowKey="id"
       />
