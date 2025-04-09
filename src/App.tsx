@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import ProtectedRoute from './auth/ProtectedRoute';
 import Register from './pages/Register';
 import Home from './pages/Home';
+import Datasync from './pages/Datasync';
 
 const App: React.FC = () => {
   return (
@@ -27,6 +28,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Home />} />
+        <Route path="/datasync" element={<Datasync />} />
       </Routes>
     </BrowserRouter>
   );
