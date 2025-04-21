@@ -2,7 +2,6 @@ import DatasyncTableRow from '../interface/model/Datasync';
 import { Table, Modal, TableProps } from 'antd';
 import { useState } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import FileImport from '../interface/model/FileImport';
 
 type TableRowSelection<T extends object = object> =
   TableProps<T>['rowSelection'];

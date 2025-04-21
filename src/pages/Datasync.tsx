@@ -33,6 +33,7 @@ const Datasync = () => {
     setIdsToDelete(rowsSelected);
     if (rowsSelected.length > 0) {
       setDeleteButtonStatus(false);
+      console.log(idsToDelete);
     } else {
       setDeleteButtonStatus(true);
     }

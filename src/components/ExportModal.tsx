@@ -31,9 +31,6 @@ const ExportModal = ({
   const [dateRange, setDateRange] = useState<
     [start: Dayjs | null, end: Dayjs | null] | null
   >(null);
-  const [dateRangeString, setDateRangeString] = useState<
-    [string | null, string | null] | null
-  >(null);
   const [downloadStatus, setDownloadStatus] = useState<DownloadStatus>('IDLE');
   const [selectedTableOptions, setSelectedTableOptions] = useState<
     (string | number | null | undefined)[]
@@ -53,17 +50,14 @@ const ExportModal = ({
   useEffect(() => {
     if (showModal) {
       setDateRange(null);
-      setDateRangeString(null);
       setSelectedTableOptions([]);
     }
   }, [showModal]);
 
   const handleDateChange = (
-    dates: [start: Dayjs | null, end: Dayjs | null] | null,
-    dateString: [string | null, string | null] | null
+    dates: [start: Dayjs | null, end: Dayjs | null] | null
   ) => {
     setDateRange(dates);
-    setDateRangeString(dateString);
   };
 
   const handleTableSelectChange = (
