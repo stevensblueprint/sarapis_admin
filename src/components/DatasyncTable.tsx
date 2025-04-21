@@ -16,7 +16,7 @@ const DatasyncTable = ({
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [modalContent, setModalContent] = useState<string | null>(null);
 
-  const showModal = (errorMessage: string) => {
+  const showModal = (errorMessage: string | null) => {
     setModalContent(errorMessage);
   };
 

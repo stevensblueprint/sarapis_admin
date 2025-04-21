@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import getApiClient from '../apiClient';
 import Response from '../../interface/Response';
-import Exchange from '../../interface/model/Exchange';
+import { Exchange } from '../../interface/model/Exchange';
 
 export class DatasyncError extends Error {
   statusCode?: number;

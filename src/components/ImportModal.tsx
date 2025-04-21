@@ -87,7 +87,7 @@ const ImportModal = ({
                       className="flex flex-row justify-between items-center w-full"
                       key={index}
                     >
-                      <p className="truncate">{file.originFileObj.name}</p>
+                      <p className="truncate">{file.originFileObj?.name}</p>
                       <Button
                         className="!border-0 !shadow-none !bg-transparent"
                         shape="round"
