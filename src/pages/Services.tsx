@@ -24,7 +24,8 @@ import ServiceForm from '../components/forms/ServiceForm';
 import { SampleServiceData } from '../data/SampleServiceData';
 
 const Services: React.FC = () => {
-  const sampleServiceArray: Service[] = [SampleServiceData];
+  const sampleServiceArray: Service[] = SampleServiceData;
+  const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
   const [services, setServices] = useState<Service[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
@@ -67,6 +68,10 @@ const Services: React.FC = () => {
   };
 
   const onSelectSearch = (data: string) => setSearchText(data);
+
+  const handleAddService = () => {
+    setShowServiceModal(true);
+  };
 
   return (
     <>
@@ -113,7 +118,11 @@ const Services: React.FC = () => {
             style={{ width: 160 }}
             className="h-10"
           />
-          <ServiceForm />
+          <Button onClick={handleAddService}>Add Service</Button>
+          <ServiceForm
+            showModal={showServiceModal}
+            closeModal={() => setShowServiceModal(false)}
+          />
         </div>
         <div className="basis-1/2 flex flex-row justify-end gap-4">
           <div className="flex flex-row justify-center items-center gap-2">
@@ -135,8 +144,8 @@ const Services: React.FC = () => {
       </div>
       <div className="flex flex-row">
         <div className="basis-2/3">
-          {services.length > 0 ? (
-            services.map((service) => {
+          {sampleServiceArray.length > 0 ? (
+            sampleServiceArray.map((service) => {
               return <ServiceCard key={service.id} service={service} />;
             })
           ) : (

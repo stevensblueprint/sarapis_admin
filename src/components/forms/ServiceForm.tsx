@@ -20,7 +20,13 @@ import Location from '../../interface/model/Location';
 import RegularScheduleForm from './RegularScheduleForm';
 import HolidayScheduleForm from './HolidayScheduleForm';
 
-const ServiceForm = () => {
+const ServiceForm = ({
+  showModal,
+  closeModal,
+}: {
+  showModal: boolean;
+  closeModal: () => void;
+}) => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -31,6 +37,10 @@ const ServiceForm = () => {
   const [phones, setPhones] = useState<Phone[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    setShowServiceModal(showModal);
+  }, [showModal]);
 
   useEffect(() => {
     const fetchOrganizations = async () => {
@@ -345,16 +355,14 @@ const ServiceForm = () => {
     return items;
   };
 
-  const showShowServiceModal = () => setShowServiceModal(true);
   const handleCancel = () => {
     setShowServiceModal(false);
     setCurrentStep(0);
+    closeModal();
   };
+
   return (
     <div>
-      <Button type="primary" className="h-12" onClick={showShowServiceModal}>
-        Add Service
-      </Button>
       <Modal
         title={formSteps[currentStep].title}
         open={showServiceModal}
