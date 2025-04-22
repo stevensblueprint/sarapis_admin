@@ -59,156 +59,162 @@ const ServiceForm = ({
     {
       title: 'Basic',
       content: (
-        <Form form={form} variant="filled" size="large">
-          <Form.Item
-            label="Service Name"
-            name="Service Name"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Organization Name"
-            name="Organization Name"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Select
-              showSearch
-              placeholder="Select an Organization"
-              options={organizations.map((organization) => {
-                return { value: organization.id, label: organization.name };
-              })}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Service Description"
-            name="Service Description"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item
-            label="Service URL (website)"
-            name="Service URL"
-            rules={[
-              { required: true },
-              { type: 'url', warningOnly: true },
-              { type: 'string', min: 6 },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Service Email"
-            name="Service Email"
-            rules={[
-              { required: true },
-              { type: 'email', warningOnly: true },
-              { type: 'string', min: 6 },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Service Area"
-            name="Service Area"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Select />
-          </Form.Item>
-          <Form.Item
-            label="Service Alternate Name"
-            name="Service Alternate Name"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Accreditations"
-            name="Accreditations"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Funding"
-            name="Funding"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Input />
-          </Form.Item>
-        </Form>
+        <div className="self-center md:w-2/3 lg:w-1/2">
+          <Form form={form} variant="filled" size="large">
+            <Form.Item
+              label="Service Name"
+              name="Service Name"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Organization Name"
+              name="Organization Name"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Select
+                showSearch
+                placeholder="Select an Organization"
+                options={organizations.map((organization) => {
+                  return { value: organization.id, label: organization.name };
+                })}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Service Description"
+              name="Service Description"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Input.TextArea />
+            </Form.Item>
+            <Form.Item
+              label="Service URL (website)"
+              name="Service URL"
+              rules={[
+                { required: true },
+                { type: 'url', warningOnly: true },
+                { type: 'string', min: 6 },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Service Email"
+              name="Service Email"
+              rules={[
+                { required: true },
+                { type: 'email', warningOnly: true },
+                { type: 'string', min: 6 },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Service Area"
+              name="Service Area"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Select />
+            </Form.Item>
+            <Form.Item
+              label="Service Alternate Name"
+              name="Service Alternate Name"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Accreditations"
+              name="Accreditations"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Funding"
+              name="Funding"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Input />
+            </Form.Item>
+          </Form>
+        </div>
       ),
     },
     {
       title: 'Language',
       content: (
-        <Form form={form} variant="filled">
-          <Form.Item
-            label="Languages"
-            name="languages"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Select
-              mode="multiple"
-              options={[{ value: '1', label: 'English' }]}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Interpretation Services"
-            name="Interpretation Services"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item
-            label="Service Alert"
-            name="Service Alert"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Input.TextArea />
-          </Form.Item>
-        </Form>
+        <div className="self-center md:w-2/3 lg:w-1/2">
+          <Form form={form} variant="filled">
+            <Form.Item
+              label="Languages"
+              name="languages"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Select
+                mode="multiple"
+                options={[{ value: '1', label: 'English' }]}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Interpretation Services"
+              name="Interpretation Services"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Input.TextArea />
+            </Form.Item>
+            <Form.Item
+              label="Service Alert"
+              name="Service Alert"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Input.TextArea />
+            </Form.Item>
+          </Form>
+        </div>
       ),
     },
     {
       title: 'Application',
       content: (
-        <Form form={form} variant="filled">
-          <Form.Item
-            label="Application Process"
-            name="Application Process"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item
-            label="Fee Description"
-            name="Fee Description"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item
-            label="Eligibility Description"
-            name="Eligibility Description"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item
-            label="Eligibility Requirement"
-            name="Eligibility Requirement"
-            rules={[{ required: true, message: 'Required field!' }]}
-          >
-            <Select
-              options={[
-                { value: '1', label: 'None' },
-                { value: '2', label: 'Yes' },
-              ]}
-            />
-          </Form.Item>
-        </Form>
+        <div className="self-center md:w-2/3 lg:w-1/2">
+          <Form form={form} variant="filled">
+            <Form.Item
+              label="Application Process"
+              name="Application Process"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Input.TextArea />
+            </Form.Item>
+            <Form.Item
+              label="Fee Description"
+              name="Fee Description"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Input.TextArea />
+            </Form.Item>
+            <Form.Item
+              label="Eligibility Description"
+              name="Eligibility Description"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Input.TextArea />
+            </Form.Item>
+            <Form.Item
+              label="Eligibility Requirement"
+              name="Eligibility Requirement"
+              rules={[{ required: true, message: 'Required field!' }]}
+            >
+              <Select
+                options={[
+                  { value: '1', label: 'None' },
+                  { value: '2', label: 'Yes' },
+                ]}
+              />
+            </Form.Item>
+          </Form>
+        </div>
       ),
     },
     {
@@ -334,11 +340,6 @@ const ServiceForm = ({
         </Button>
       );
     }
-    items.push(
-      <Button key="cancel" onClick={handleCancel}>
-        Cancel
-      </Button>
-    );
     if (currentStep < formSteps.length - 1) {
       items.push(
         <Button key="next" type="primary" onClick={next}>
@@ -357,31 +358,29 @@ const ServiceForm = ({
 
   const handleCancel = () => {
     setShowServiceModal(false);
-    setCurrentStep(0);
+    setCurrentStep(7);
     closeModal();
   };
 
   return (
-    <div>
-      <Modal
-        title={formSteps[currentStep].title}
-        open={showServiceModal}
-        onCancel={handleCancel}
-        footer={modalFooter()}
-        centered
-        width={'80%'}
-      >
-        <div className="mb-8">
+    <Modal
+      title={formSteps[currentStep].title}
+      open={showServiceModal}
+      onCancel={handleCancel}
+      footer={modalFooter()}
+      centered
+      width={'80%'}
+    >
+      <div className="flex flex-col align-center gap-10">
+        <div>
           <Steps
             current={currentStep}
             items={formSteps.map((step) => ({ title: step.title }))}
           />
         </div>
-        <div className="flex flex-row justify-center">
-          {formSteps[currentStep].content}
-        </div>
-      </Modal>
-    </div>
+        {formSteps[currentStep].content}
+      </div>
+    </Modal>
   );
 };
 
