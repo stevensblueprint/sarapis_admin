@@ -21,7 +21,9 @@ const Navbar = () => {
       </p>
       <p>
         {isAuthenticated ? (
-          <a onClick={onClick}>Logout</a>
+          <a className="hover:cursor-pointer" onClick={onClick}>
+            Logout
+          </a>
         ) : (
           <Link to="/login">Login</Link>
         )}
