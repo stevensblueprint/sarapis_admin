@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, Modal, Steps } from 'antd';
-import BasicForm from './BasicForm';
+import BasicInfoForm from './BasicInfoForm';
+import AdditionalInfoForm from './AdditionalInfoForm';
+import StepDataArray from '../../interface/model/StepData';
 
 const { Step } = Steps;
 
@@ -13,124 +15,101 @@ const ServiceForm = ({
 }) => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [stepData, setStepData] = useState({
-    step0: {},
-    step1: {},
-  });
   const [form] = Form.useForm();
+  const [stepData, setStepData] = useState<StepDataArray>([]);
 
-  useEffect(() => {
-    setShowServiceModal(showModal);
-  }, [showModal]);
-
-  const formSteps = [
+  const steps = [
     {
-      title: 'Basic',
-      content: <BasicForm />,
+      title: 'Basic Info',
+      content: <BasicInfoForm />,
     },
     {
-      title: 'Basic2',
-      content: <BasicForm />,
+      title: 'Additional Info',
+      content: <AdditionalInfoForm />,
     },
   ];
 
-  const next = () => {
-    form.validateFields().then(() => {
+  useEffect(() => {
+    setShowServiceModal(showModal);
+    setStepData([]);
+  }, [showModal]);
+
+  const next = async () => {
+    try {
+      const values = await form.validateFields();
+      setStepData((prev) => ({ ...prev, [currentStep]: values }));
       setCurrentStep(currentStep + 1);
-    });
+      form.setFieldsValue(stepData[currentStep + 1] || {});
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const prev = () => {
     setCurrentStep(currentStep - 1);
+    form.setFieldsValue(stepData[currentStep - 1] || {});
   };
 
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      console.log(values);
-      setShowServiceModal(false);
+      setStepData((prev) => ({ ...prev, [currentStep]: values }));
+      closeModal();
       form.resetFields();
       setCurrentStep(0);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error('Validation failed:', err);
     }
   };
 
+  const handleCancel = () => {
+    setCurrentStep(0);
+    form.resetFields();
+    closeModal();
+  };
+
   const modalFooter = () => {
-    const items = [];
+    const buttons = [];
     if (currentStep > 0) {
-      items.push(
+      buttons.push(
         <Button key="back" onClick={prev}>
           Previous
         </Button>
       );
     }
-    if (currentStep < formSteps.length - 1) {
-      items.push(
+    if (currentStep < 1) {
+      buttons.push(
         <Button key="next" type="primary" onClick={next}>
           Next
         </Button>
       );
     } else {
-      items.push(
+      buttons.push(
         <Button key="submit" type="primary" onClick={handleSubmit}>
           Submit
         </Button>
       );
     }
-    return items;
+    return buttons;
   };
-
-  const handleCancel = () => {
-    setShowServiceModal(false);
-    setCurrentStep(0);
-    closeModal();
-  };
-
-  const onFinish = () => {};
 
   return (
     <Modal
-      title={formSteps[currentStep].title}
+      title="Create Service"
       open={showServiceModal}
       onCancel={handleCancel}
       footer={modalFooter()}
       centered
-      width={'80%'}
+      width="70%"
     >
-      <div>
-        <Form
-          className="flex flex-col align-center gap-10"
-          form={form}
-          layout="vertical"
-          initialValues={stepData['step0'] || {}}
-        >
-          <Steps current={currentStep} style={{ marginBottom: 24 }}>
-            {formSteps.map((s) => (
-              <Step key={s.title} title={s.title} />
-            ))}
-          </Steps>
+      <Form form={form} layout="vertical">
+        <Steps current={currentStep} className="mb-6">
+          <Step title="Basic Info" />
+          <Step title="Additional Info" />
+        </Steps>
 
-          {formSteps[currentStep].content}
-
-          <div style={{ marginTop: 24 }}>
-            {currentStep > 0 && (
-              <Button onClick={prev} style={{ marginRight: 8 }}>
-                Previous
-              </Button>
-            )}
-            {currentStep < formSteps.length - 1 ? (
-              <Button type="primary" onClick={next}>
-                Next
-              </Button>
-            ) : (
-              <Button type="primary" onClick={onFinish}>
-                Submit
-              </Button>
-            )}
-          </div>
-        </Form>
-      </div>
+        {steps[currentStep].content}
+      </Form>
     </Modal>
   );
 };
