@@ -2,7 +2,7 @@ interface Metadata {
   id: string;
   resource_id: string | null;
   resource_type: string | null;
-  last_action_date: string;
+  last_action_date: Date;
   last_action_type: string;
   field_name: string;
   previous_value: string;

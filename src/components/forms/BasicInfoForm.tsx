@@ -33,11 +33,7 @@ const BasicInfoForm = () => {
         <Form.Item label="Alternate Service Name" name="alternate_name">
           <Input />
         </Form.Item>
-        <Form.Item
-          label="Organization"
-          name="organization"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
+        <Form.Item label="Organization" name="organization">
           <Select
             showSearch
             placeholder="Select an Organization"
@@ -49,11 +45,7 @@ const BasicInfoForm = () => {
         <Form.Item
           label="Service Email"
           name="email"
-          rules={[
-            { required: true, message: 'Required field!' },
-            { type: 'email', warningOnly: true },
-            { type: 'string' },
-          ]}
+          rules={[{ type: 'email' }]}
         >
           <Input />
         </Form.Item>
@@ -64,14 +56,8 @@ const BasicInfoForm = () => {
           name="url"
           rules={[
             {
-              required: true,
-              message: 'Required field!',
-            },
-            {
               type: 'url',
-              warningOnly: true,
             },
-            { type: 'string' },
           ]}
         >
           <Input />
@@ -79,11 +65,7 @@ const BasicInfoForm = () => {
         <Form.Item label="Additional Service URLs" name="additional_urls">
           <Select mode="tags" />
         </Form.Item>
-        <Form.Item
-          label="Service Description"
-          name="description"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
+        <Form.Item label="Service Description" name="description">
           <Input.TextArea rows={5} />
         </Form.Item>
       </div>

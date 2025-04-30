@@ -102,7 +102,7 @@ const ServiceForm = ({
       centered
       width="70%"
     >
-      <Form form={form} layout="vertical">
+      <Form form={form} layout="vertical" requiredMark={false}>
         <Steps current={currentStep} className="mb-6">
           <Step title="Basic Info" />
           <Step title="Additional Info" />
