@@ -3,10 +3,11 @@ import Metadata from './Metadata';
 
 interface RequiredDocument {
   id: string;
-  document: string;
-  uri: string;
-  attributes: Attribute[];
-  metadata: Metadata[];
+  service_id: string | null;
+  document: string | null;
+  uri: string | null;
+  attributes: Attribute[] | null;
+  metadata: Metadata[] | null;
 }
 
 export default RequiredDocument;

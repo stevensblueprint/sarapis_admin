@@ -3,14 +3,15 @@ import Metadata from './Metadata';
 
 interface CostOption {
   id: string;
-  validFrom: string;
-  validTo: string;
-  option: string;
-  currency: string;
-  amount: number;
-  amountDescription: string;
-  attributes: Attribute[];
-  metadata: Metadata[];
+  service_id: string | null;
+  valid_from: string | null;
+  valid_to: string | null;
+  option: string | null;
+  currency: string | null;
+  amount: number | null;
+  amount_description: string | null;
+  attributes: Attribute[] | null;
+  metadata: Metadata[] | null;
 }
 
 export default CostOption;

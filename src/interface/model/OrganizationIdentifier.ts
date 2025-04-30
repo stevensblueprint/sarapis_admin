@@ -3,11 +3,12 @@ import Metadata from './Metadata';
 
 interface OrganizationIdentifier {
   id: string;
-  identifierScheme: string;
-  identifierType: string;
+  organization_id: string | null;
+  identifier_scheme: string | null;
+  identifier_type: string;
   identifier: string;
-  attributes: Attribute[];
-  metadata: Metadata[];
+  attributes: Attribute[] | null;
+  metadata: Metadata[] | null;
 }
 
 export default OrganizationIdentifier;

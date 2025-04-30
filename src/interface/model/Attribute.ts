@@ -3,13 +3,13 @@ import TaxonomyTerm from './TaxonomyTerm';
 
 interface Attribute {
   id: string;
-  linkId: string;
-  linkType: string;
-  linkEntity: string;
-  value: string;
-  taxonomyTerm: TaxonomyTerm;
-  label: string;
-  metadata: Metadata[];
+  link_id: string | null;
+  link_type: string | null;
+  link_entity: string | null;
+  value: string | null;
+  taxonomy_term: TaxonomyTerm | null;
+  metadata: Metadata[] | null;
+  label: string | null;
 }
 
 export default Attribute;

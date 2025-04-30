@@ -4,12 +4,16 @@ import Phone from './Phone';
 
 interface Contact {
   id: string;
-  name: string;
-  title: string;
-  department: string;
-  email: string;
-  phones: Phone[];
-  attributes: Attribute[];
-  metadata: Metadata[];
+  organization_id: string | null;
+  service_id: string | null;
+  service_at_location_id: string | null;
+  location_id: string | null;
+  name: string | null;
+  title: string | null;
+  department: string | null;
+  email: string | null;
+  phones: Phone[] | null;
+  attributes: Attribute[] | null;
+  metadata: Metadata[] | null;
 }
 export default Contact;

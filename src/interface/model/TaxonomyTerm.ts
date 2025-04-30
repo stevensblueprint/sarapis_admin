@@ -3,15 +3,16 @@ import Taxonomy from './Taxonomy';
 
 interface TaxonomyTerm {
   id: string;
-  code: string;
+  code: string | null;
   name: string;
   description: string;
-  parent: TaxonomyTerm | null;
-  taxonomy: string;
-  taxonomyDetail: Taxonomy | null;
-  language: string;
-  termUri: string;
-  metadata: Metadata[];
+  parent_id: string | null;
+  taxonomy: string | null;
+  taxonomy_detail: Taxonomy | null;
+  language: string | null;
+  taxonomy_id: string | null;
+  term_uri: string | null;
+  metadata: Metadata[] | null;
 }
 
 export default TaxonomyTerm;

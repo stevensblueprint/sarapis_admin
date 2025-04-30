@@ -4,9 +4,9 @@ interface Taxonomy {
   id: string;
   name: string;
   description: string;
-  uri: string;
-  version: string;
-  metadata: Metadata[];
+  uri: string | null;
+  version: string | null;
+  metadata: Metadata[] | null;
 }
 
 export default Taxonomy;

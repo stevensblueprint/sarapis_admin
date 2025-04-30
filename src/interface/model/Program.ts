@@ -3,12 +3,12 @@ import Metadata from './Metadata';
 
 interface Program {
   id: string;
+  organization_id: string | null;
   name: string;
-  alternateName: string;
+  alternate_name: string | null;
   description: string;
-  organizationId: string;
-  attributes: Attribute[];
-  metadata: Metadata[];
+  attributes: Attribute[] | null;
+  metadata: Metadata[] | null;
 }
 
 export default Program;
