@@ -1,6 +1,6 @@
 export const StatusForm = () => {
   return (
-    <div>
+    <div className="flex flex-row justify-center gap-4">
       <div></div>
     </div>
   );
