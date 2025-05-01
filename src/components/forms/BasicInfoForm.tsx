@@ -22,7 +22,7 @@ const BasicInfoForm = () => {
 
   return (
     <div className="flex flex-row justify-center gap-4">
-      <div className="w-1/3">
+      <div className="w-1/3 flex flex-col">
         <Form.Item
           label="Service Name"
           name="name"
@@ -43,6 +43,7 @@ const BasicInfoForm = () => {
           />
         </Form.Item>
         <Form.Item
+          className="mt-auto"
           label="Service Email"
           name="email"
           rules={[{ type: 'email' }]}

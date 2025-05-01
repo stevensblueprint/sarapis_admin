@@ -15,7 +15,7 @@ const ServiceForm = ({
   closeModal: () => void;
 }) => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<number>(2);
   const [form] = Form.useForm();
   const [stepData, setStepData] = useState<StepDataArray>([]);
 
@@ -79,7 +79,7 @@ const ServiceForm = ({
         </Button>
       );
     }
-    if (currentStep < 1) {
+    if (currentStep < steps.length - 1) {
       buttons.push(
         <Button key="next" type="primary" onClick={next}>
           Next
