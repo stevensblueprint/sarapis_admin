@@ -3,6 +3,7 @@ import { Button, Form, Modal, Steps } from 'antd';
 import BasicInfoForm from './BasicInfoForm';
 import AdditionalInfoForm from './AdditionalInfoForm';
 import StepDataArray from '../../interface/model/StepData';
+import StatusForm from './StatusForm';
 
 const { Step } = Steps;
 
@@ -20,12 +21,13 @@ const ServiceForm = ({
 
   const steps = [
     {
-      title: 'Basic Info',
       content: <BasicInfoForm />,
     },
     {
-      title: 'Additional Info',
       content: <AdditionalInfoForm />,
+    },
+    {
+      content: <StatusForm />,
     },
   ];
 
@@ -106,6 +108,7 @@ const ServiceForm = ({
         <Steps current={currentStep} className="mb-6">
           <Step title="Basic Info" />
           <Step title="Additional Info" />
+          <Step title="Status" />
         </Steps>
 
         {steps[currentStep].content}
