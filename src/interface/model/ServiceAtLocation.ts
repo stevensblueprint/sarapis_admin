@@ -8,15 +8,15 @@ import Location from './Location';
 
 interface ServiceAtLocation {
   id: string;
-  service_id: string | null;
-  description: string | null;
-  service_areas: ServiceArea[] | null;
-  contacts: Contact[] | null;
-  phones: Phone[] | null;
-  schedules: Schedule[] | null;
-  location: Location[] | null;
-  attributes: Attribute[] | null;
-  metadata: Metadata[] | null;
+  service_id?: string;
+  description?: string;
+  service_areas?: ServiceArea[];
+  contacts?: Contact[];
+  phones?: Phone[];
+  schedules?: Schedule[];
+  location?: Location[];
+  attributes?: Attribute[];
+  metadata?: Metadata[];
 }
 
 export default ServiceAtLocation;

@@ -6,6 +6,9 @@ import StepDataArray from '../../interface/model/StepData';
 import StatusForm from './StatusForm';
 import LanguageForm from './LanguageForm';
 import ApplicationForm from './ApplicationForm';
+import ScheduleForm from './ScheduleForm';
+import LocationForm from './LocationForm';
+import ContactForm from './ContactForm';
 
 const { Step } = Steps;
 
@@ -17,31 +20,49 @@ const ServiceForm = ({
   closeModal: () => void;
 }) => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(3);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [form] = Form.useForm();
   const [stepData, setStepData] = useState<StepDataArray>([]);
 
   const steps = [
     {
+      title: 'Basic Info',
       content: <BasicInfoForm />,
     },
     {
+      title: 'Additional Info',
       content: <AdditionalInfoForm />,
     },
     {
+      title: 'Status',
       content: <StatusForm />,
     },
     {
+      title: 'Language',
       content: <LanguageForm />,
     },
     {
+      title: 'Application',
       content: <ApplicationForm />,
+    },
+    {
+      title: 'Schedule',
+      content: <ScheduleForm />,
+    },
+    {
+      title: 'Location',
+      content: <LocationForm />,
+    },
+    {
+      title: 'Contact',
+      content: <ContactForm />,
     },
   ];
 
   useEffect(() => {
     setShowServiceModal(showModal);
     setStepData([]);
+    setCurrentStep(7);
   }, [showModal]);
 
   const next = async () => {
@@ -66,14 +87,12 @@ const ServiceForm = ({
       setStepData((prev) => ({ ...prev, [currentStep]: values }));
       closeModal();
       form.resetFields();
-      setCurrentStep(0);
     } catch (err) {
       console.error('Validation failed:', err);
     }
   };
 
   const handleCancel = () => {
-    setCurrentStep(0);
     form.resetFields();
     closeModal();
   };
@@ -105,7 +124,7 @@ const ServiceForm = ({
 
   return (
     <Modal
-      title="Create Service"
+      title={steps[currentStep].title}
       open={showServiceModal}
       onCancel={handleCancel}
       footer={modalFooter()}
@@ -114,11 +133,14 @@ const ServiceForm = ({
     >
       <Form form={form} layout="vertical" requiredMark={false}>
         <Steps current={currentStep} className="mb-6">
-          <Step title="Basic Info" />
-          <Step title="Additional Info" />
-          <Step title="Status" />
-          <Step title="Language" />
-          <Step title="Application Form" />
+          <Step />
+          <Step />
+          <Step />
+          <Step />
+          <Step />
+          <Step />
+          <Step />
+          <Step />
         </Steps>
 
         {steps[currentStep].content}

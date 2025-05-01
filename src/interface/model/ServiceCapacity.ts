@@ -4,14 +4,14 @@ import Unit from './Unit';
 
 interface ServiceCapacity {
   id: string;
-  service_id: string | null;
+  service_id?: string;
   unit: Unit;
   available: number;
-  maximum: number | null;
-  description: string | null;
+  maximum?: number;
+  description?: string;
   updated: string;
-  attributes: Attribute[] | null;
-  metadata: Metadata[] | null;
+  attributes?: Attribute[];
+  metadata?: Metadata[];
 }
 
 export default ServiceCapacity;

@@ -4,18 +4,18 @@ import Metadata from './Metadata';
 
 interface Phone {
   id: string;
-  location_id: string | null;
-  service_id: string | null;
-  organization_id: string | null;
-  contact_id: string | null;
-  service_at_location_id: string | null;
+  location_id?: string;
+  service_id?: string;
+  organization_id?: string;
+  contact_id?: string;
+  service_at_location_id?: string;
   number: string;
-  extension: string | null;
-  type: string | null;
-  description: string | null;
-  languages: Language[] | null;
-  attributes: Attribute[] | null;
-  metadata: Metadata[] | null;
+  extension?: string;
+  type?: string;
+  description?: string;
+  languages?: Language[];
+  attributes?: Attribute[];
+  metadata?: Metadata[];
 }
 
 export default Phone;

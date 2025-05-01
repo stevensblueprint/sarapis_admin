@@ -3,11 +3,11 @@ import Metadata from './Metadata';
 
 interface Funding {
   id: string;
-  organization_id: string | null;
-  service_id: string | null;
-  source: string | null;
-  attributes: Attribute[] | null;
-  metadata: Metadata[] | null;
+  organization_id?: string;
+  service_id?: string;
+  source?: string;
+  attributes?: Attribute[];
+  metadata?: Metadata[];
 }
 
 export default Funding;

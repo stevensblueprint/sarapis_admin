@@ -3,12 +3,12 @@ import Metadata from './Metadata';
 
 interface Url {
   id: string;
-  label: string | null;
+  label?: string;
   url: string;
-  organization_id: string | null;
-  service_id: string | null;
-  attributes: Attribute[] | null;
-  metadata: Metadata[] | null;
+  organization_id?: string;
+  service_id?: string;
+  attributes?: Attribute[];
+  metadata?: Metadata[];
 }
 
 export default Url;

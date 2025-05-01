@@ -3,12 +3,12 @@ import Metadata from './Metadata';
 
 interface Accessibility {
   id: string;
-  location_id: string | null;
-  description: string | null;
-  details: string | null;
-  url: string | null;
-  attributes: Attribute[] | null;
-  metadata: Metadata[] | null;
+  location_id?: string;
+  description?: string;
+  details?: string;
+  url?: string;
+  attributes?: Attribute[];
+  metadata?: Metadata[];
 }
 
 export default Accessibility;

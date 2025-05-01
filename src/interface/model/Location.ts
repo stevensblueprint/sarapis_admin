@@ -16,24 +16,24 @@ export enum LocationType {
 interface Location {
   id: string;
   location_type: string;
-  url: string | null;
-  organization_id: string | null;
-  name: string | null;
-  alternate_name: string | null;
-  description: string | null;
-  transportation: string | null;
-  latitude: number | null;
-  longitude: number | null;
-  external_identifier: string | null;
-  external_identifier_type: string | null;
-  languages: Language[] | null;
-  addresses: Address[] | null;
-  contacts: Contact[] | null;
-  accessibility: Accessibility[] | null;
-  phones: Phone[] | null;
-  schedules: Schedule[] | null;
-  attributes: Attribute[] | null;
-  metadata: Metadata[] | null;
+  url?: string;
+  organization_id?: string;
+  name?: string;
+  alternate_name?: string;
+  description?: string;
+  transportation?: string;
+  latitude?: number;
+  longitude?: number;
+  external_identifier?: string;
+  external_identifier_type?: string;
+  languages?: Language[];
+  addresses?: Address[];
+  contacts?: Contact[];
+  accessibility?: Accessibility[];
+  phones?: Phone[];
+  schedules?: Schedule[];
+  attributes?: Attribute[];
+  metadata?: Metadata[];
 }
 
 export default Location;

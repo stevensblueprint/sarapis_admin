@@ -1,4 +1,4 @@
-const LocationForm = () => {
+const ScheduleForm = () => {
   return (
     <div>
       <div></div>
@@ -6,4 +6,4 @@ const LocationForm = () => {
   );
 };
 
-export default LocationForm;
+export default ScheduleForm;
