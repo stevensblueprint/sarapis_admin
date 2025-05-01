@@ -1,7 +1,9 @@
 import Organization from './Organization';
 import Url from './Url';
+import ServiceCapacity from './ServiceCapacity';
+import Funding from './Funding';
 
-interface Step0Data {
+interface BasicInfoFormData {
   name: string;
   alternate_name: string | null;
   organization: Organization | null;
@@ -11,13 +13,26 @@ interface Step0Data {
   description: string | null;
 }
 
-interface Step1Data {
-  capacities: string;
+interface AdditionalInfoFormData {
+  capacities: ServiceCapacity[];
   accreditations: string;
-  funding: string;
-  attributes: string;
+  funding: Funding[];
 }
 
-type StepDataArray = [Step0Data?, Step1Data?];
+interface StatusFormData {
+  status: string;
+  assured_date: Date | null;
+  assurer_email: string | null;
+  last_modified: Date | null;
+  alert: string | null;
+}
+
+interface LanguageFormData {}
+
+type StepDataArray = [
+  BasicInfoFormData?,
+  AdditionalInfoFormData?,
+  StatusFormData?,
+];
 
 export default StepDataArray;

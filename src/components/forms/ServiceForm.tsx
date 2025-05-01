@@ -15,7 +15,7 @@ const ServiceForm = ({
   closeModal: () => void;
 }) => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(2);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   const [form] = Form.useForm();
   const [stepData, setStepData] = useState<StepDataArray>([]);
 
