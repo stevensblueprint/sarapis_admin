@@ -4,6 +4,8 @@ import BasicInfoForm from './BasicInfoForm';
 import AdditionalInfoForm from './AdditionalInfoForm';
 import StepDataArray from '../../interface/model/StepData';
 import StatusForm from './StatusForm';
+import LanguageForm from './LanguageForm';
+import ApplicationForm from './ApplicationForm';
 
 const { Step } = Steps;
 
@@ -15,7 +17,7 @@ const ServiceForm = ({
   closeModal: () => void;
 }) => {
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<number>(3);
   const [form] = Form.useForm();
   const [stepData, setStepData] = useState<StepDataArray>([]);
 
@@ -28,6 +30,12 @@ const ServiceForm = ({
     },
     {
       content: <StatusForm />,
+    },
+    {
+      content: <LanguageForm />,
+    },
+    {
+      content: <ApplicationForm />,
     },
   ];
 
@@ -109,6 +117,8 @@ const ServiceForm = ({
           <Step title="Basic Info" />
           <Step title="Additional Info" />
           <Step title="Status" />
+          <Step title="Language" />
+          <Step title="Application Form" />
         </Steps>
 
         {steps[currentStep].content}

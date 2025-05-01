@@ -2,6 +2,9 @@ import Organization from './Organization';
 import Url from './Url';
 import ServiceCapacity from './ServiceCapacity';
 import Funding from './Funding';
+import Language from './Language';
+import CostOption from './CostOption';
+import RequiredDocument from './RequiredDocument';
 
 interface BasicInfoFormData {
   name: string;
@@ -27,12 +30,27 @@ interface StatusFormData {
   alert: string | null;
 }
 
-interface LanguageFormData {}
+interface LanguageFormData {
+  languages: Language[] | null;
+  interpretation_services: string | null;
+}
+
+interface ApplicationFormData {
+  application_process: string;
+  fees_description: string;
+  cost_options: CostOption[];
+  eligibility_description: string;
+  minimum_age: number;
+  maximum_age: number;
+  required_documents: RequiredDocument[];
+}
 
 type StepDataArray = [
   BasicInfoFormData?,
   AdditionalInfoFormData?,
   StatusFormData?,
+  LanguageFormData?,
+  ApplicationFormData?,
 ];
 
 export default StepDataArray;
