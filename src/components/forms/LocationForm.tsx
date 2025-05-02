@@ -1,13 +1,30 @@
-import { Table, Form } from 'antd';
+import { Table, Form, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 const LocationForm = () => {
   return (
     <div className="w-[100%] flex justify-center">
       <div className="flex flex-col gap-4 w-3/4">
-        <Form.Item label="Service Areas" name="service_areas">
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2 pt-2">
+              <span>Service Areas</span>
+              <Button icon={<PlusOutlined />} size="small" />
+            </div>
+          }
+          name="service_areas"
+        >
           <Table></Table>
         </Form.Item>
-        <Form.Item label="Service At Locations" name="service_at_locations">
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2 pt-2">
+              <span>Service At Locations</span>
+              <Button icon={<PlusOutlined />} size="small" />
+            </div>
+          }
+          name="service_at_locations"
+        >
           <Table></Table>
         </Form.Item>
       </div>

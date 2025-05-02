@@ -1,4 +1,5 @@
-import { Form, Input, InputNumber, Table } from 'antd';
+import { Form, Input, InputNumber, Table, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 const ApplicationForm = () => {
   return (
@@ -30,10 +31,26 @@ const ApplicationForm = () => {
         </div>
       </div>
       <div className="flex flex-col gap-4 w-3/4 self-center">
-        <Form.Item label="Required Documents" name="required_documents">
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2 pt-2">
+              <span>Required Documents</span>
+              <Button icon={<PlusOutlined />} size="small" />
+            </div>
+          }
+          name="required_documents"
+        >
           <Table></Table>
         </Form.Item>
-        <Form.Item label="Cost Options" name="cost_options">
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2 pt-2">
+              <span>Cost Options</span>
+              <Button icon={<PlusOutlined />} size="small" />
+            </div>
+          }
+          name="cost_options"
+        >
           <Table></Table>
         </Form.Item>
       </div>
