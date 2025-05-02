@@ -11,6 +11,7 @@ import ServiceArea from './ServiceArea';
 import ServiceAtLocation from './ServiceAtLocation';
 import Contact from './Contact';
 import Phone from './Phone';
+import Attribute from './Attribute';
 
 interface BasicInfoFormData {
   name: string;
@@ -27,6 +28,7 @@ interface AdditionalInfoFormData {
   accreditations?: string;
   funding?: Funding[];
   program?: Program;
+  attributes?: Attribute[];
 }
 
 interface StatusFormData {

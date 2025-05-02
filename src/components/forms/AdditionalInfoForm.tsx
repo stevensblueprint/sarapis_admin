@@ -1,4 +1,4 @@
-import { Table, Form, Input, Button } from 'antd';
+import { Table, Form, Input, Button, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 const AdditionalInfoForm = () => {
@@ -33,12 +33,15 @@ const AdditionalInfoForm = () => {
             label="Accreditations"
             name="accreditations"
           >
-            <Input.TextArea />
+            <Input.TextArea rows={1} />
           </Form.Item>
           <Form.Item className="w-1/2" label="Program" name="program">
             <Input />
           </Form.Item>
         </div>
+        <Form.Item className="w-[100%]" label="Attributes" name="attributes">
+          <Select />
+        </Form.Item>
       </div>
     </div>
   );
