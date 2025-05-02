@@ -84,7 +84,7 @@ const ExportModal = ({
       setDownloadStatus('DOWNLOADING');
       const response = await getAllFiles({
         format: format,
-        user_id: 'test',
+        user_id: 'example_user_id',
         files: ['Organization'],
       });
       const blob = new Blob([response.data], { type: 'application/zip' });
