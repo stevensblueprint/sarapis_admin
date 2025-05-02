@@ -66,14 +66,10 @@ const ServiceForm = ({
   }, [showModal]);
 
   const next = async () => {
-    try {
-      const values = await form.validateFields();
-      setStepData((prev) => ({ ...prev, [currentStep]: values }));
-      setCurrentStep(currentStep + 1);
-      form.setFieldsValue(stepData[currentStep + 1] || {});
-    } catch (err) {
-      console.log(err);
-    }
+    const values = await form.validateFields();
+    setStepData((prev) => ({ ...prev, [currentStep]: values }));
+    setCurrentStep(currentStep + 1);
+    form.setFieldsValue(stepData[currentStep + 1] || {});
   };
 
   const prev = () => {
@@ -82,14 +78,10 @@ const ServiceForm = ({
   };
 
   const handleSubmit = async () => {
-    try {
-      const values = await form.validateFields();
-      setStepData((prev) => ({ ...prev, [currentStep]: values }));
-      closeModal();
-      form.resetFields();
-    } catch (err) {
-      console.error('Validation failed:', err);
-    }
+    const values = await form.validateFields();
+    setStepData((prev) => ({ ...prev, [currentStep]: values }));
+    closeModal();
+    form.resetFields();
   };
 
   const handleCancel = () => {
