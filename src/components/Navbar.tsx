@@ -6,13 +6,14 @@ const Navbar = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const onClick = async () => {
+  const handleLogout = async () => {
     await logout();
     navigate('/');
   };
 
   return (
     <div className="flex flex-row pt-5 px-5 justify-end gap-8">
+      <p>{isAuthenticated && <Link to="/datasync">Datasync</Link>}</p>
       <p>
         <Link to="/services">Services</Link>
       </p>
@@ -21,7 +22,7 @@ const Navbar = () => {
       </p>
       <p>
         {isAuthenticated ? (
-          <a onClick={onClick}>Logout</a>
+          <a onClick={handleLogout}>Logout</a>
         ) : (
           <Link to="/login">Login</Link>
         )}
