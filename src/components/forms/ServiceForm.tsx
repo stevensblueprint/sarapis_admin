@@ -27,7 +27,7 @@ const ServiceForm = ({
   const steps = [
     {
       title: 'Basic Info',
-      content: <BasicInfoForm />,
+      content: <BasicInfoForm form={form} />,
     },
     {
       title: 'Additional Info',
@@ -67,6 +67,7 @@ const ServiceForm = ({
 
   const next = async () => {
     const values = await form.validateFields();
+    console.log(values);
     setStepData((prev) => ({ ...prev, [currentStep]: values }));
     setCurrentStep(currentStep + 1);
     form.setFieldsValue(stepData[currentStep + 1] || {});
