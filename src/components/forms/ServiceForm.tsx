@@ -31,7 +31,7 @@ const ServiceForm = ({
     },
     {
       title: 'Additional Info',
-      content: <AdditionalInfoForm />,
+      content: <AdditionalInfoForm form={form} />,
     },
     {
       title: 'Status',
@@ -39,23 +39,23 @@ const ServiceForm = ({
     },
     {
       title: 'Language',
-      content: <LanguageForm />,
+      content: <LanguageForm form={form} />,
     },
     {
       title: 'Application',
-      content: <ApplicationForm />,
+      content: <ApplicationForm form={form} />,
     },
     {
       title: 'Schedule',
-      content: <ScheduleForm />,
+      content: <ScheduleForm form={form} />,
     },
     {
       title: 'Location',
-      content: <LocationForm />,
+      content: <LocationForm form={form} />,
     },
     {
       title: 'Contact',
-      content: <ContactForm />,
+      content: <ContactForm form={form} />,
     },
   ];
 

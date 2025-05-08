@@ -133,10 +133,10 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
             <Table columns={columns} dataSource={URLData} />
           </Form.Item>
           <AdditionalURLForm
-            showURLModal={showURLModal}
-            closeURLModal={() => setShowURLModal(false)}
-            addURL={handleAddURL}
-            URLData={URLData}
+            showModal={showURLModal}
+            closeModal={() => setShowURLModal(false)}
+            addObject={handleAddURL}
+            objectData={URLData}
           />
         </div>
       </div>

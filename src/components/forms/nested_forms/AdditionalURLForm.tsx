@@ -2,27 +2,27 @@ import { Modal, Button, Form, Input, message } from 'antd';
 import Url from '../../../interface/model/Url';
 
 const AdditionalURLForm = ({
-  showURLModal,
-  closeURLModal,
-  addURL,
-  URLData,
+  showModal,
+  closeModal,
+  addObject,
+  objectData,
 }: {
-  showURLModal: boolean;
-  closeURLModal: () => void;
-  addURL: (url: Url) => void;
-  URLData: Url[];
+  showModal: boolean;
+  closeModal: () => void;
+  addObject: (url: Url) => void;
+  objectData: Url[];
 }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
 
   const addNewURL = async () => {
     const values = await form.validateFields();
-    const exists = URLData.some((existing) => existing.url === values.url);
+    const exists = objectData.some((existing) => existing.url === values.url);
     if (exists) {
       showError();
     } else {
-      addURL(values);
-      closeURLModal();
+      addObject(values);
+      closeModal();
       form.resetFields();
     }
   };
@@ -37,9 +37,9 @@ const AdditionalURLForm = ({
 
   return (
     <Modal
-      open={showURLModal}
+      open={showModal}
       onCancel={() => {
-        closeURLModal();
+        closeModal();
         form.resetFields();
       }}
       title="Add Additional URL"
@@ -59,6 +59,7 @@ const AdditionalURLForm = ({
           rules={[
             {
               type: 'url',
+              message: 'Invalid URL!',
             },
           ]}
         >
