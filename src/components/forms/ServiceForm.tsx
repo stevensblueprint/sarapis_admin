@@ -58,7 +58,7 @@ const ServiceForm = ({
     },
     {
       title: 'Contact',
-      content: <ContactForm form={form} />,
+      content: <ContactForm form={form} organizationId={organizationId} />,
     },
   ];
 

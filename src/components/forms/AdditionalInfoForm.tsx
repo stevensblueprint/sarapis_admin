@@ -168,7 +168,7 @@ const AdditionalInfoForm = ({
         />
         <div className="flex flex-row gap-4">
           <Form.Item className="w-1/2" label="Attributes" name="attributes">
-            <Select />
+            <Select showSearch allowClear />
           </Form.Item>
           <Form.Item className="w-1/2" label="Program" name="program">
             <Input />
