@@ -8,6 +8,7 @@ import {
   DatePicker,
 } from 'antd';
 import ServiceCapacity from '../../../interface/model/ServiceCapacity';
+
 const CapacitiesForm = ({
   showModal,
   closeModal,
@@ -22,15 +23,29 @@ const CapacitiesForm = ({
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const addNewCapacity = async () => {
-    const values = await form.validateFields();
-    const exists = objectData.some((existing) => existing === values);
-    if (exists) {
-      showError();
-    } else {
-      addObject(values);
-      closeModal();
-      form.resetFields();
+  const isDuplicate = (newCapacity: ServiceCapacity) => {
+    return objectData.some(
+      (existing) => JSON.stringify(existing) === JSON.stringify(newCapacity)
+    );
+  };
+
+  const addNewObject = async () => {
+    try {
+      const values = await form.validateFields();
+      const newCapacity: ServiceCapacity = {
+        ...values,
+        updated: values.updated ? values.updated.toISOString() : undefined,
+      };
+
+      if (isDuplicate(newCapacity)) {
+        showError();
+      } else {
+        addObject(newCapacity);
+        closeModal();
+        form.resetFields();
+      }
+    } catch (error) {
+      console.error('Form validation failed:', error);
     }
   };
 
@@ -38,7 +53,7 @@ const CapacitiesForm = ({
     messageApi.open({
       type: 'error',
       content: 'Duplicate capacities not allowed!',
-      duration: 10,
+      duration: 5,
     });
   };
 
@@ -51,7 +66,7 @@ const CapacitiesForm = ({
       }}
       title="Add Capacity"
       footer={
-        <Button type="primary" onClick={addNewCapacity}>
+        <Button type="primary" onClick={addNewObject}>
           Add
         </Button>
       }

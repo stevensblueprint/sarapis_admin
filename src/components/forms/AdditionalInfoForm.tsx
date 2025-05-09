@@ -6,40 +6,50 @@ import { ColumnsType } from 'antd/es/table';
 import { useState, useEffect } from 'react';
 import ServiceCapacity from '../../interface/model/ServiceCapacity';
 import CapacitiesForm from './nested_forms/CapacitiesForm';
+import FundingForm from './nested_forms/FundingForm';
+import Funding from '../../interface/model/Funding';
 
-const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
+const AdditionalInfoForm = ({
+  form,
+  organizationId,
+}: {
+  form: FormInstance;
+  organizationId: string;
+}) => {
   const [showCapacityModal, setShowCapacityModal] = useState<boolean>(false);
+  const [showFundingModal, setShowFundingModal] = useState<boolean>(false);
   const [capacityData, setCapacityData] = useState<ServiceCapacity[]>([]);
+  const [fundingData, setFundingData] = useState<Funding[]>([]);
 
   const capacitiesColumns: ColumnsType = [
     {
       title: 'Name',
       dataIndex: ['unit', 'name'],
-      width: 75,
+      width: '20%',
       ellipsis: true,
     },
     {
       title: 'Available',
       dataIndex: 'available',
-      width: 75,
+      width: '15%',
       ellipsis: true,
     },
     {
       title: 'Maximum',
       dataIndex: 'maximum',
-      width: 75,
+      width: '15%',
       ellipsis: true,
     },
     {
       title: 'Description',
       dataIndex: 'description',
-      width: 200,
+      width: '40%',
       ellipsis: true,
     },
     {
       title: '',
       key: 'delete',
-      width: 30,
+      width: '10%',
       align: 'center',
       render: (record: ServiceCapacity) => (
         <Button
@@ -52,15 +62,40 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
     },
   ];
 
+  const fundingColumns: ColumnsType = [
+    {
+      title: 'Source',
+      dataIndex: 'source',
+      width: '90%',
+      ellipsis: true,
+    },
+    {
+      title: '',
+      key: 'delete',
+      width: '10%',
+      align: 'center',
+      render: (record: Funding) => (
+        <Button
+          danger
+          icon={<DeleteOutlined />}
+          size="small"
+          onClick={() => handleDeleteFunding(record)}
+        />
+      ),
+    },
+  ];
+
   useEffect(() => {
     const existingCapacities = form.getFieldValue('capacities') || [];
     setCapacityData(existingCapacities);
+    const existingFunding = form.getFieldValue('funding') || [];
+    setFundingData(existingFunding);
   }, [form]);
 
   const handleAddCapacity = (capacity: ServiceCapacity) => {
     const newCapacities = [...capacityData, capacity];
     setCapacityData(newCapacities);
-    form.setFieldsValue({ additional_urls: newCapacities });
+    form.setFieldsValue({ capacities: newCapacities });
   };
 
   const handleDeleteCapacity = (capacityToDelete: ServiceCapacity) => {
@@ -68,7 +103,21 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
       (capacity) => capacity !== capacityToDelete
     );
     setCapacityData(updatedCapacities);
-    form.setFieldsValue({ additional_urls: updatedCapacities });
+    form.setFieldsValue({ capacities: updatedCapacities });
+  };
+
+  const handleAddFunding = (funding: Funding) => {
+    const newFunding = [...fundingData, funding];
+    setFundingData(newFunding);
+    form.setFieldsValue({ funding: newFunding });
+  };
+
+  const handleDeleteFunding = (fundingToDelete: Funding) => {
+    const updatedFunding = fundingData.filter(
+      (funding) => funding !== fundingToDelete
+    );
+    setFundingData(updatedFunding);
+    form.setFieldsValue({ funding: updatedFunding });
   };
 
   return (
@@ -99,13 +148,24 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
               <span>Funding</span>
-              <Button icon={<PlusOutlined />} size="small" />
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowFundingModal(true)}
+                size="small"
+              />
             </div>
           }
           name="funding"
         >
-          <Table />
+          <Table columns={fundingColumns} dataSource={fundingData} />
         </Form.Item>
+        <FundingForm
+          showModal={showFundingModal}
+          closeModal={() => setShowFundingModal(false)}
+          addObject={handleAddFunding}
+          objectData={fundingData}
+          organizationId={organizationId}
+        />
         <div className="flex flex-row gap-4">
           <Form.Item
             className="w-1/2 self-center"

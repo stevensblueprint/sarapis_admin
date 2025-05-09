@@ -23,6 +23,7 @@ const ServiceForm = ({
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [form] = Form.useForm();
   const [stepData, setStepData] = useState<StepDataArray>([]);
+  const [organizationId, setOrganizationId] = useState<string>('');
 
   const steps = [
     {
@@ -31,7 +32,9 @@ const ServiceForm = ({
     },
     {
       title: 'Additional Info',
-      content: <AdditionalInfoForm form={form} />,
+      content: (
+        <AdditionalInfoForm form={form} organizationId={organizationId} />
+      ),
     },
     {
       title: 'Status',
@@ -67,6 +70,9 @@ const ServiceForm = ({
 
   const next = async () => {
     const values = await form.validateFields();
+    if (currentStep == 0) {
+      setOrganizationId(values.organization);
+    }
     console.log(values);
     setStepData((prev) => ({ ...prev, [currentStep]: values }));
     setCurrentStep(currentStep + 1);

@@ -15,15 +15,22 @@ const AdditionalURLForm = ({
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const addNewURL = async () => {
-    const values = await form.validateFields();
-    const exists = objectData.some((existing) => existing.url === values.url);
-    if (exists) {
-      showError();
-    } else {
-      addObject(values);
-      closeModal();
-      form.resetFields();
+  const addNewObject = async () => {
+    try {
+      const values = await form.validateFields();
+      const trimmedUrl = values.url.trim();
+
+      const exists = objectData.some((existing) => existing.url === trimmedUrl);
+
+      if (exists) {
+        showError();
+      } else {
+        addObject({ ...values, url: trimmedUrl });
+        closeModal();
+        form.resetFields();
+      }
+    } catch (error) {
+      console.error('Form validation failed:', error);
     }
   };
 
@@ -31,7 +38,7 @@ const AdditionalURLForm = ({
     messageApi.open({
       type: 'error',
       content: 'Duplicate URLs not allowed!',
-      duration: 10,
+      duration: 5,
     });
   };
 
@@ -44,12 +51,12 @@ const AdditionalURLForm = ({
       }}
       title="Add Additional URL"
       footer={
-        <Button type="primary" onClick={addNewURL}>
+        <Button type="primary" onClick={addNewObject}>
           Add
         </Button>
       }
     >
-      <Form form={form} layout="vertical">
+      <Form form={form} layout="vertical" requiredMark={false}>
         <Form.Item label="Name" name="label">
           <Input />
         </Form.Item>
@@ -60,6 +67,10 @@ const AdditionalURLForm = ({
             {
               type: 'url',
               message: 'Invalid URL!',
+            },
+            {
+              required: true,
+              message: 'URL is required!',
             },
           ]}
         >
