@@ -32,7 +32,6 @@ const FundingForm = ({
 
   const handleClear = () => {
     setSelectedFunding(null);
-    form.resetFields();
   };
 
   const addNewObject = async () => {
@@ -112,7 +111,7 @@ const FundingForm = ({
         <Form.Item
           label="Source"
           name="source"
-          rules={[{ required: true, message: 'Please enter a source.' }]}
+          rules={[{ required: true, message: 'Required Field!' }]}
         >
           <Input.TextArea rows={5} />
         </Form.Item>

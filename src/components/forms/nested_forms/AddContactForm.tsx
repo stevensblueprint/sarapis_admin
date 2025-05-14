@@ -33,7 +33,6 @@ const AddContactForm = ({
 
   const handleClear = () => {
     setSelectedContact(null);
-    form.resetFields();
   };
 
   const addNewObject = async () => {
@@ -101,7 +100,7 @@ const AddContactForm = ({
       <Divider />
 
       <div className="pb-2">
-        <strong>Create New Funding Source</strong>
+        <strong>Create New Contact</strong>
       </div>
 
       <Form

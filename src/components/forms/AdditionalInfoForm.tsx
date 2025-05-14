@@ -9,6 +9,8 @@ import CapacitiesForm from './nested_forms/CapacitiesForm';
 import FundingForm from './nested_forms/FundingForm';
 import Funding from '../../interface/model/Funding';
 import Organization from '../../interface/model/Organization';
+import ProgramForm from './nested_forms/ProgramForm';
+import Program from '../../interface/model/Program';
 
 const AdditionalInfoForm = ({
   form,
@@ -19,8 +21,10 @@ const AdditionalInfoForm = ({
 }) => {
   const [showCapacityModal, setShowCapacityModal] = useState<boolean>(false);
   const [showFundingModal, setShowFundingModal] = useState<boolean>(false);
+  const [showProgramModal, setShowProgramModal] = useState<boolean>(false);
   const [capacityData, setCapacityData] = useState<ServiceCapacity[]>([]);
   const [fundingData, setFundingData] = useState<Funding[]>([]);
+  const [selectedProgram, setSelectedProgram] = useState<Program>();
 
   const capacitiesColumns: ColumnsType = [
     {
@@ -91,6 +95,8 @@ const AdditionalInfoForm = ({
     setCapacityData(existingCapacities);
     const existingFunding = form.getFieldValue('funding') || [];
     setFundingData(existingFunding);
+    const existingProgram = form.getFieldValue('program');
+    setSelectedProgram(existingProgram);
   }, [form]);
 
   const handleAddCapacity = (capacity: ServiceCapacity) => {
@@ -119,6 +125,16 @@ const AdditionalInfoForm = ({
     );
     setFundingData(updatedFunding);
     form.setFieldsValue({ funding: updatedFunding });
+  };
+
+  const handleAddProgram = (program: Program) => {
+    setSelectedProgram(program);
+    form.setFieldsValue({ program: program });
+  };
+
+  const handleDeleteProgram = () => {
+    setSelectedProgram(undefined);
+    form.setFieldsValue({ program: undefined });
   };
 
   return (
@@ -168,12 +184,61 @@ const AdditionalInfoForm = ({
           existingFunding={organization ? organization.funding! : []}
         />
         <div className="flex flex-row gap-4">
-          <Form.Item className="w-1/2" label="Attributes" name="attributes">
-            <Select showSearch allowClear />
+          <Form.Item
+            className="w-1/2"
+            label={
+              <div className="flex flex-row items-center gap-2">
+                <span>Attributes</span>
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() => setShowProgramModal(true)}
+                  size="small"
+                />
+              </div>
+            }
+            name="attributes"
+          >
+            <Select mode="multiple" showSearch allowClear />
           </Form.Item>
-          <Form.Item className="w-1/2" label="Program" name="program">
-            <Select showSearch allowClear />
+          <Form.Item
+            className="w-1/2"
+            label={
+              <div className="flex flex-row items-center gap-2">
+                <span>Program</span>
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() => setShowProgramModal(true)}
+                  size="small"
+                />
+              </div>
+            }
+            name="program"
+          >
+            {selectedProgram ? (
+              <div className="flex flex-row items-center gap-2">
+                <div className="overflow-hidden">
+                  <span className="truncate">
+                    {selectedProgram.name} - {selectedProgram.description}
+                  </span>
+                </div>
+                <Button
+                  className="ml-auto"
+                  icon={<DeleteOutlined />}
+                  onClick={handleDeleteProgram}
+                  size="middle"
+                  danger
+                />
+              </div>
+            ) : (
+              'No Program Selected'
+            )}
           </Form.Item>
+          <ProgramForm
+            showModal={showProgramModal}
+            closeModal={() => setShowProgramModal(false)}
+            addObject={handleAddProgram}
+            existingPrograms={organization ? organization.programs! : []}
+          />
         </div>
         <Form.Item
           className="w-2/3 self-center"
