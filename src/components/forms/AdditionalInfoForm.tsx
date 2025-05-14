@@ -8,13 +8,14 @@ import ServiceCapacity from '../../interface/model/ServiceCapacity';
 import CapacitiesForm from './nested_forms/CapacitiesForm';
 import FundingForm from './nested_forms/FundingForm';
 import Funding from '../../interface/model/Funding';
+import Organization from '../../interface/model/Organization';
 
 const AdditionalInfoForm = ({
   form,
-  organizationId,
+  organization,
 }: {
   form: FormInstance;
-  organizationId: string;
+  organization: Organization | undefined;
 }) => {
   const [showCapacityModal, setShowCapacityModal] = useState<boolean>(false);
   const [showFundingModal, setShowFundingModal] = useState<boolean>(false);
@@ -164,14 +165,14 @@ const AdditionalInfoForm = ({
           closeModal={() => setShowFundingModal(false)}
           addObject={handleAddFunding}
           objectData={fundingData}
-          organizationId={organizationId}
+          existingFunding={organization ? organization.funding! : []}
         />
         <div className="flex flex-row gap-4">
           <Form.Item className="w-1/2" label="Attributes" name="attributes">
             <Select showSearch allowClear />
           </Form.Item>
           <Form.Item className="w-1/2" label="Program" name="program">
-            <Input />
+            <Select showSearch allowClear />
           </Form.Item>
         </div>
         <Form.Item

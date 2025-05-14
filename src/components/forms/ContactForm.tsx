@@ -5,13 +5,14 @@ import Contact from '../../interface/model/Contact';
 import { FormInstance } from 'antd';
 import AddContactForm from './nested_forms/AddContactForm';
 import { ColumnsType } from 'antd/es/table';
+import Organization from '../../interface/model/Organization';
 
 const ContactForm = ({
   form,
-  organizationId,
+  organization,
 }: {
   form: FormInstance;
-  organizationId: string;
+  organization: Organization | undefined;
 }) => {
   const [showContactModal, setShowContactModal] = useState<boolean>(false);
   const [contactData, setContactData] = useState<Contact[]>([]);
@@ -20,7 +21,25 @@ const ContactForm = ({
     {
       title: 'Name',
       dataIndex: 'name',
-      width: '90%',
+      width: '20%',
+      ellipsis: true,
+    },
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      width: '25%',
+      ellipsis: true,
+    },
+    {
+      title: 'Department',
+      dataIndex: 'department',
+      width: '20%',
+      ellipsis: true,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      width: '25%',
       ellipsis: true,
     },
     {
@@ -81,7 +100,7 @@ const ContactForm = ({
           closeModal={() => setShowContactModal(false)}
           addObject={handleAddContact}
           objectData={contactData}
-          organizationId={organizationId}
+          existingContacts={organization ? organization.contacts! : []}
         />
         <Form.Item
           label={

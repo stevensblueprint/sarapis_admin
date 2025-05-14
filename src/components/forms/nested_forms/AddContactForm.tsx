@@ -1,8 +1,6 @@
 import { Modal, Button, Form, Input, message, Select, Divider } from 'antd';
 import Funding from '../../../interface/model/Funding';
-import { getOrganizationById } from '../../../api/lib/organizations';
-import { useEffect, useState } from 'react';
-import Organization from '../../../interface/model/Organization';
+import { useState } from 'react';
 import Contact from '../../../interface/model/Contact';
 
 const AddContactForm = ({
@@ -10,31 +8,17 @@ const AddContactForm = ({
   closeModal,
   addObject,
   objectData,
-  organizationId,
+  existingContacts,
 }: {
   showModal: boolean;
   closeModal: () => void;
   addObject: (contact: Contact) => void;
   objectData: Contact[];
-  organizationId: string;
+  existingContacts: Contact[];
 }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [existingContacts, setExistingContacts] = useState<Contact[]>([]);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
-
-  useEffect(() => {
-    const fetchOrganization = async () => {
-      try {
-        const response = await getOrganizationById(organizationId);
-        const data = response.data as Organization;
-        setExistingContacts(data.contacts || []);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchOrganization();
-  }, [organizationId]);
 
   const isDuplicate = (newContact: Contact) => {
     return objectData.some(

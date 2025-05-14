@@ -9,6 +9,8 @@ import ApplicationForm from './ApplicationForm';
 import ScheduleForm from './ScheduleForm';
 import LocationForm from './LocationForm';
 import ContactForm from './ContactForm';
+import Organization from '../../interface/model/Organization';
+import { getOrganizationById } from '../../api/lib/organizations';
 
 const { Step } = Steps;
 
@@ -23,7 +25,7 @@ const ServiceForm = ({
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [form] = Form.useForm();
   const [stepData, setStepData] = useState<StepDataArray>([]);
-  const [organizationId, setOrganizationId] = useState<string>('');
+  const [organization, setOrganization] = useState<Organization>();
 
   const steps = [
     {
@@ -32,9 +34,7 @@ const ServiceForm = ({
     },
     {
       title: 'Additional Info',
-      content: (
-        <AdditionalInfoForm form={form} organizationId={organizationId} />
-      ),
+      content: <AdditionalInfoForm form={form} organization={organization} />,
     },
     {
       title: 'Status',
@@ -58,20 +58,22 @@ const ServiceForm = ({
     },
     {
       title: 'Contact',
-      content: <ContactForm form={form} organizationId={organizationId} />,
+      content: <ContactForm form={form} organization={organization} />,
     },
   ];
 
   useEffect(() => {
     setShowServiceModal(showModal);
     setStepData([]);
-    setCurrentStep(0);
+    setCurrentStep(6);
   }, [showModal]);
 
   const next = async () => {
     const values = await form.validateFields();
-    if (currentStep == 0) {
-      setOrganizationId(values.organization);
+    if (currentStep == 0 && values.organization) {
+      const response = await getOrganizationById(values.organization);
+      const data = response.data as Organization;
+      setOrganization(data);
     }
     console.log(values);
     setStepData((prev) => ({ ...prev, [currentStep]: values }));
@@ -79,7 +81,10 @@ const ServiceForm = ({
     form.setFieldsValue(stepData[currentStep + 1] || {});
   };
 
-  const prev = () => {
+  const prev = async () => {
+    const values = await form.validateFields();
+    console.log(values);
+    setStepData((prev) => ({ ...prev, [currentStep]: values }));
     setCurrentStep(currentStep - 1);
     form.setFieldsValue(stepData[currentStep - 1] || {});
   };

@@ -1,39 +1,23 @@
 import { Modal, Button, Form, Input, message, Select, Divider } from 'antd';
 import Funding from '../../../interface/model/Funding';
-import { getOrganizationById } from '../../../api/lib/organizations';
-import { useEffect, useState } from 'react';
-import Organization from '../../../interface/model/Organization';
+import { useState } from 'react';
 
 const FundingForm = ({
   showModal,
   closeModal,
   addObject,
   objectData,
-  organizationId,
+  existingFunding,
 }: {
   showModal: boolean;
   closeModal: () => void;
   addObject: (funding: Funding) => void;
   objectData: Funding[];
-  organizationId: string;
+  existingFunding: Funding[];
 }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [existingFunding, setExistingFunding] = useState<Funding[]>([]);
   const [selectedFunding, setSelectedFunding] = useState<Funding | null>(null);
-
-  useEffect(() => {
-    const fetchOrganization = async () => {
-      try {
-        const response = await getOrganizationById(organizationId);
-        const data = response.data as Organization;
-        setExistingFunding(data.funding || []);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchOrganization();
-  }, [organizationId]);
 
   const isDuplicate = (newFunding: Funding) => {
     return objectData.some(
