@@ -25,7 +25,7 @@ const StatusForm = () => {
           className="mt-auto"
           label="Assurer Email"
           name="assurer_email"
-          rules={[{ type: 'email' }]}
+          rules={[{ type: 'email', message: 'Invalid Email!' }]}
         >
           <Input />
         </Form.Item>

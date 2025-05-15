@@ -75,7 +75,6 @@ const ServiceForm = ({
       const data = response.data as Organization;
       setOrganization(data);
     }
-    console.log(values);
     setStepData((prev) => ({ ...prev, [currentStep]: values }));
     setCurrentStep(currentStep + 1);
     form.setFieldsValue(stepData[currentStep + 1] || {});
@@ -83,7 +82,6 @@ const ServiceForm = ({
 
   const prev = async () => {
     const values = await form.validateFields();
-    console.log(values);
     setStepData((prev) => ({ ...prev, [currentStep]: values }));
     setCurrentStep(currentStep - 1);
     form.setFieldsValue(stepData[currentStep - 1] || {});

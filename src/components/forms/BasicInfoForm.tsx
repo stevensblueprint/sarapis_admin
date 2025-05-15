@@ -100,7 +100,7 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
           <Form.Item
             label="Service Email"
             name="email"
-            rules={[{ type: 'email' }]}
+            rules={[{ type: 'email', message: 'Invalid Email!' }]}
           >
             <Input />
           </Form.Item>
@@ -112,6 +112,7 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
             rules={[
               {
                 type: 'url',
+                message: 'Invalid URL!',
               },
             ]}
           >

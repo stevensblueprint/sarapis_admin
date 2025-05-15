@@ -34,7 +34,6 @@ const CapacitiesForm = ({
       const values = await form.validateFields();
       const newCapacity: ServiceCapacity = {
         ...values,
-        updated: values.updated ? values.updated.toISOString() : undefined,
       };
 
       if (isDuplicate(newCapacity)) {
