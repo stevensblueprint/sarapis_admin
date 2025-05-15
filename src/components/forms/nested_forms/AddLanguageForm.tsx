@@ -63,7 +63,19 @@ const AddLanguageForm = ({
       }
     >
       {contextHolder}
-      <Form form={form} layout="vertical" requiredMark={false}></Form>
+      <Form form={form} layout="vertical" requiredMark={false}>
+        <div className="flex flex-row gap-2">
+          <Form.Item className="w-2/3" label="Name" name="name">
+            <Input />
+          </Form.Item>
+          <Form.Item className="w-1/3" label="Code" name="code">
+            <Input />
+          </Form.Item>
+        </div>
+        <Form.Item label="Note" name="note">
+          <Input.TextArea rows={5} />
+        </Form.Item>
+      </Form>
     </Modal>
   );
 };

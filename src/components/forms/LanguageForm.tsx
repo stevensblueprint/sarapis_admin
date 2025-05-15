@@ -2,19 +2,48 @@ import { Table, Input, Form, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import AddLanguageForm from './nested_forms/AddLanguageForm';
 import { FormInstance } from 'antd';
-import Organization from '../../interface/model/Organization';
 import Language from '../../interface/model/Language';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { ColumnsType } from 'antd/es/table';
+import { DeleteOutlined } from '@ant-design/icons';
 
-const LanguageForm = ({
-  form,
-  organization,
-}: {
-  form: FormInstance;
-  organization: Organization | undefined;
-}) => {
+const LanguageForm = ({ form }: { form: FormInstance }) => {
   const [showLanguageModal, setShowLanguageModal] = useState<boolean>(false);
   const [languageData, setLanguageData] = useState<Language[]>([]);
+
+  const languageColumns: ColumnsType = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      width: '30%',
+      ellipsis: true,
+    },
+    {
+      title: 'Note',
+      dataIndex: 'note',
+      width: '60%',
+      ellipsis: true,
+    },
+    {
+      title: '',
+      key: 'delete',
+      width: '10%',
+      align: 'center',
+      render: (record: Language) => (
+        <Button
+          danger
+          icon={<DeleteOutlined />}
+          size="small"
+          onClick={() => handleDeleteLanguage(record)}
+        />
+      ),
+    },
+  ];
+
+  useEffect(() => {
+    const existingLanguages = form.getFieldValue('languages') || [];
+    setLanguageData(existingLanguages);
+  }, [form]);
 
   const handleAddLanguage = (language: Language) => {
     const newLanguages = [...languageData, language];
@@ -37,12 +66,16 @@ const LanguageForm = ({
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
               <span>Languages</span>
-              <Button icon={<PlusOutlined />} size="small" />
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowLanguageModal(true)}
+                size="small"
+              />
             </div>
           }
           name="languages"
         >
-          <Table />
+          <Table columns={languageColumns} dataSource={languageData} />
         </Form.Item>
         <AddLanguageForm
           showModal={showLanguageModal}
