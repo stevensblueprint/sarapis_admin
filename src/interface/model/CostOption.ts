@@ -2,7 +2,7 @@ import Attribute from './Attribute';
 import Metadata from './Metadata';
 
 interface CostOption {
-  id: string;
+  id?: string;
   service_id?: string;
   valid_from?: string;
   valid_to?: string;

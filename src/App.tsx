@@ -12,10 +12,7 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/services"
-          element={<ProtectedRoute element={<Services />} />}
-        />
+        <Route path="/services" element={<Services />} />
         <Route
           path="/organizations"
           element={<ProtectedRoute element={<Organizations />} />}
