@@ -6,7 +6,6 @@ import OrganizationLayout from './pages/OrganizationLayout';
 import Login from './pages/Login';
 import ProtectedRoute from './auth/ProtectedRoute';
 import Register from './pages/Register';
-import Home from './pages/Home';
 import Datasync from './pages/Datasync';
 
 const App: React.FC = () => {
@@ -18,7 +17,7 @@ const App: React.FC = () => {
           element={<ProtectedRoute element={<Services />} />}
         />
         <Route
-          path="/organizations"
+          path="/"
           element={<ProtectedRoute element={<Organizations />} />}
         />
         <Route
@@ -27,7 +26,6 @@ const App: React.FC = () => {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home />} />
         <Route path="/datasync" element={<Datasync />} />
       </Routes>
     </BrowserRouter>
