@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Button, Form, Modal, Steps } from 'antd';
 import BasicInfoForm from './BasicInfoForm';
 import AdditionalInfoForm from './AdditionalInfoForm';
-import StepDataArray from '../../interface/model/StepData';
 import StatusForm from './StatusForm';
 import LanguageForm from './LanguageForm';
 import ApplicationForm from './ApplicationForm';
@@ -11,6 +10,8 @@ import LocationForm from './LocationForm';
 import ContactForm from './ContactForm';
 import Organization from '../../interface/model/Organization';
 import { getOrganizationById } from '../../api/lib/organizations';
+import { createService } from '../../api/lib/services';
+import { Service } from '../../interface/model/Service';
 
 const { Step } = Steps;
 
@@ -24,8 +25,8 @@ const ServiceForm = ({
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [form] = Form.useForm();
-  const [stepData, setStepData] = useState<StepDataArray>([]);
   const [organization, setOrganization] = useState<Organization>();
+  const [formData, setFormData] = useState<Service>({});
 
   const steps = [
     {
@@ -64,7 +65,6 @@ const ServiceForm = ({
 
   useEffect(() => {
     setShowServiceModal(showModal);
-    setStepData([]);
     setCurrentStep(0);
   }, [showModal]);
 
@@ -76,24 +76,31 @@ const ServiceForm = ({
       setOrganization(data);
     }
     console.log(values);
-    setStepData((prev) => ({ ...prev, [currentStep]: values }));
     setCurrentStep(currentStep + 1);
-    form.setFieldsValue(stepData[currentStep + 1] || {});
+    setFormData((prev) => ({ ...prev, ...values }));
+    form.setFieldsValue(values);
   };
 
   const prev = async () => {
     const values = await form.validateFields();
     console.log(values);
-    setStepData((prev) => ({ ...prev, [currentStep]: values }));
     setCurrentStep(currentStep - 1);
-    form.setFieldsValue(stepData[currentStep - 1] || {});
+    setFormData((prev) => ({ ...prev, ...values }));
+    form.setFieldsValue(values);
   };
 
   const handleSubmit = async () => {
     const values = await form.validateFields();
-    setStepData((prev) => ({ ...prev, [currentStep]: values }));
-    closeModal();
-    form.resetFields();
+    const service: Service = {
+      ...formData,
+      ...values,
+      organization: {
+        id: form.getFieldValue('organization'),
+      },
+    };
+    console.log(service);
+    const response = await createService(service);
+    console.log(response);
   };
 
   const handleCancel = () => {

@@ -15,14 +15,14 @@ import ServiceCapacity from './ServiceCapacity';
 import Organization from './Organization';
 
 export interface Service {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   alternate_name?: string;
   description?: string;
   url?: string;
   additional_urls?: Url[];
   email?: string;
-  status: string;
+  status?: string;
   interpretation_services?: string;
   application_process?: string;
   fees_description?: string;
