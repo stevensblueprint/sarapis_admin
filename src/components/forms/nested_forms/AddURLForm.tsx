@@ -1,7 +1,7 @@
 import { Modal, Button, Form, Input, message } from 'antd';
 import Url from '../../../interface/model/Url';
 
-const AdditionalURLForm = ({
+const AddURLForm = ({
   showModal,
   closeModal,
   addObject,
@@ -82,4 +82,4 @@ const AdditionalURLForm = ({
   );
 };
 
-export default AdditionalURLForm;
+export default AddURLForm;

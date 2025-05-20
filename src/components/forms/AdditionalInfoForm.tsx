@@ -5,11 +5,11 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { useState, useEffect } from 'react';
 import ServiceCapacity from '../../interface/model/ServiceCapacity';
-import CapacitiesForm from './nested_forms/CapacitiesForm';
-import FundingForm from './nested_forms/FundingForm';
+import AddCapacityForm from './nested_forms/AddCapacityForm';
+import AddFundingForm from './nested_forms/AddFundingForm';
 import Funding from '../../interface/model/Funding';
 import Organization from '../../interface/model/Organization';
-import ProgramForm from './nested_forms/ProgramForm';
+import AddProgramForm from './nested_forms/AddProgramForm';
 import Program from '../../interface/model/Program';
 
 const AdditionalInfoForm = ({
@@ -155,7 +155,7 @@ const AdditionalInfoForm = ({
         >
           <Table columns={capacitiesColumns} dataSource={capacityData} />
         </Form.Item>
-        <CapacitiesForm
+        <AddCapacityForm
           showModal={showCapacityModal}
           closeModal={() => setShowCapacityModal(false)}
           addObject={handleAddCapacity}
@@ -176,7 +176,7 @@ const AdditionalInfoForm = ({
         >
           <Table columns={fundingColumns} dataSource={fundingData} />
         </Form.Item>
-        <FundingForm
+        <AddFundingForm
           showModal={showFundingModal}
           closeModal={() => setShowFundingModal(false)}
           addObject={handleAddFunding}
@@ -233,7 +233,7 @@ const AdditionalInfoForm = ({
               'No Program Selected'
             )}
           </Form.Item>
-          <ProgramForm
+          <AddProgramForm
             showModal={showProgramModal}
             closeModal={() => setShowProgramModal(false)}
             addObject={handleAddProgram}

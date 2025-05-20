@@ -2,7 +2,7 @@ import { Modal, Button, Form, Input, message, Select, Divider } from 'antd';
 import Funding from '../../../interface/model/Funding';
 import { useState } from 'react';
 
-const FundingForm = ({
+const AddFundingForm = ({
   showModal,
   closeModal,
   addObject,
@@ -120,4 +120,4 @@ const FundingForm = ({
   );
 };
 
-export default FundingForm;
+export default AddFundingForm;

@@ -9,7 +9,7 @@ import {
 } from 'antd';
 import ServiceCapacity from '../../../interface/model/ServiceCapacity';
 
-const CapacitiesForm = ({
+const AddCapacityForm = ({
   showModal,
   closeModal,
   addObject,
@@ -121,4 +121,4 @@ const CapacitiesForm = ({
   );
 };
 
-export default CapacitiesForm;
+export default AddCapacityForm;

@@ -5,7 +5,7 @@ import { getAllOrganizations } from '../../api/lib/organizations';
 import Organization from '../../interface/model/Organization';
 import Response from '../../interface/Response';
 import Url from '../../interface/model/Url';
-import AdditionalURLForm from './nested_forms/AdditionalURLForm';
+import AddURLForm from './nested_forms/AddURLForm';
 import type { FormInstance } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
@@ -133,7 +133,7 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
           >
             <Table columns={columns} dataSource={URLData} />
           </Form.Item>
-          <AdditionalURLForm
+          <AddURLForm
             showModal={showURLModal}
             closeModal={() => setShowURLModal(false)}
             addObject={handleAddURL}

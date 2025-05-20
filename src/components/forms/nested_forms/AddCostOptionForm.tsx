@@ -2,7 +2,7 @@ import { Modal, Button, Form, Input, message, InputNumber } from 'antd';
 import CostOption from '../../../interface/model/CostOption';
 import { DatePicker } from 'antd';
 
-const CostOptionForm = ({
+const AddCostOptionForm = ({
   showModal,
   closeModal,
   addObject,
@@ -98,4 +98,4 @@ const CostOptionForm = ({
   );
 };
 
-export default CostOptionForm;
+export default AddCostOptionForm;

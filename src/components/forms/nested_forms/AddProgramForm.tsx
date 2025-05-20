@@ -2,7 +2,7 @@ import { Modal, Button, Form, Input, Select, Divider } from 'antd';
 import { useState } from 'react';
 import Program from '../../../interface/model/Program';
 
-const ProgramForm = ({
+const AddProgramForm = ({
   showModal,
   closeModal,
   addObject,
@@ -104,4 +104,4 @@ const ProgramForm = ({
   );
 };
 
-export default ProgramForm;
+export default AddProgramForm;

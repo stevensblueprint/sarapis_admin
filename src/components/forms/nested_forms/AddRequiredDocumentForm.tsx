@@ -1,7 +1,7 @@
 import { Modal, Button, Form, Input, message } from 'antd';
 import RequiredDocument from '../../../interface/model/RequiredDocument';
 
-const RequiredDocumentForm = ({
+const AddRequiredDocumentForm = ({
   showModal,
   closeModal,
   addObject,
@@ -84,4 +84,4 @@ const RequiredDocumentForm = ({
   );
 };
 
-export default RequiredDocumentForm;
+export default AddRequiredDocumentForm;

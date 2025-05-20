@@ -1,13 +1,13 @@
 import { Form, Input, InputNumber, Table, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import RequiredDocumentForm from './nested_forms/RequiredDocumentForm';
+import AddRequiredDocumentForm from './nested_forms/AddRequiredDocumentForm';
 import RequiredDocument from '../../interface/model/RequiredDocument';
 import { useState, useEffect } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd';
 import CostOption from '../../interface/model/CostOption';
-import CostOptionForm from './nested_forms/CostOptionForm';
+import AddCostOptionForm from './nested_forms/AddCostOptionForm';
 
 const ApplicationForm = ({ form }: { form: FormInstance }) => {
   const [showDocumentModal, setShowDocumentModal] = useState<boolean>(false);
@@ -159,7 +159,7 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
         >
           <Table columns={documentColumns} dataSource={documentData} />
         </Form.Item>
-        <RequiredDocumentForm
+        <AddRequiredDocumentForm
           showModal={showDocumentModal}
           closeModal={() => setShowDocumentModal(false)}
           addObject={handleAddDocument}
@@ -180,7 +180,7 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
         >
           <Table columns={costOptionColumns} dataSource={costOptionData} />
         </Form.Item>
-        <CostOptionForm
+        <AddCostOptionForm
           showModal={showCostOptionModal}
           closeModal={() => setShowCostOptionModal(false)}
           addObject={handleAddCostOption}
