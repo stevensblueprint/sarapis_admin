@@ -3,7 +3,7 @@ import Metadata from './Metadata';
 import Phone from './Phone';
 
 interface Contact {
-  id: string;
+  id?: string;
   organization_id?: string;
   service_id?: string;
   service_at_location_id?: string;

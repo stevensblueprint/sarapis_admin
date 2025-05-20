@@ -2,10 +2,10 @@ import Metadata from './Metadata';
 import Taxonomy from './Taxonomy';
 
 interface TaxonomyTerm {
-  id: string;
+  id?: string;
   code?: string;
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   parent_id?: string;
   taxonomy?: string;
   taxonomy_detail?: Taxonomy;

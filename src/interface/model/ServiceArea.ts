@@ -2,7 +2,7 @@ import Attribute from './Attribute';
 import Metadata from './Metadata';
 
 interface ServiceArea {
-  id: string;
+  id?: string;
   service_id?: string;
   service_at_location_id?: string;
   name?: string;

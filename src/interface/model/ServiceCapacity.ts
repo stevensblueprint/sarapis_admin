@@ -3,13 +3,13 @@ import Metadata from './Metadata';
 import Unit from './Unit';
 
 interface ServiceCapacity {
-  id: string;
+  id?: string;
   service_id?: string;
-  unit: Unit;
-  available: number;
+  unit?: Unit;
+  available?: number;
   maximum?: number;
   description?: string;
-  updated: string;
+  updated?: string;
   attributes?: Attribute[];
   metadata?: Metadata[];
 }

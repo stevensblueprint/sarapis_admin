@@ -2,7 +2,7 @@ import Attribute from './Attribute';
 import Metadata from './Metadata';
 
 interface RequiredDocument {
-  id: string;
+  id?: string;
   service_id?: string;
   document?: string;
   uri?: string;

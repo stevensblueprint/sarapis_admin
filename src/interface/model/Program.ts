@@ -2,11 +2,11 @@ import Attribute from './Attribute';
 import Metadata from './Metadata';
 
 interface Program {
-  id: string;
+  id?: string;
   organization_id?: string;
-  name: string;
+  name?: string;
   alternate_name?: string;
-  description: string;
+  description?: string;
   attributes?: Attribute[];
   metadata?: Metadata[];
 }

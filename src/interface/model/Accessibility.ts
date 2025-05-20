@@ -2,7 +2,7 @@ import Attribute from './Attribute';
 import Metadata from './Metadata';
 
 interface Accessibility {
-  id: string;
+  id?: string;
   location_id?: string;
   description?: string;
   details?: string;

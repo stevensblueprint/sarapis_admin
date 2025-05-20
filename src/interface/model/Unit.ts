@@ -2,8 +2,8 @@ import Attribute from './Attribute';
 import Metadata from './Metadata';
 
 interface Unit {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   scheme?: string;
   identifier?: string;
   uri?: string;

@@ -9,10 +9,10 @@ import { Service } from './Service';
 import Program from './Program';
 
 interface Organization {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   alternate_name?: string;
-  description: string;
+  description?: string;
   email?: string;
   website?: string;
   additional_websites?: string[];

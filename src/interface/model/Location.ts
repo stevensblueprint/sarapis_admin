@@ -14,8 +14,8 @@ export enum LocationType {
 }
 
 interface Location {
-  id: string;
-  location_type: string;
+  id?: string;
+  location_type?: LocationType;
   url?: string;
   organization_id?: string;
   name?: string;

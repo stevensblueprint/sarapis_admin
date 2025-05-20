@@ -7,7 +7,7 @@ import Contact from './Contact';
 import Location from './Location';
 
 interface ServiceAtLocation {
-  id: string;
+  id?: string;
   service_id?: string;
   description?: string;
   service_areas?: ServiceArea[];
