@@ -119,7 +119,6 @@ const ContactForm = ({
   };
 
   const handleAddPhone = (phone: Phone) => {
-    console.log(phone);
     const newPhones = [...phoneData, phone];
     setPhoneData(newPhones);
     form.setFieldsValue({ phones: newPhones });
@@ -155,6 +154,9 @@ const ContactForm = ({
           addObject={handleAddContact}
           objectData={contactData}
           existingContacts={organization ? organization.contacts! : []}
+          existingPhones={
+            organization ? [...organization.phones!, ...phoneData] : phoneData
+          }
         />
         <Form.Item
           label={

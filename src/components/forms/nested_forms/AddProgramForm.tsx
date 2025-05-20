@@ -24,9 +24,9 @@ const AddProgramForm = ({
       const trimmed: Program = { ...values };
       addObject(trimmed);
     }
-    form.resetFields();
-    setSelectedProgram(null);
     closeModal();
+    setSelectedProgram(null);
+    form.resetFields();
   };
 
   const handleSelect = (jsonValue: string) => {
@@ -43,6 +43,7 @@ const AddProgramForm = ({
       open={showModal}
       onCancel={() => {
         closeModal();
+        setSelectedProgram(null);
         form.resetFields();
       }}
       title="Add Program"

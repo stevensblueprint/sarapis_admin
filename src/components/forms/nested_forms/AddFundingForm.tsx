@@ -51,9 +51,9 @@ const AddFundingForm = ({
       addObject(trimmed);
     }
 
+    closeModal();
     form.resetFields();
     setSelectedFunding(null);
-    closeModal();
   };
 
   const showError = () => {
