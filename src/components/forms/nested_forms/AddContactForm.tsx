@@ -1,5 +1,4 @@
 import { Modal, Button, Form, Input, message, Select, Divider } from 'antd';
-import Funding from '../../../interface/model/Funding';
 import { useState } from 'react';
 import Contact from '../../../interface/model/Contact';
 

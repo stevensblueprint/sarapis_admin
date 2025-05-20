@@ -14,7 +14,7 @@ const ScheduleForm = () => {
           }
           name="schedules"
         >
-          <Table></Table>
+          <Table />
         </Form.Item>
       </div>
     </div>

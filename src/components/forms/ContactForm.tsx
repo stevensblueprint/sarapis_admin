@@ -6,6 +6,8 @@ import { FormInstance } from 'antd';
 import AddContactForm from './nested_forms/AddContactForm';
 import { ColumnsType } from 'antd/es/table';
 import Organization from '../../interface/model/Organization';
+import AddPhoneForm from './nested_forms/AddPhoneForm';
+import Phone from '../../interface/model/Phone';
 
 const ContactForm = ({
   form,
@@ -16,6 +18,8 @@ const ContactForm = ({
 }) => {
   const [showContactModal, setShowContactModal] = useState<boolean>(false);
   const [contactData, setContactData] = useState<Contact[]>([]);
+  const [showPhoneModal, setShowPhoneModal] = useState<boolean>(false);
+  const [phoneData, setPhoneData] = useState<Phone[]>([]);
 
   const contactColumns: ColumnsType = [
     {
@@ -58,9 +62,46 @@ const ContactForm = ({
     },
   ];
 
+  const phoneColumns: ColumnsType = [
+    {
+      title: 'Number',
+      dataIndex: 'number',
+      width: '25%',
+      ellipsis: true,
+    },
+    {
+      title: 'Extension',
+      dataIndex: 'extension',
+      width: '15%',
+      ellipsis: true,
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      width: '50%',
+      ellipsis: true,
+    },
+    {
+      title: '',
+      key: 'delete',
+      width: '10%',
+      align: 'center',
+      render: (record: Phone) => (
+        <Button
+          danger
+          icon={<DeleteOutlined />}
+          size="small"
+          onClick={() => handleDeletePhone(record)}
+        />
+      ),
+    },
+  ];
+
   useEffect(() => {
     const existingContacts = form.getFieldValue('contacts') || [];
     setContactData(existingContacts);
+    const existingPhones = form.getFieldValue('phones') || [];
+    setPhoneData(existingPhones);
   }, [form]);
 
   const handleAddContact = (contact: Contact) => {
@@ -75,6 +116,19 @@ const ContactForm = ({
     );
     setContactData(updatedContacts);
     form.setFieldsValue({ contacts: updatedContacts });
+  };
+
+  const handleAddPhone = (phone: Phone) => {
+    console.log(phone);
+    const newPhones = [...phoneData, phone];
+    setPhoneData(newPhones);
+    form.setFieldsValue({ phones: newPhones });
+  };
+
+  const handleDeletePhone = (phoneToDelete: Phone) => {
+    const updatedPhones = phoneData.filter((phone) => phone !== phoneToDelete);
+    setPhoneData(updatedPhones);
+    form.setFieldsValue({ phones: updatedPhones });
   };
 
   return (
@@ -106,13 +160,24 @@ const ContactForm = ({
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
               <span>Phones</span>
-              <Button icon={<PlusOutlined />} size="small" />
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowPhoneModal(true)}
+                size="small"
+              />
             </div>
           }
           name="phones"
         >
-          <Table />
+          <Table columns={phoneColumns} dataSource={phoneData} />
         </Form.Item>
+        <AddPhoneForm
+          showModal={showPhoneModal}
+          closeModal={() => setShowPhoneModal(false)}
+          addObject={handleAddPhone}
+          objectData={phoneData}
+          existingPhones={organization ? organization.phones! : []}
+        />
       </div>
     </div>
   );
