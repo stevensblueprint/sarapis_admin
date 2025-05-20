@@ -70,6 +70,7 @@ const AddCapacityForm = ({
         </Button>
       }
     >
+      {contextHolder}
       <Form form={form} layout="vertical" requiredMark={false}>
         <div className="flex flex-row gap-4">
           <div className="flex flex-col w-1/2">
@@ -115,7 +116,6 @@ const AddCapacityForm = ({
         <Form.Item label="Description" name="description">
           <Input.TextArea rows={5} />
         </Form.Item>
-        {contextHolder}
       </Form>
     </Modal>
   );

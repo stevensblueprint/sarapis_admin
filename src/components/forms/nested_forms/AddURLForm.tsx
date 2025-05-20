@@ -56,6 +56,7 @@ const AddURLForm = ({
         </Button>
       }
     >
+      {contextHolder}
       <Form form={form} layout="vertical" requiredMark={false}>
         <Form.Item label="Name" name="label">
           <Input />
@@ -76,7 +77,6 @@ const AddURLForm = ({
         >
           <Input />
         </Form.Item>
-        {contextHolder}
       </Form>
     </Modal>
   );
