@@ -136,6 +136,28 @@ const ContactForm = ({
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
+              <span>Phones</span>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowPhoneModal(true)}
+                size="small"
+              />
+            </div>
+          }
+          name="phones"
+        >
+          <Table columns={phoneColumns} dataSource={phoneData} />
+        </Form.Item>
+        <AddPhoneForm
+          showModal={showPhoneModal}
+          closeModal={() => setShowPhoneModal(false)}
+          addObject={handleAddPhone}
+          objectData={phoneData}
+          existingPhones={organization ? organization.phones! : []}
+        />
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2 pt-2">
               <span>Contacts</span>
               <Button
                 icon={<PlusOutlined />}
@@ -157,28 +179,6 @@ const ContactForm = ({
           existingPhones={
             organization ? [...organization.phones!, ...phoneData] : phoneData
           }
-        />
-        <Form.Item
-          label={
-            <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Phones</span>
-              <Button
-                icon={<PlusOutlined />}
-                onClick={() => setShowPhoneModal(true)}
-                size="small"
-              />
-            </div>
-          }
-          name="phones"
-        >
-          <Table columns={phoneColumns} dataSource={phoneData} />
-        </Form.Item>
-        <AddPhoneForm
-          showModal={showPhoneModal}
-          closeModal={() => setShowPhoneModal(false)}
-          addObject={handleAddPhone}
-          objectData={phoneData}
-          existingPhones={organization ? organization.phones! : []}
         />
       </div>
     </div>

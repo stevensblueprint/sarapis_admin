@@ -54,12 +54,12 @@ const ServiceForm = ({
       content: <ScheduleForm form={form} />,
     },
     {
-      title: 'Location',
-      content: <LocationForm form={form} />,
-    },
-    {
       title: 'Contact',
       content: <ContactForm form={form} organization={organization} />,
+    },
+    {
+      title: 'Location',
+      content: <LocationForm form={form} />,
     },
   ];
 
