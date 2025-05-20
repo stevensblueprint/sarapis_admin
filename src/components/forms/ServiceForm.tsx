@@ -65,7 +65,7 @@ const ServiceForm = ({
 
   useEffect(() => {
     setShowServiceModal(showModal);
-    setCurrentStep(7);
+    setCurrentStep(5);
   }, [showModal]);
 
   const next = async () => {

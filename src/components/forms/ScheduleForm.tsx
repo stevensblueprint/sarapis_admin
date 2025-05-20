@@ -1,5 +1,6 @@
 import { Table, Form, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import AddScheduleForm from './nested_forms/AddScheduleForm';
 
 const ScheduleForm = () => {
   return (
@@ -16,6 +17,7 @@ const ScheduleForm = () => {
         >
           <Table />
         </Form.Item>
+        <AddScheduleForm />
       </div>
     </div>
   );

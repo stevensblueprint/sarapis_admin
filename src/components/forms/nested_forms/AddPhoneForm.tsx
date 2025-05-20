@@ -100,12 +100,12 @@ const AddPhoneForm = ({
       addObject(selectedPhone);
     } else {
       const values = await form.validateFields();
-      const trimmed: Phone = { ...values, languages: languageData };
-      if (isDuplicate(trimmed)) {
+      const newPhone: Phone = { ...values, languages: languageData };
+      if (isDuplicate(newPhone)) {
         showError();
         return;
       }
-      addObject(trimmed);
+      addObject(newPhone);
     }
 
     closeModal();

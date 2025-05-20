@@ -105,13 +105,13 @@ const AddContactForm = ({
       addObject(selectedContact);
     } else {
       const values = await form.validateFields();
-      const trimmed: Contact = { ...values, phones: phoneData };
-      console.log(trimmed);
-      if (isDuplicate(trimmed)) {
+      const newContact: Contact = { ...values, phones: phoneData };
+      console.log(newContact);
+      if (isDuplicate(newContact)) {
         showError();
         return;
       }
-      addObject(trimmed);
+      addObject(newContact);
     }
 
     closeModal();

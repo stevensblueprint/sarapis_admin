@@ -21,8 +21,8 @@ const AddProgramForm = ({
       addObject(selectedProgram);
     } else {
       const values = await form.validateFields();
-      const trimmed: Program = { ...values };
-      addObject(trimmed);
+      const newProgram: Program = { ...values };
+      addObject(newProgram);
     }
     closeModal();
     setSelectedProgram(null);

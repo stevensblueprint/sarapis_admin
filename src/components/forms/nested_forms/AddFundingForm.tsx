@@ -43,12 +43,12 @@ const AddFundingForm = ({
       addObject(selectedFunding);
     } else {
       const values = await form.validateFields();
-      const trimmed: Funding = { ...values, source: values.source.trim() };
-      if (isDuplicate(trimmed)) {
+      const newFunding: Funding = { ...values, source: values.source.trim() };
+      if (isDuplicate(newFunding)) {
         showError();
         return;
       }
-      addObject(trimmed);
+      addObject(newFunding);
     }
 
     closeModal();
