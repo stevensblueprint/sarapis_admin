@@ -91,6 +91,7 @@ const ServiceForm = ({
 
   const handleSubmit = async () => {
     const values = await form.validateFields();
+    const last_modified_obj = formData.last_modified;
     const service: Service = {
       ...formData,
       ...values,
@@ -99,8 +100,6 @@ const ServiceForm = ({
       },
     };
     console.log(service);
-    const response = await createService(service);
-    console.log(response);
   };
 
   const handleCancel = () => {
