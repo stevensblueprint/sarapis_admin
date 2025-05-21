@@ -19,7 +19,7 @@ const ScheduleForm = ({ form }: { form: FormInstance }) => {
     },
     {
       title: 'Closes At',
-      dataIndex: 'opens_at',
+      dataIndex: 'closes_at',
       width: '15%',
       ellipsis: true,
     },

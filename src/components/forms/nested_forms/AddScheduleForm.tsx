@@ -60,7 +60,6 @@ const AddScheduleForm = ({
       if (isDuplicate(newSchedule)) {
         showError();
       } else {
-        console.log(newSchedule);
         addObject(newSchedule);
         closeModal();
         form.resetFields();
