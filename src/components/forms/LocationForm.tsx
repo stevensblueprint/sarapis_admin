@@ -1,7 +1,15 @@
 import { Table, Form, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { FormInstance } from 'antd';
+import Organization from '../../interface/model/Organization';
 
-const LocationForm = () => {
+const LocationForm = ({
+  form,
+  organization,
+}: {
+  form: FormInstance;
+  organization: Organization;
+}) => {
   return (
     <div className="w-[100%] flex justify-center">
       <div className="flex flex-col gap-4 w-3/4">

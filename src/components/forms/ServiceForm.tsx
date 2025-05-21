@@ -66,15 +66,17 @@ const ServiceForm = ({
 
   useEffect(() => {
     setShowServiceModal(showModal);
-    setCurrentStep(5);
+    setCurrentStep(0);
   }, [showModal]);
 
   const next = async () => {
-    const values = await form.validateFields();
+    let values = await form.validateFields();
     if (currentStep == 0 && values.organization) {
-      const response = await getOrganizationById(values.organization);
-      const data = response.data as Organization;
-      setOrganization(data);
+      const org = JSON.parse(values.organization) as Organization;
+      console.log(org);
+      form.setFieldValue(organization, org);
+      setOrganization(org);
+      values = { ...values, organization: org };
     }
     console.log(values);
     setCurrentStep(currentStep + 1);

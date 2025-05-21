@@ -93,7 +93,10 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
               showSearch
               placeholder="Select an Organization"
               options={organizations.map((organization) => {
-                return { value: organization.id, label: organization.name };
+                return {
+                  value: JSON.stringify(organization),
+                  label: organization.name,
+                };
               })}
             />
           </Form.Item>
