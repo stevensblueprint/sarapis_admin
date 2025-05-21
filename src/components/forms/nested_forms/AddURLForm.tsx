@@ -18,14 +18,14 @@ const AddURLForm = ({
   const addNewObject = async () => {
     try {
       const values = await form.validateFields();
-      const trimmedUrl = values.url.trim();
+      const newURL: Url = { ...values, url: values.url.trim() };
 
-      const exists = objectData.some((existing) => existing.url === trimmedUrl);
+      const exists = objectData.some((existing) => existing.url === newURL);
 
       if (exists) {
         showError();
       } else {
-        addObject({ ...values, url: trimmedUrl });
+        addObject(newURL);
         closeModal();
         form.resetFields();
       }
