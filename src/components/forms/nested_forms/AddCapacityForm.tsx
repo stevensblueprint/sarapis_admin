@@ -34,8 +34,10 @@ const AddCapacityForm = ({
       const values = await form.validateFields();
       const newCapacity: ServiceCapacity = {
         ...values,
+        updated:
+          values.updated?.format('YYYY-MM-DD[T]HH:mm:ss:SSS') ?? undefined,
       };
-
+      console.log(newCapacity);
       if (isDuplicate(newCapacity)) {
         showError();
       } else {

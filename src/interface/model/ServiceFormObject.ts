@@ -13,6 +13,7 @@ import RequiredDocument from './RequiredDocument';
 import Contact from './Contact';
 import ServiceCapacity from './ServiceCapacity';
 import Organization from './Organization';
+import { Dayjs } from 'dayjs';
 
 export interface ServiceFormObject {
   id?: string;
@@ -30,10 +31,10 @@ export interface ServiceFormObject {
   eligibility_description?: string;
   minimum_age?: number;
   maximum_age?: number;
-  assured_date?: string;
+  assured_date?: Dayjs;
   assurer_email?: string;
   alert?: string;
-  last_modified?: string;
+  last_modified?: Dayjs;
   phones?: Phone[];
   schedules?: Schedule[];
   service_areas?: ServiceArea[];

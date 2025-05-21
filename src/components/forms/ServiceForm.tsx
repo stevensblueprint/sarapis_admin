@@ -12,6 +12,7 @@ import Organization from '../../interface/model/Organization';
 import { getOrganizationById } from '../../api/lib/organizations';
 import { createService } from '../../api/lib/services';
 import { Service } from '../../interface/model/Service';
+import { ServiceFormObject } from '../../interface/model/ServiceFormObject';
 
 const { Step } = Steps;
 
@@ -26,7 +27,7 @@ const ServiceForm = ({
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [form] = Form.useForm();
   const [organization, setOrganization] = useState<Organization>();
-  const [formData, setFormData] = useState<Service>({});
+  const [formData, setFormData] = useState<ServiceFormObject>({});
 
   const steps = [
     {
@@ -91,10 +92,13 @@ const ServiceForm = ({
 
   const handleSubmit = async () => {
     const values = await form.validateFields();
-    const last_modified_obj = formData.last_modified;
     const service: Service = {
       ...formData,
       ...values,
+      last_modified:
+        formData.last_modified?.format('YYYY-MM-DD[T]HH:mm:ss:SSS') ??
+        undefined,
+      assured_date: formData.assured_date?.format('YYYY-MM-DD') ?? undefined,
       organization: {
         id: form.getFieldValue('organization'),
       },
