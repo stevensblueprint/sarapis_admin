@@ -181,7 +181,7 @@ const AdditionalInfoForm = ({
           closeModal={() => setShowFundingModal(false)}
           addObject={handleAddFunding}
           objectData={fundingData}
-          existingFunding={organization ? organization.funding! : []}
+          existingFunding={organization?.funding ?? []}
         />
         <div className="flex flex-row gap-4">
           <Form.Item
@@ -237,7 +237,7 @@ const AdditionalInfoForm = ({
             showModal={showProgramModal}
             closeModal={() => setShowProgramModal(false)}
             addObject={handleAddProgram}
-            existingPrograms={organization ? organization.programs! : []}
+            existingPrograms={organization?.programs ?? []}
           />
         </div>
         <Form.Item

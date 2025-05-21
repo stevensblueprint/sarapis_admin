@@ -6,8 +6,10 @@ import {
   message,
   InputNumber,
   DatePicker,
+  Select,
 } from 'antd';
 import Schedule from '../../../interface/model/Schedule';
+import { useState } from 'react';
 
 const AddScheduleForm = ({
   showModal,
@@ -22,6 +24,7 @@ const AddScheduleForm = ({
 }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
+  const [usingInterval, setUsingInterval] = useState<number | null>(null);
 
   const isDuplicate = (newSchedule: Schedule) => {
     return objectData.some(
@@ -33,12 +36,31 @@ const AddScheduleForm = ({
     try {
       const values = await form.validateFields();
       const newSchedule: Schedule = {
-        ...values,
+        valid_from: values.valid_dates?.[0]?.format('YYYY-MM-DD') ?? undefined,
+        valid_to: values.valid_dates?.[1]?.format('YYYY-MM-DD') ?? undefined,
+        dtstart: values.occurrence?.[0]?.format('YYYY-MM-DD') ?? undefined,
+        until: values.occurrence?.[1]?.format('YYYY-MM-DD') ?? undefined,
+        timezone: values.timezone ? values.timezone : 0,
+        freq: values.freq,
+        interval: values.interval,
+        count: values.count,
+        wkst: values.wkst,
+        byday: values.byday?.join(',') ?? undefined,
+        byweekno: values.byweekno?.join(',') ?? undefined,
+        bymonthday: values.bymonthday?.join(',') ?? undefined,
+        byyearday: values.byyearday?.join(',') ?? undefined,
+        opens_at: values.valid_hours?.[0]?.format('HH:mm') ?? undefined,
+        closes_at: values.valid_hours?.[1]?.format('HH:mm') ?? undefined,
+        schedule_link: values.schedule_link,
+        description: values.description,
+        attending_type: values.attending_type,
+        notes: values.notes,
       };
 
       if (isDuplicate(newSchedule)) {
         showError();
       } else {
+        console.log(newSchedule);
         addObject(newSchedule);
         closeModal();
         form.resetFields();
@@ -71,7 +93,126 @@ const AddScheduleForm = ({
       }
     >
       {contextHolder}
-      <Form form={form} layout="vertical" requiredMark={false}></Form>
+      <Form form={form} layout="vertical" requiredMark={false}>
+        <Form.Item label="Valid Dates" name="valid_dates">
+          <DatePicker.RangePicker className="w-full" format={'YYYY-MM-DD'} />
+        </Form.Item>
+        <div className="flex flex-row gap-2">
+          <Form.Item className="w-1/2" label="Frequency" name="freq">
+            <Select
+              options={[
+                { value: 'WEEKLY', label: 'Weekly' },
+                { value: 'MONTHLY', label: 'Monthly' },
+              ]}
+              allowClear
+            />
+          </Form.Item>
+          <Form.Item className="w-1/4" label="Interval" name="interval">
+            <InputNumber
+              onChange={(value: number | null) => setUsingInterval(value)}
+              className="w-full"
+            />
+          </Form.Item>
+          <Form.Item className="w-1/4" label="Count" name="count">
+            <InputNumber className="w-full" />
+          </Form.Item>
+        </div>
+        <Form.Item
+          label="First & Last Occurrence of Event"
+          name="occurrence"
+          rules={[
+            {
+              required: usingInterval !== null,
+              message: 'Required field when using Interval!',
+            },
+          ]}
+        >
+          <DatePicker.RangePicker className="w-full" format={'YYYY-MM-DD'} />
+        </Form.Item>
+        <div className="flex flex-row gap-2">
+          <Form.Item
+            className="w-1/2"
+            label="Timezone (UTC offset)"
+            name="timezone"
+          >
+            <InputNumber className="w-full" />
+          </Form.Item>
+          <Form.Item className="w-1/2" label="Week Start" name="wkst">
+            <Select
+              options={[
+                { value: 'MO', label: 'Monday' },
+                { value: 'TU', label: 'Tuesday' },
+                { value: 'WE', label: 'Wednesday' },
+                { value: 'TH', label: 'Thursday' },
+                { value: 'FR', label: 'Friday' },
+                { value: 'SA', label: 'Saturday' },
+                { value: 'SU', label: 'Sunday' },
+              ]}
+              allowClear
+            />
+          </Form.Item>
+        </div>
+        <div className="flex flex-row gap-2">
+          <Form.Item className="w-1/2" label="By Day" name="byday">
+            <Select mode="tags" allowClear />
+          </Form.Item>
+          <Form.Item className="w-1/2" label="By Week Number" name="byweekno">
+            <Select mode="tags" allowClear />
+          </Form.Item>
+        </div>
+        <div className="flex flex-row gap-2">
+          <Form.Item className="w-1/2" label="By Month Day" name="bymonthday">
+            <Select mode="tags" allowClear />
+          </Form.Item>
+          <Form.Item className="w-1/2" label="By Year Day" name="byyearday">
+            <Select mode="tags" allowClear />
+          </Form.Item>
+        </div>
+        <Form.Item label="Opening & Closing Hours" name="valid_hours">
+          <DatePicker.RangePicker
+            className="w-full"
+            picker="time"
+            format={'HH:mm'}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Schedule Link"
+          name="schedule_link"
+          rules={[
+            {
+              type: 'url',
+              message: 'Invalid URL!',
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="
+        Description"
+          name="description"
+        >
+          <Input.TextArea rows={5} />
+        </Form.Item>
+        <div className="flex flex-row gap-2">
+          <Form.Item
+            className="w-1/2"
+            label="
+        Attending Type"
+            name="attending_type"
+          >
+            <Input.TextArea rows={5} />
+          </Form.Item>
+          <Form.Item
+            className="w-1/2"
+            label="
+        Notes"
+            name="notes"
+          >
+            <Input.TextArea rows={5} />
+          </Form.Item>
+        </div>
+      </Form>
     </Modal>
   );
 };

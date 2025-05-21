@@ -153,7 +153,7 @@ const ContactForm = ({
           closeModal={() => setShowPhoneModal(false)}
           addObject={handleAddPhone}
           objectData={phoneData}
-          existingPhones={organization ? organization.phones! : []}
+          existingPhones={organization?.phones ?? []}
         />
         <Form.Item
           label={
@@ -175,7 +175,7 @@ const ContactForm = ({
           closeModal={() => setShowContactModal(false)}
           addObject={handleAddContact}
           objectData={contactData}
-          existingContacts={organization ? organization.contacts! : []}
+          existingContacts={organization?.contacts ?? []}
           existingPhones={
             organization ? [...organization.phones!, ...phoneData] : phoneData
           }
