@@ -9,7 +9,6 @@ import ScheduleForm from './ScheduleForm';
 import LocationForm from './LocationForm';
 import ContactForm from './ContactForm';
 import Organization from '../../interface/model/Organization';
-import { getOrganizationById } from '../../api/lib/organizations';
 import { createService } from '../../api/lib/services';
 import { Service } from '../../interface/model/Service';
 import { ServiceFormObject } from '../../interface/model/ServiceFormObject';
@@ -60,13 +59,13 @@ const ServiceForm = ({
     },
     {
       title: 'Location',
-      content: <LocationForm form={form} />,
+      content: <LocationForm form={form} organization={organization} />,
     },
   ];
 
   useEffect(() => {
     setShowServiceModal(showModal);
-    setCurrentStep(0);
+    setCurrentStep(7);
   }, [showModal]);
 
   const next = async () => {
@@ -106,6 +105,8 @@ const ServiceForm = ({
       },
     };
     console.log(service);
+    const response = await createService(service);
+    console.log(response);
   };
 
   const handleCancel = () => {
