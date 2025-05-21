@@ -30,8 +30,8 @@ const AddCostOptionForm = ({
         amount_description: values.amount_description,
         currency: values.currency,
         option: values.option,
-        valid_from: values.valid_dates[0],
-        valid_to: values.valid_dates[1],
+        valid_from: values.valid_dates?.[0]?.format('YYYY-MM-DD') ?? undefined,
+        valid_to: values.valid_dates?.[1]?.format('YYYY-MM-DD') ?? undefined,
       };
 
       if (isDuplicate(newCostOption)) {
