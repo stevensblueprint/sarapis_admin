@@ -106,7 +106,6 @@ const AddContactForm = ({
     } else {
       const values = await form.validateFields();
       const newContact: Contact = { ...values, phones: phoneData };
-      console.log(newContact);
       if (isDuplicate(newContact)) {
         showError();
         return;

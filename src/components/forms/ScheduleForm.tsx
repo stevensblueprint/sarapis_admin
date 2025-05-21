@@ -87,6 +87,7 @@ const ScheduleForm = ({ form }: { form: FormInstance }) => {
           closeModal={() => setShowScheduleModal(false)}
           addObject={handleAddSchedule}
           objectData={scheduleData}
+          existingSchedules={[]}
         />
       </div>
     </div>

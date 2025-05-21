@@ -7,6 +7,7 @@ import {
   InputNumber,
   DatePicker,
   Select,
+  Divider,
 } from 'antd';
 import Schedule from '../../../interface/model/Schedule';
 import { useState } from 'react';
@@ -16,15 +17,20 @@ const AddScheduleForm = ({
   closeModal,
   addObject,
   objectData,
+  existingSchedules,
 }: {
   showModal: boolean;
   closeModal: () => void;
   addObject: (schedule: Schedule) => void;
   objectData: Schedule[];
+  existingSchedules: Schedule[];
 }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [usingInterval, setUsingInterval] = useState<number | null>(null);
+  const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(
+    null
+  );
 
   const isDuplicate = (newSchedule: Schedule) => {
     return objectData.some(
@@ -32,8 +38,23 @@ const AddScheduleForm = ({
     );
   };
 
+  const handleSelect = (jsonValue: string) => {
+    const schedule = JSON.parse(jsonValue) as Schedule;
+    setSelectedSchedule(schedule);
+  };
+
+  const handleClear = () => {
+    setSelectedSchedule(null);
+  };
+
   const addNewObject = async () => {
-    try {
+    if (selectedSchedule) {
+      if (isDuplicate(selectedSchedule)) {
+        showError();
+        return;
+      }
+      addObject(selectedSchedule);
+    } else {
       const values = await form.validateFields();
       const newSchedule: Schedule = {
         valid_from: values.valid_dates?.[0]?.format('YYYY-MM-DD') ?? undefined,
@@ -56,17 +77,15 @@ const AddScheduleForm = ({
         attending_type: values.attending_type,
         notes: values.notes,
       };
-
       if (isDuplicate(newSchedule)) {
         showError();
-      } else {
-        addObject(newSchedule);
-        closeModal();
-        form.resetFields();
+        return;
       }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+      addObject(newSchedule);
     }
+    closeModal();
+    form.resetFields();
+    setSelectedSchedule(null);
   };
 
   const showError = () => {
@@ -83,6 +102,7 @@ const AddScheduleForm = ({
       onCancel={() => {
         closeModal();
         form.resetFields();
+        setSelectedSchedule(null);
       }}
       title="Add Schedule"
       footer={
@@ -92,7 +112,36 @@ const AddScheduleForm = ({
       }
     >
       {contextHolder}
-      <Form form={form} layout="vertical" requiredMark={false}>
+      <div className="flex flex-col gap-2 pb-2">
+        <strong>Select Existing Schedule</strong>
+        <Select
+          allowClear
+          showSearch
+          placeholder="Select a Schedule"
+          options={existingSchedules.map((schedule) => ({
+            value: JSON.stringify(schedule),
+            label: schedule.description,
+          }))}
+          onSelect={handleSelect}
+          onClear={handleClear}
+          value={
+            selectedSchedule ? JSON.stringify(selectedSchedule) : undefined
+          }
+        />
+      </div>
+
+      <Divider />
+
+      <div className="pb-2">
+        <strong>Create New Schedule</strong>
+      </div>
+
+      <Form
+        form={form}
+        layout="vertical"
+        requiredMark={false}
+        disabled={selectedSchedule !== null}
+      >
         <Form.Item label="Valid Dates" name="valid_dates">
           <DatePicker.RangePicker className="w-full" format={'YYYY-MM-DD'} />
         </Form.Item>

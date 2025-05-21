@@ -1,19 +1,24 @@
-import { Modal, Button, Form, Input, message, Select } from 'antd';
+import { Modal, Button, Form, Input, message, Select, Divider } from 'antd';
 import ServiceArea from '../../../interface/model/ServiceArea';
+import { useState } from 'react';
 
 const AddServiceAreaForm = ({
   showModal,
   closeModal,
   addObject,
   objectData,
+  existingServiceAreas,
 }: {
   showModal: boolean;
   closeModal: () => void;
   addObject: (ServiceArea: ServiceArea) => void;
   objectData: ServiceArea[];
+  existingServiceAreas: ServiceArea[];
 }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
+  const [selectedServiceArea, setSelectedServiceArea] =
+    useState<ServiceArea | null>(null);
 
   const isDuplicate = (newServiceArea: ServiceArea) => {
     return objectData.some(
@@ -21,23 +26,35 @@ const AddServiceAreaForm = ({
     );
   };
 
-  const addNewObject = async () => {
-    try {
-      const values = await form.validateFields();
-      const newServiceArea: ServiceArea = {
-        ...values,
-      };
+  const handleSelect = (jsonValue: string) => {
+    const serviceArea = JSON.parse(jsonValue) as ServiceArea;
+    setSelectedServiceArea(serviceArea);
+  };
 
+  const handleClear = () => {
+    setSelectedServiceArea(null);
+  };
+
+  const addNewObject = async () => {
+    if (selectedServiceArea) {
+      if (isDuplicate(selectedServiceArea)) {
+        showError();
+        return;
+      }
+      addObject(selectedServiceArea);
+    } else {
+      const values = await form.validateFields();
+      const newServiceArea: ServiceArea = { ...values };
       if (isDuplicate(newServiceArea)) {
         showError();
-      } else {
-        addObject(newServiceArea);
-        closeModal();
-        form.resetFields();
+        return;
       }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+      addObject(newServiceArea);
     }
+
+    closeModal();
+    form.resetFields();
+    setSelectedServiceArea(null);
   };
 
   const showError = () => {
@@ -54,6 +71,7 @@ const AddServiceAreaForm = ({
       onCancel={() => {
         closeModal();
         form.resetFields();
+        setSelectedServiceArea(null);
       }}
       title="Add Service Area"
       footer={
@@ -63,7 +81,38 @@ const AddServiceAreaForm = ({
       }
     >
       {contextHolder}
-      <Form form={form} layout="vertical" requiredMark={false}>
+      <div className="flex flex-col gap-2 pb-2">
+        <strong>Select Existing Service Area</strong>
+        <Select
+          allowClear
+          showSearch
+          placeholder="Select a Service Area"
+          options={existingServiceAreas.map((serviceArea) => ({
+            value: JSON.stringify(serviceArea),
+            label: serviceArea.name,
+          }))}
+          onSelect={handleSelect}
+          onClear={handleClear}
+          value={
+            selectedServiceArea
+              ? JSON.stringify(selectedServiceArea)
+              : undefined
+          }
+        />
+      </div>
+
+      <Divider />
+
+      <div className="pb-2">
+        <strong>Create New Service Area</strong>
+      </div>
+
+      <Form
+        form={form}
+        layout="vertical"
+        requiredMark={false}
+        disabled={selectedServiceArea !== null}
+      >
         <Form.Item label="Name" name="name">
           <Input />
         </Form.Item>
