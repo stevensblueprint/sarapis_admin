@@ -1,9 +1,16 @@
-import { Modal, Button, Form, Input, message, Table } from 'antd';
+import {
+  Modal,
+  Button,
+  Form,
+  Input,
+  message,
+  Table,
+  Select,
+  Divider,
+} from 'antd';
 import { useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import ServiceAtLocation from '../../../interface/model/ServiceAtLocation';
-import ServiceArea from '../../../interface/model/ServiceArea';
 import Contact from '../../../interface/model/Contact';
 import Phone from '../../../interface/model/Phone';
 import Schedule from '../../../interface/model/Schedule';
@@ -12,8 +19,11 @@ import AddServiceAreaForm from './AddServiceAreaForm';
 import AddContactForm from './AddContactForm';
 import AddPhoneForm from './AddPhoneForm';
 import AddScheduleForm from './AddScheduleForm';
+import Language from '../../../interface/model/Language';
+import Accessibility from '../../../interface/model/Accessibility';
+import Address from '../../../interface/model/Address';
 
-const AddServiceAtLocationForm = ({
+const AddLocationForm = ({
   showModal,
   closeModal,
   addObject,
@@ -22,9 +32,9 @@ const AddServiceAtLocationForm = ({
 }: {
   showModal: boolean;
   closeModal: () => void;
-  addObject: (serviceAtLocation: ServiceAtLocation) => void;
-  objectData: ServiceAtLocation[];
-  existingData: [ServiceArea[], Contact[], Phone[], Schedule[], Location[]];
+  addObject: (location: Location) => void;
+  objectData: Location[];
+  existingData: [Location[], Language[], Contact[], Phone[], Schedule[]];
 }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
@@ -34,14 +44,21 @@ const AddServiceAtLocationForm = ({
     false,
     false,
     false,
+    false,
   ]);
-  const [serviceAreaData, setServiceAreaData] = useState<ServiceArea[]>([]);
+  const [languageData, setLanguageData] = useState<Language[]>([]);
+  const [addressData, setAddressData] = useState<Address[]>([]);
   const [contactData, setContactData] = useState<Contact[]>([]);
+  const [accessibilityData, setAccessibilityData] = useState<Accessibility[]>(
+    []
+  );
   const [phoneData, setPhoneData] = useState<Phone[]>([]);
   const [scheduleData, setScheduleData] = useState<Schedule[]>([]);
-  const [selectedLocation, setSelectedLocation] = useState<Location>();
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null
+  );
 
-  const serviceAreaColumns: ColumnsType = [
+  const languageColumns: ColumnsType = [
     {
       title: 'Name',
       dataIndex: 'name',
@@ -49,8 +66,8 @@ const AddServiceAtLocationForm = ({
       ellipsis: true,
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
+      title: 'Note',
+      dataIndex: 'note',
       width: '60%',
       ellipsis: true,
     },
@@ -59,12 +76,41 @@ const AddServiceAtLocationForm = ({
       key: 'delete',
       width: '10%',
       align: 'center',
-      render: (record: ServiceArea) => (
+      render: (record: Language) => (
         <Button
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteServiceArea(record)}
+          onClick={() => handleDeleteLanguage(record)}
+        />
+      ),
+    },
+  ];
+
+  const addressColumns: ColumnsType = [
+    {
+      title: 'Address',
+      dataIndex: 'address_1',
+      width: '70%',
+      ellipsis: true,
+    },
+    {
+      title: 'City',
+      dataIndex: 'city',
+      width: '20%',
+      ellipsis: true,
+    },
+    {
+      title: '',
+      key: 'delete',
+      width: '10%',
+      align: 'center',
+      render: (record: Address) => (
+        <Button
+          danger
+          icon={<DeleteOutlined />}
+          size="small"
+          onClick={() => handleDeleteAddress(record)}
         />
       ),
     },
@@ -106,6 +152,29 @@ const AddServiceAtLocationForm = ({
           icon={<DeleteOutlined />}
           size="small"
           onClick={() => handleDeleteContact(record)}
+        />
+      ),
+    },
+  ];
+
+  const accessibilityColumns: ColumnsType = [
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      width: '90%',
+      ellipsis: true,
+    },
+    {
+      title: '',
+      key: 'delete',
+      width: '10%',
+      align: 'center',
+      render: (record: Address) => (
+        <Button
+          danger
+          icon={<DeleteOutlined />}
+          size="small"
+          onClick={() => handleDeleteAccessibility(record)}
         />
       ),
     },
@@ -181,16 +250,37 @@ const AddServiceAtLocationForm = ({
     },
   ];
 
-  const handleAddServiceArea = (serviceArea: ServiceArea) => {
-    const newServiceAreas = [...serviceAreaData, serviceArea];
-    setServiceAreaData(newServiceAreas);
+  const handleSelect = (jsonValue: string) => {
+    const location = JSON.parse(jsonValue) as Location;
+    setSelectedLocation(location);
   };
 
-  const handleDeleteServiceArea = (serviceAreaToDelete: ServiceArea) => {
-    const updatedServiceAreas = serviceAreaData.filter(
-      (serviceArea) => serviceArea !== serviceAreaToDelete
+  const handleClear = () => {
+    setSelectedLocation(null);
+  };
+
+  const handleAddLanguage = (language: Language) => {
+    const newLanguages = [...languageData, language];
+    setLanguageData(newLanguages);
+  };
+
+  const handleDeleteLanguage = (languageToDelete: Language) => {
+    const updatedLanguages = languageData.filter(
+      (language) => language !== languageToDelete
     );
-    setServiceAreaData(updatedServiceAreas);
+    setLanguageData(updatedLanguages);
+  };
+
+  const handleAddAddress = (address: Address) => {
+    const newAddresses = [...addressData, address];
+    setAddressData(newAddresses);
+  };
+
+  const handleDeleteAddress = (addressToDelete: Address) => {
+    const updatedAddresses = addressData.filter(
+      (address) => address !== addressToDelete
+    );
+    setAddressData(updatedAddresses);
   };
 
   const handleAddContact = (contact: Contact) => {
@@ -203,6 +293,18 @@ const AddServiceAtLocationForm = ({
       (contact) => contact !== contactToDelete
     );
     setContactData(updatedContacts);
+  };
+
+  const handleAddAccessibility = (accessibility: Accessibility) => {
+    const newAccessibilities = [...accessibilityData, accessibility];
+    setAccessibilityData(newAccessibilities);
+  };
+
+  const handleDeleteAccessibility = (accessibilityToDelete: Accessibility) => {
+    const updatedAccessibilities = accessibilityData.filter(
+      (accessibility) => accessibility !== accessibilityToDelete
+    );
+    setAccessibilityData(updatedAccessibilities);
   };
 
   const handleAddPhone = (phone: Phone) => {
@@ -227,54 +329,52 @@ const AddServiceAtLocationForm = ({
     setScheduleData(updatedSchedules);
   };
 
-  const handleAddLocation = (location: Location) => {
-    setSelectedLocation(location);
-  };
-
-  const handleDeleteLocation = () => {
-    setSelectedLocation(undefined);
-  };
-
-  const isDuplicate = (newServiceAtLocation: ServiceAtLocation) => {
+  const isDuplicate = (newLocation: Location) => {
     return objectData.some(
-      (existing) =>
-        JSON.stringify(existing) === JSON.stringify(newServiceAtLocation)
+      (existing) => JSON.stringify(existing) === JSON.stringify(newLocation)
     );
   };
 
   const addNewObject = async () => {
-    try {
+    if (selectedLocation) {
+      if (isDuplicate(selectedLocation)) {
+        showError();
+        return;
+      }
+      addObject(selectedLocation);
+    } else {
       const values = await form.validateFields();
-      const newServiceAtLocation: ServiceAtLocation = {
+      const newLocation: Location = {
         ...values,
-        service_areas: serviceAreaData,
+        languages: languageData,
         contacts: contactData,
         phones: phoneData,
         schedules: scheduleData,
-        location: selectedLocation,
+        addresses: addressData,
+        accessibility: accessibilityData,
       };
-
-      if (isDuplicate(newServiceAtLocation)) {
+      if (isDuplicate(newLocation)) {
         showError();
-      } else {
-        addObject(newServiceAtLocation);
-        closeModal();
-        form.resetFields();
-        setServiceAreaData([]);
-        setContactData([]);
-        setPhoneData([]);
-        setScheduleData([]);
-        setSelectedLocation(undefined);
+        return;
       }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+      addObject(newLocation);
     }
+
+    closeModal();
+    form.resetFields();
+    setLanguageData([]);
+    setContactData([]);
+    setPhoneData([]);
+    setScheduleData([]);
+    setAddressData([]);
+    setAccessibilityData([]);
+    setSelectedLocation(null);
   };
 
   const showError = () => {
     messageApi.open({
       type: 'error',
-      content: 'Duplicate service at location not allowed!',
+      content: 'Duplicate locations not allowed!',
       duration: 5,
     });
   };
@@ -285,13 +385,15 @@ const AddServiceAtLocationForm = ({
       onCancel={() => {
         closeModal();
         form.resetFields();
-        setServiceAreaData([]);
+        setLanguageData([]);
         setContactData([]);
         setPhoneData([]);
         setScheduleData([]);
-        setSelectedLocation(undefined);
+        setAddressData([]);
+        setAccessibilityData([]);
+        setSelectedLocation(null);
       }}
-      title="Add Service At Location"
+      title="Add Location"
       width="70%"
       footer={
         <Button type="primary" onClick={addNewObject}>
@@ -300,7 +402,36 @@ const AddServiceAtLocationForm = ({
       }
     >
       {contextHolder}
-      <Form form={form} layout="vertical" requiredMark={false}>
+      <div className="flex flex-col gap-2 pb-2">
+        <strong>Select Existing Location</strong>
+        <Select
+          allowClear
+          showSearch
+          placeholder="Select a Location"
+          options={existingData[0].map((location) => ({
+            value: JSON.stringify(location),
+            label: location.name,
+          }))}
+          onSelect={handleSelect}
+          onClear={handleClear}
+          value={
+            selectedLocation ? JSON.stringify(selectedLocation) : undefined
+          }
+        />
+      </div>
+
+      <Divider />
+
+      <div className="pb-2">
+        <strong>Create New Location</strong>
+      </div>
+
+      <Form
+        form={form}
+        layout="vertical"
+        requiredMark={false}
+        disabled={selectedLocation !== null}
+      >
         <div className="flex justify-center">
           <Form.Item className="w-2/3" label="Description" name="description">
             <Input.TextArea rows={5} />
@@ -448,4 +579,4 @@ const AddServiceAtLocationForm = ({
   );
 };
 
-export default AddServiceAtLocationForm;
+export default AddLocationForm;
