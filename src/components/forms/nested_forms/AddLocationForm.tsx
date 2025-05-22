@@ -15,13 +15,13 @@ import Contact from '../../../interface/model/Contact';
 import Phone from '../../../interface/model/Phone';
 import Schedule from '../../../interface/model/Schedule';
 import Location from '../../../interface/model/Location';
-import AddServiceAreaForm from './AddServiceAreaForm';
 import AddContactForm from './AddContactForm';
 import AddPhoneForm from './AddPhoneForm';
 import AddScheduleForm from './AddScheduleForm';
 import Language from '../../../interface/model/Language';
 import Accessibility from '../../../interface/model/Accessibility';
 import Address from '../../../interface/model/Address';
+import AddLanguageForm from './AddLanguageForm';
 
 const AddLocationForm = ({
   showModal,
@@ -34,7 +34,7 @@ const AddLocationForm = ({
   closeModal: () => void;
   addObject: (location: Location) => void;
   objectData: Location[];
-  existingData: [Location[], Language[], Contact[], Phone[], Schedule[]];
+  existingData: [Location[], Contact[], Phone[], Schedule[]];
 }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
@@ -440,7 +440,7 @@ const AddLocationForm = ({
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Service Areas</span>
+              <span>Languages</span>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -454,11 +454,11 @@ const AddLocationForm = ({
               />
             </div>
           }
-          name="service_areas"
+          name="languages"
         >
-          <Table columns={serviceAreaColumns} dataSource={serviceAreaData} />
+          <Table columns={languageColumns} dataSource={languageData} />
         </Form.Item>
-        <AddServiceAreaForm
+        <AddLanguageForm
           showModal={showModals[0]}
           closeModal={() =>
             setShowModals((prev) => {
@@ -467,14 +467,13 @@ const AddLocationForm = ({
               return updated;
             })
           }
-          addObject={handleAddServiceArea}
-          objectData={serviceAreaData}
-          existingServiceAreas={existingData[0]}
+          addObject={handleAddLanguage}
+          objectData={languageData}
         />
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Contacts</span>
+              <span>Addresses</span>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -488,9 +487,9 @@ const AddLocationForm = ({
               />
             </div>
           }
-          name="contacts"
+          name="addresses"
         >
-          <Table columns={contactColumns} dataSource={contactData} />
+          <Table columns={addressColumns} dataSource={addressData} />
         </Form.Item>
         <AddContactForm
           showModal={showModals[1]}
