@@ -14,7 +14,7 @@ export class OrganizationError extends Error {
   }
 }
 
-const API_BASE_URL = '/api/organizations';
+const API_BASE_URL = '/organizations';
 const apiClient = getApiClient(process.env.REACT_APP_API_BASE_URL || '');
 
 const handleApiError = (error: unknown, defaultMessage: string): never => {
@@ -62,4 +62,18 @@ export const getTextSearchOrganizations = async (
   return apiClient
     .get(`${API_BASE_URL}?query=${query}`)
     .catch((error) => handleApiError(error, 'Failed to fetch organizations'));
+};
+
+/**
+ * Fetches an organization by its ID
+ * @param id - Organization ID
+ * @returns Promise resolving to the API response
+ * @throws {OrganizationError} When the API request fails
+ */
+export const getOrganizationById = async (
+  id: string
+): Promise<AxiosResponse<Organization>> => {
+  return apiClient
+    .get(`${API_BASE_URL}/${id}`)
+    .catch((error) => handleApiError(error, 'Failed to fetch organization'));
 };

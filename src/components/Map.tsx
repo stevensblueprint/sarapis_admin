@@ -24,7 +24,7 @@ const Map = ({ services }: MapProps) => {
   const mapInfoList: MapInfo[] = services.flatMap((service) =>
     service.serviceAtLocations.map((serviceAtLocation) => {
       const { id, name, latitude, longitude } = serviceAtLocation.location;
-      return { id, name, latitude, longitude };
+      return { id, name: name || 'Unknown', latitude, longitude };
     })
   );
 

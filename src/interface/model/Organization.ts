@@ -6,6 +6,7 @@ import OrganizationIdentifier from './OrganizationIdentifier';
 import Attribute from './Attribute';
 import Metadata from './Metadata';
 import Url from './Url';
+import { Service } from './Service';
 
 interface Organization {
   id: string;
@@ -27,6 +28,7 @@ interface Organization {
   phones: Phone[];
   locations: Location[];
   organizationIdentifiers: OrganizationIdentifier[];
+  services: Service[];
   attributes: Attribute[];
   metadata: Metadata[];
 }

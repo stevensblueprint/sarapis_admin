@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Organization from '../../interface/model/Organization';
 import {
   Button,
@@ -42,13 +42,13 @@ interface OrganizationFormProps {
 
 const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(2);
   const [locations, setLocations] = useState<Location[]>([]);
   const [phones, setPhones] = useState<Phone[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [form] = Form.useForm();
 
-  useState(() => {
+  useEffect(() => {
     const fetchAllLocations = async () => {
       try {
         const response = await getAllLocations();
@@ -59,7 +59,7 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
       }
     };
     fetchAllLocations();
-  });
+  }, []);
 
   const formSteps = [
     {
@@ -82,9 +82,10 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
             <Select
               showSearch
               placeholder="Select a parent organization"
-              options={organizations.map((organizations) => {
-                return { value: organizations.id, label: organizations.name };
-              })}
+              options={organizations.map((org) => ({
+                value: org.id,
+                label: org.name,
+              }))}
             />
           </Form.Item>
           <Form.Item
@@ -223,9 +224,10 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
           dropdownName="location Name"
           dropdownPlaceholder="Select a Location"
           emptyText="Locations"
-          options={locations.map((location) => {
-            return { value: location.id, label: location.name };
-          })}
+          options={locations.map((location) => ({
+            value: location.id,
+            label: location.name,
+          }))}
           tableColumns={locationTableColumns || []}
           dataSource={locations}
         />
@@ -243,9 +245,10 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
           dropdownName="Phone Number"
           dropdownPlaceholder="Select a Phone"
           emptyText="Phones"
-          options={phones.map((phone) => {
-            return { value: phone.id, label: phone.number };
-          })}
+          options={phones.map((phone) => ({
+            value: phone.id,
+            label: phone.number,
+          }))}
           tableColumns={phoneTableColumns || []}
           dataSource={phones}
         />
@@ -265,9 +268,10 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
           dropdownName="Contact Name"
           dropdownPlaceholder="Select a Contact"
           emptyText="Contacts"
-          options={contacts.map((contact) => {
-            return { value: contact.id, label: contact.name };
-          })}
+          options={contacts.map((contact) => ({
+            value: contact.id,
+            label: contact.name,
+          }))}
           tableColumns={contactTableColumns || []}
           dataSource={contacts}
         />
@@ -308,8 +312,6 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
 
   const handleCancel = () => {
     setShowModal(false);
-    form.resetFields();
-    setCurrentStep(0);
   };
 
   const modalFooter = () => {
@@ -355,6 +357,14 @@ const OrganizationForm = ({ organizations }: OrganizationFormProps) => {
         title={formSteps[currentStep].title}
         open={showModal}
         onCancel={handleCancel}
+        destroyOnClose
+        afterClose={() => {
+          form.resetFields();
+          setContacts([]);
+          setPhones([]);
+          setLocations([]);
+          setCurrentStep(0);
+        }}
         footer={modalFooter()}
         centered
         width={'80%'}

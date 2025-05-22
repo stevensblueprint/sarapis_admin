@@ -6,6 +6,7 @@ import {
   CascaderProps,
   Dropdown,
   Space,
+  Row,
 } from 'antd';
 import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
@@ -115,22 +116,22 @@ const Organizations = () => {
           </div>
         </div>
       </div>
-      <div>
-        <div className="grid grid-cols-3 gap-4">
-          {organizations.length > 0 ? (
-            organizations.map((organization) => {
-              return (
+      <div className="flex justify-center">
+        <div>
+          <Row gutter={[16, 16]} justify="start">
+            {organizations.length > 0 ? (
+              organizations.map((organization) => (
                 <OrganizationCard
                   key={organization.id}
                   organization={organization}
                 />
-              );
-            })
-          ) : (
-            <div className="col-span-3">
-              <EmptyData text="No Organizations found" />
-            </div>
-          )}
+              ))
+            ) : (
+              <div className="col-span-3">
+                <EmptyData text="No Organizations found" />
+              </div>
+            )}
+          </Row>
         </div>
       </div>
     </>

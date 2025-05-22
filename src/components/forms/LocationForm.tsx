@@ -1,4 +1,4 @@
-import React, { JSX, useEffect, useState } from 'react';
+import React, { JSX, useState } from 'react';
 import {
   Alert,
   Button,
@@ -12,9 +12,6 @@ import {
 } from 'antd';
 import { LocationError, createLocation } from '../../api/lib/locations';
 import Location from '../../interface/model/Location';
-import { Service } from '../../interface/model/Service';
-import Response from '../../interface/Response';
-import { getAllServices } from '../../api/lib/services';
 import { stateList } from '../../data/Common';
 
 interface LocationFormProps {
@@ -27,23 +24,7 @@ const LocationForm = ({
   setLocations,
 }: LocationFormProps): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [services, setServices] = useState<Service[]>([]);
-  const [form] = Form.useForm();
-
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await getAllServices();
-        const data = response.data as Response<Service[]>;
-        data.contents?.forEach((service) => {
-          setServices((prev) => [...prev, service]);
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchServices();
-  });
+  const [form] = Form.useForm<Location>();
 
   const onFinish: FormProps<Location>['onFinish'] = async (values) => {
     try {
@@ -61,7 +42,7 @@ const LocationForm = ({
       }
     }
   };
-  // TODO: Add phones and Regular Schedules table
+
   return (
     <div>
       {errorMessage && (
@@ -73,7 +54,7 @@ const LocationForm = ({
           className="my-5"
         />
       )}
-      <Form form={form} variant="filled" onFinish={onFinish}>
+      <Form form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item
           label="Location Name"
           name="name"
@@ -81,80 +62,126 @@ const LocationForm = ({
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Location Alternate Name" name="alternateName">
+        <Form.Item label="Alternate Name" name="alternateName">
           <Input />
         </Form.Item>
         <Form.Item
-          label="Location Transportation"
-          name="locationTransportation"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Location Description"
+          label="Description"
           name="description"
           rules={[{ required: true, message: 'Required field!' }]}
         >
           <Input.TextArea />
         </Form.Item>
-        <Form.Item label="Location Service" name="service">
-          <Select
-            showSearch
-            placeholder="Select a Service"
-            options={services.map((service) => {
-              return { value: service.id, label: service.name };
-            })}
-          />
-        </Form.Item>
-        <Form.Item
-          label="Address"
-          name="address"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
+        <Form.Item label="URL" name="url">
           <Input />
         </Form.Item>
         <Form.Item
-          label="City"
-          name="city"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="State"
-          name="state"
+          label="Location Type"
+          name="locationType"
           rules={[{ required: true, message: 'Required field!' }]}
         >
           <Select
-            showSearch
-            placeholder="Select a State"
-            options={stateList.map((state) => {
-              return { value: state, label: state };
-            })}
+            placeholder="Select Location Type"
+            options={[
+              { label: 'Virtual', value: 'virtual' },
+              { label: 'Physical', value: 'physical' },
+              { label: 'Postal', value: 'postal' },
+            ]}
           />
         </Form.Item>
         <Form.Item
-          label="Zip Code"
-          name="zip"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <InputNumber />
-        </Form.Item>
-        <Form.Item
-          label="Location Details"
-          name="details"
+          label="Transportation"
+          name="transportation"
           rules={[{ required: true, message: 'Required field!' }]}
         >
           <Input />
         </Form.Item>
+        <Form.Item
+          label="Latitude"
+          name="latitude"
+          rules={[{ required: true, message: 'Required field!' }]}
+        >
+          <InputNumber style={{ width: '100%' }} />
+        </Form.Item>
+        <Form.Item
+          label="Longitude"
+          name="longitude"
+          rules={[{ required: true, message: 'Required field!' }]}
+        >
+          <InputNumber style={{ width: '100%' }} />
+        </Form.Item>
+        <Form.Item label="External Identifier" name="externalIdentifier">
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="External Identifier Type"
+          name="externalIdentifierType"
+        >
+          <Input />
+        </Form.Item>
+        <Form.List name="addresses">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map((field) => (
+                <Space
+                  key={field.key}
+                  align="baseline"
+                  style={{ display: 'flex', marginBottom: 8 }}
+                >
+                  <Form.Item
+                    {...field}
+                    name={[field.name, 'address']}
+                    fieldKey={[field.key, 'address']}
+                    rules={[{ required: true, message: 'Missing address' }]}
+                  >
+                    <Input placeholder="Address" />
+                  </Form.Item>
+                  <Form.Item
+                    {...field}
+                    name={[field.name, 'city']}
+                    fieldKey={[field.key, 'city']}
+                    rules={[{ required: true, message: 'Missing city' }]}
+                  >
+                    <Input placeholder="City" />
+                  </Form.Item>
+                  <Form.Item
+                    {...field}
+                    name={[field.name, 'state']}
+                    fieldKey={[field.key, 'state']}
+                    rules={[{ required: true, message: 'Missing state' }]}
+                  >
+                    <Select
+                      placeholder="Select State"
+                      options={stateList.map((state) => ({
+                        value: state,
+                        label: state,
+                      }))}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    {...field}
+                    name={[field.name, 'zip']}
+                    fieldKey={[field.key, 'zip']}
+                    rules={[{ required: true, message: 'Missing zip code' }]}
+                  >
+                    <InputNumber placeholder="Zip Code" />
+                  </Form.Item>
+                  <Button type="link" onClick={() => remove(field.name)}>
+                    Remove
+                  </Button>
+                </Space>
+              ))}
+              <Form.Item>
+                <Button type="dashed" onClick={() => add()} block>
+                  Add Address
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+
         <Form.Item>
-          <Space
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-            }}
-          >
+          <Space style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button type="primary" htmlType="submit">
               Submit
             </Button>

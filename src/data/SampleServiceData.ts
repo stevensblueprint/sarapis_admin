@@ -147,6 +147,7 @@ export const SampleServiceData: Service = {
     organizationIdentifiers: [],
     attributes: [],
     metadata: [],
+    services: [],
   },
   funding: [],
   costOptions: [],
