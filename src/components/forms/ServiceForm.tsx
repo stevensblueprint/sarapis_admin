@@ -8,7 +8,6 @@ import ApplicationForm from './ApplicationForm';
 import ScheduleForm from './ScheduleForm';
 import LocationForm from './LocationForm';
 import ContactForm from './ContactForm';
-import Organization from '../../interface/model/Organization';
 import { createService } from '../../api/lib/services';
 import { Service } from '../../interface/model/Service';
 import { ServiceFormObject } from '../../interface/model/ServiceFormObject';
