@@ -1,4 +1,4 @@
-import { Form, Input, Select, Table, Button } from 'antd';
+import { Form, Input, Table, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { getAllOrganizations } from '../../api/lib/organizations';
@@ -9,15 +9,23 @@ import AddURLForm from './nested_forms/AddURLForm';
 import type { FormInstance } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
+import AddOrganizationToServiceForm from './nested_forms/AddOrganizationToServiceForm';
 
 const BasicInfoForm = ({ form }: { form: FormInstance }) => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [showURLModal, setShowURLModal] = useState<boolean>(false);
+  const [showOrganizationModal, setShowOrganizationModal] =
+    useState<boolean>(false);
   const [URLData, setURLData] = useState<Url[]>([]);
+  const [selectedOrganization, setSelectedOrganization] =
+    useState<Organization>();
 
   useEffect(() => {
     const existingURLs = form.getFieldValue('additional_urls') || [];
     setURLData(existingURLs);
+    const existingOrganization: Organization =
+      form.getFieldValue('organization') ?? undefined;
+    setSelectedOrganization(existingOrganization);
   }, [form]);
 
   useEffect(() => {
@@ -74,6 +82,16 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
     form.setFieldsValue({ additional_urls: updatedURLs });
   };
 
+  const handleAddOrganization = (organization: Organization) => {
+    setSelectedOrganization(organization);
+    form.setFieldsValue({ organization: organization });
+  };
+
+  const handleDeleteOrganization = () => {
+    setSelectedOrganization(undefined);
+    form.setFieldsValue({ organization: undefined });
+  };
+
   return (
     <div className="w-[100%] flex flex-col justify-center pt-4">
       <div className="flex flex-row justify-center gap-4">
@@ -88,18 +106,45 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
           <Form.Item label="Alternate Service Name" name="alternate_name">
             <Input />
           </Form.Item>
-          <Form.Item label="Organization" name="organization">
-            <Select
-              showSearch
-              placeholder="Select an Organization"
-              options={organizations.map((organization) => {
-                return {
-                  value: JSON.stringify(organization),
-                  label: organization.name,
-                };
-              })}
-            />
+          <Form.Item
+            label={
+              <div className="flex flex-row items-center gap-2">
+                <span>Organization</span>
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() => setShowOrganizationModal(true)}
+                  size="small"
+                />
+              </div>
+            }
+            name="organization"
+          >
+            {selectedOrganization ? (
+              <div className="flex flex-row items-center gap-2">
+                <div className="overflow-hidden">
+                  <span className="truncate">
+                    {selectedOrganization.name} -{' '}
+                    {selectedOrganization.description}
+                  </span>
+                </div>
+                <Button
+                  className="ml-auto"
+                  icon={<DeleteOutlined />}
+                  onClick={handleDeleteOrganization}
+                  size="middle"
+                  danger
+                />
+              </div>
+            ) : (
+              'No Organization Selected'
+            )}
           </Form.Item>
+          <AddOrganizationToServiceForm
+            showModal={showOrganizationModal}
+            closeModal={() => setShowOrganizationModal(false)}
+            addObject={handleAddOrganization}
+            existingOrganizations={organizations ?? []}
+          />
           <Form.Item
             label="Service Email"
             name="email"

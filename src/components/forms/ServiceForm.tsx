@@ -12,6 +12,7 @@ import Organization from '../../interface/model/Organization';
 import { createService } from '../../api/lib/services';
 import { Service } from '../../interface/model/Service';
 import { ServiceFormObject } from '../../interface/model/ServiceFormObject';
+import { getOrganizationById } from '../../api/lib/organizations';
 
 const { Step } = Steps;
 
@@ -65,17 +66,13 @@ const ServiceForm = ({
 
   useEffect(() => {
     setShowServiceModal(showModal);
-    setCurrentStep(7);
+    setCurrentStep(0);
   }, [showModal]);
 
   const next = async () => {
-    let values = await form.validateFields();
+    const values = await form.validateFields();
     if (currentStep == 0 && values.organization) {
-      const org = JSON.parse(values.organization) as Organization;
-      console.log(org);
-      form.setFieldValue(organization, org);
-      setOrganization(org);
-      values = { ...values, organization: org };
+      setOrganization(values.organization);
     }
     console.log(values);
     setCurrentStep(currentStep + 1);

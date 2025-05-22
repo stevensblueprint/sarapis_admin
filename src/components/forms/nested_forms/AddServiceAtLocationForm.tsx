@@ -12,6 +12,7 @@ import AddServiceAreaForm from './AddServiceAreaForm';
 import AddContactForm from './AddContactForm';
 import AddPhoneForm from './AddPhoneForm';
 import AddScheduleForm from './AddScheduleForm';
+import AddLocationForm from './AddLocationForm';
 
 const AddServiceAtLocationForm = ({
   showModal,
@@ -442,6 +443,64 @@ const AddServiceAtLocationForm = ({
           addObject={handleAddSchedule}
           objectData={scheduleData}
           existingSchedules={existingData[3]}
+        />
+        <div className="flex justify-center">
+          <Form.Item
+            className="w-2/3"
+            label={
+              <div className="flex flex-row items-center gap-2">
+                <span>Location</span>
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() =>
+                    setShowModals((prev) => {
+                      const updated = [...prev];
+                      updated[4] = true;
+                      return updated;
+                    })
+                  }
+                  size="small"
+                />
+              </div>
+            }
+            name="location"
+          >
+            {selectedLocation ? (
+              <div className="flex flex-row items-center gap-2">
+                <div className="overflow-hidden">
+                  <span className="truncate">
+                    {selectedLocation.name} - {selectedLocation.description}
+                  </span>
+                </div>
+                <Button
+                  className="ml-auto"
+                  icon={<DeleteOutlined />}
+                  onClick={handleDeleteLocation}
+                  size="middle"
+                  danger
+                />
+              </div>
+            ) : (
+              'No Location Selected'
+            )}
+          </Form.Item>
+        </div>
+        <AddLocationForm
+          showModal={showModals[4]}
+          closeModal={() =>
+            setShowModals((prev) => {
+              const updated = [...prev];
+              updated[4] = false;
+              return updated;
+            })
+          }
+          addObject={handleAddLocation}
+          existingData={[
+            existingData[4],
+            existingData[1],
+            existingData[2],
+            existingData[3],
+          ]}
         />
       </Form>
     </Modal>

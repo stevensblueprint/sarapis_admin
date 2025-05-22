@@ -95,7 +95,7 @@ const AdditionalInfoForm = ({
     setCapacityData(existingCapacities);
     const existingFunding = form.getFieldValue('funding') || [];
     setFundingData(existingFunding);
-    const existingProgram = form.getFieldValue('program');
+    const existingProgram = form.getFieldValue('program') || {};
     setSelectedProgram(existingProgram);
   }, [form]);
 

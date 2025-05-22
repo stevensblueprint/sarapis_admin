@@ -1,13 +1,4 @@
-import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  message,
-  Table,
-  Select,
-  Divider,
-} from 'antd';
+import { Modal, Button, Form, Input, Table, Select, Divider } from 'antd';
 import { useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
@@ -22,22 +13,21 @@ import Language from '../../../interface/model/Language';
 import Accessibility from '../../../interface/model/Accessibility';
 import Address from '../../../interface/model/Address';
 import AddLanguageForm from './AddLanguageForm';
+import AddAddressForm from './AddAddressForm';
+import AddAccessibilityForm from './AddAccessibilityForm';
 
 const AddLocationForm = ({
   showModal,
   closeModal,
   addObject,
-  objectData,
   existingData,
 }: {
   showModal: boolean;
   closeModal: () => void;
   addObject: (location: Location) => void;
-  objectData: Location[];
   existingData: [Location[], Contact[], Phone[], Schedule[]];
 }) => {
   const [form] = Form.useForm();
-  const [messageApi, contextHolder] = message.useMessage();
   const [showModals, setShowModals] = useState<boolean[]>([
     false,
     false,
@@ -329,18 +319,8 @@ const AddLocationForm = ({
     setScheduleData(updatedSchedules);
   };
 
-  const isDuplicate = (newLocation: Location) => {
-    return objectData.some(
-      (existing) => JSON.stringify(existing) === JSON.stringify(newLocation)
-    );
-  };
-
   const addNewObject = async () => {
     if (selectedLocation) {
-      if (isDuplicate(selectedLocation)) {
-        showError();
-        return;
-      }
       addObject(selectedLocation);
     } else {
       const values = await form.validateFields();
@@ -353,10 +333,6 @@ const AddLocationForm = ({
         addresses: addressData,
         accessibility: accessibilityData,
       };
-      if (isDuplicate(newLocation)) {
-        showError();
-        return;
-      }
       addObject(newLocation);
     }
 
@@ -369,14 +345,6 @@ const AddLocationForm = ({
     setAddressData([]);
     setAccessibilityData([]);
     setSelectedLocation(null);
-  };
-
-  const showError = () => {
-    messageApi.open({
-      type: 'error',
-      content: 'Duplicate locations not allowed!',
-      duration: 5,
-    });
   };
 
   return (
@@ -401,7 +369,6 @@ const AddLocationForm = ({
         </Button>
       }
     >
-      {contextHolder}
       <div className="flex flex-col gap-2 pb-2">
         <strong>Select Existing Location</strong>
         <Select
@@ -491,7 +458,7 @@ const AddLocationForm = ({
         >
           <Table columns={addressColumns} dataSource={addressData} />
         </Form.Item>
-        <AddContactForm
+        <AddAddressForm
           showModal={showModals[1]}
           closeModal={() =>
             setShowModals((prev) => {
@@ -500,15 +467,13 @@ const AddLocationForm = ({
               return updated;
             })
           }
-          addObject={handleAddContact}
-          objectData={contactData}
-          existingContacts={existingData[1]}
-          existingPhones={existingData[2]}
+          addObject={handleAddAddress}
+          objectData={addressData}
         />
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Phones</span>
+              <span>Contacts</span>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -522,16 +487,87 @@ const AddLocationForm = ({
               />
             </div>
           }
-          name="phones"
+          name="contacts"
         >
-          <Table columns={phoneColumns} dataSource={phoneData} />
+          <Table columns={contactColumns} dataSource={contactData} />
         </Form.Item>
-        <AddPhoneForm
+        <AddContactForm
           showModal={showModals[2]}
           closeModal={() =>
             setShowModals((prev) => {
               const updated = [...prev];
               updated[2] = false;
+              return updated;
+            })
+          }
+          addObject={handleAddContact}
+          objectData={contactData}
+          existingContacts={existingData[1]}
+          existingPhones={existingData[2]}
+        />
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2 pt-2">
+              <span>Accessibility</span>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() =>
+                  setShowModals((prev) => {
+                    const updated = [...prev];
+                    updated[3] = true;
+                    return updated;
+                  })
+                }
+                size="small"
+              />
+            </div>
+          }
+          name="accessibility"
+        >
+          <Table
+            columns={accessibilityColumns}
+            dataSource={accessibilityData}
+          />
+        </Form.Item>
+        <AddAccessibilityForm
+          showModal={showModals[3]}
+          closeModal={() =>
+            setShowModals((prev) => {
+              const updated = [...prev];
+              updated[3] = false;
+              return updated;
+            })
+          }
+          addObject={handleAddAccessibility}
+          objectData={accessibilityData}
+        />
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2 pt-2">
+              <span>Phones</span>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() =>
+                  setShowModals((prev) => {
+                    const updated = [...prev];
+                    updated[4] = true;
+                    return updated;
+                  })
+                }
+                size="small"
+              />
+            </div>
+          }
+          name="phones"
+        >
+          <Table columns={phoneColumns} dataSource={phoneData} />
+        </Form.Item>
+        <AddPhoneForm
+          showModal={showModals[4]}
+          closeModal={() =>
+            setShowModals((prev) => {
+              const updated = [...prev];
+              updated[4] = false;
               return updated;
             })
           }
@@ -548,7 +584,7 @@ const AddLocationForm = ({
                 onClick={() =>
                   setShowModals((prev) => {
                     const updated = [...prev];
-                    updated[3] = true;
+                    updated[5] = true;
                     return updated;
                   })
                 }
@@ -561,11 +597,11 @@ const AddLocationForm = ({
           <Table columns={scheduleColumns} dataSource={scheduleData} />
         </Form.Item>
         <AddScheduleForm
-          showModal={showModals[3]}
+          showModal={showModals[5]}
           closeModal={() =>
             setShowModals((prev) => {
               const updated = [...prev];
-              updated[3] = false;
+              updated[5] = false;
               return updated;
             })
           }
