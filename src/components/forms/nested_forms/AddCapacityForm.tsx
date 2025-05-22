@@ -37,7 +37,6 @@ const AddCapacityForm = ({
         updated:
           values.updated?.format('YYYY-MM-DD[T]HH:mm:ss:SSS') ?? undefined,
       };
-      console.log(newCapacity);
       if (isDuplicate(newCapacity)) {
         showError();
       } else {

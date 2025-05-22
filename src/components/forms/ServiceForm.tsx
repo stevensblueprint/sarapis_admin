@@ -68,7 +68,6 @@ const ServiceForm = ({
 
   const next = async () => {
     const values = await form.validateFields();
-    console.log(values);
     setCurrentStep(currentStep + 1);
     setFormData((prev) => ({ ...prev, ...values }));
     form.setFieldsValue(values);
@@ -76,7 +75,6 @@ const ServiceForm = ({
 
   const prev = async () => {
     const values = await form.validateFields();
-    console.log(values);
     setCurrentStep(currentStep - 1);
     setFormData((prev) => ({ ...prev, ...values }));
     form.setFieldsValue(values);

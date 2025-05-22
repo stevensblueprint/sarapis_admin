@@ -27,7 +27,6 @@ const AddAddressForm = ({
       const newAddress: Address = {
         ...values,
       };
-      console.log(newAddress);
       if (isDuplicate(newAddress)) {
         showError();
       } else {

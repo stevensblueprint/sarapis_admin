@@ -28,7 +28,6 @@ const AddAccessibilityForm = ({
       const newAccessibility: Accessibility = {
         ...values,
       };
-      console.log(newAccessibility);
       if (isDuplicate(newAccessibility)) {
         showError();
       } else {
