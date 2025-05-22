@@ -91,9 +91,6 @@ const ServiceForm = ({
         formData.last_modified?.format('YYYY-MM-DD[T]HH:mm:ss:SSS') ??
         undefined,
       assured_date: formData.assured_date?.format('YYYY-MM-DD') ?? undefined,
-      organization: {
-        id: form.getFieldValue('organization'),
-      },
     };
     console.log(service);
     const response = await createService(service);
