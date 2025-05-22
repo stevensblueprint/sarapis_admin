@@ -9,13 +9,7 @@ import AddServiceAreaForm from './nested_forms/AddServiceAreaForm';
 import AddServiceAtLocationForm from './nested_forms/AddServiceAtLocationForm';
 import ServiceAtLocation from '../../interface/model/ServiceAtLocation';
 
-const LocationForm = ({
-  form,
-  organization,
-}: {
-  form: FormInstance;
-  organization: Organization | undefined;
-}) => {
+const LocationForm = ({ form }: { form: FormInstance }) => {
   const [showServiceAreaModal, setShowServiceAreaModal] =
     useState<boolean>(false);
   const [serviceAreaData, setServiceAreaData] = useState<ServiceArea[]>([]);
@@ -24,6 +18,7 @@ const LocationForm = ({
   const [serviceAtLocationData, setServiceAtLocationData] = useState<
     ServiceAtLocation[]
   >([]);
+  const [organization, setOrganization] = useState<Organization | undefined>();
 
   const serviceAreaColumns: ColumnsType = [
     {
@@ -83,6 +78,9 @@ const LocationForm = ({
     const existingServiceAtLocations =
       form.getFieldValue('service_at_locations') || [];
     setServiceAtLocationData(existingServiceAtLocations);
+    const selectedOrganization =
+      form.getFieldValue('organization') ?? undefined;
+    setOrganization(selectedOrganization);
   }, [form]);
 
   const handleAddServiceArea = (serviceArea: ServiceArea) => {

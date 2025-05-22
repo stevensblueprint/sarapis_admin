@@ -12,19 +12,14 @@ import Organization from '../../interface/model/Organization';
 import AddProgramForm from './nested_forms/AddProgramForm';
 import Program from '../../interface/model/Program';
 
-const AdditionalInfoForm = ({
-  form,
-  organization,
-}: {
-  form: FormInstance;
-  organization: Organization | undefined;
-}) => {
+const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
   const [showCapacityModal, setShowCapacityModal] = useState<boolean>(false);
   const [showFundingModal, setShowFundingModal] = useState<boolean>(false);
   const [showProgramModal, setShowProgramModal] = useState<boolean>(false);
   const [capacityData, setCapacityData] = useState<ServiceCapacity[]>([]);
   const [fundingData, setFundingData] = useState<Funding[]>([]);
   const [selectedProgram, setSelectedProgram] = useState<Program>();
+  const [organization, setOrganization] = useState<Organization | undefined>();
 
   const capacitiesColumns: ColumnsType = [
     {
@@ -97,6 +92,9 @@ const AdditionalInfoForm = ({
     setFundingData(existingFunding);
     const existingProgram = form.getFieldValue('program') ?? undefined;
     setSelectedProgram(existingProgram);
+    const selectedOrganization =
+      form.getFieldValue('organization') ?? undefined;
+    setOrganization(selectedOrganization);
   }, [form]);
 
   const handleAddCapacity = (capacity: ServiceCapacity) => {

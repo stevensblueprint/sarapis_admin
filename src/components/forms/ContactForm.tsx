@@ -9,17 +9,12 @@ import Organization from '../../interface/model/Organization';
 import AddPhoneForm from './nested_forms/AddPhoneForm';
 import Phone from '../../interface/model/Phone';
 
-const ContactForm = ({
-  form,
-  organization,
-}: {
-  form: FormInstance;
-  organization: Organization | undefined;
-}) => {
+const ContactForm = ({ form }: { form: FormInstance }) => {
   const [showContactModal, setShowContactModal] = useState<boolean>(false);
   const [contactData, setContactData] = useState<Contact[]>([]);
   const [showPhoneModal, setShowPhoneModal] = useState<boolean>(false);
   const [phoneData, setPhoneData] = useState<Phone[]>([]);
+  const [organization, setOrganization] = useState<Organization | undefined>();
 
   const contactColumns: ColumnsType = [
     {
@@ -102,6 +97,9 @@ const ContactForm = ({
     setContactData(existingContacts);
     const existingPhones = form.getFieldValue('phones') || [];
     setPhoneData(existingPhones);
+    const selectedOrganization =
+      form.getFieldValue('organization') ?? undefined;
+    setOrganization(selectedOrganization);
   }, [form]);
 
   const handleAddContact = (contact: Contact) => {

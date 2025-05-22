@@ -12,7 +12,6 @@ import Organization from '../../interface/model/Organization';
 import { createService } from '../../api/lib/services';
 import { Service } from '../../interface/model/Service';
 import { ServiceFormObject } from '../../interface/model/ServiceFormObject';
-import { getOrganizationById } from '../../api/lib/organizations';
 
 const { Step } = Steps;
 
@@ -26,7 +25,6 @@ const ServiceForm = ({
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [form] = Form.useForm();
-  const [organization, setOrganization] = useState<Organization>();
   const [formData, setFormData] = useState<ServiceFormObject>({});
 
   const steps = [
@@ -36,7 +34,7 @@ const ServiceForm = ({
     },
     {
       title: 'Additional Info',
-      content: <AdditionalInfoForm form={form} organization={organization} />,
+      content: <AdditionalInfoForm form={form} />,
     },
     {
       title: 'Status',
@@ -56,11 +54,11 @@ const ServiceForm = ({
     },
     {
       title: 'Contact',
-      content: <ContactForm form={form} organization={organization} />,
+      content: <ContactForm form={form} />,
     },
     {
       title: 'Location',
-      content: <LocationForm form={form} organization={organization} />,
+      content: <LocationForm form={form} />,
     },
   ];
 
@@ -71,9 +69,6 @@ const ServiceForm = ({
 
   const next = async () => {
     const values = await form.validateFields();
-    if (currentStep == 0 && values.organization) {
-      setOrganization(values.organization);
-    }
     console.log(values);
     setCurrentStep(currentStep + 1);
     setFormData((prev) => ({ ...prev, ...values }));
