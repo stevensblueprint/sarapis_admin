@@ -86,10 +86,14 @@ const AddFundingForm = ({
           allowClear
           showSearch
           placeholder="Select a Funding Source"
-          options={existingFunding.map((funding) => ({
-            value: JSON.stringify(funding),
-            label: funding.source,
-          }))}
+          options={Array.from(
+            new Set(existingFunding.map((value) => JSON.stringify(value)))
+          )
+            .map((value) => JSON.parse(value) as Funding)
+            .map((funding) => ({
+              value: JSON.stringify(funding),
+              label: funding.source,
+            }))}
           onSelect={handleSelect}
           onClear={handleClear}
           value={selectedFunding ? JSON.stringify(selectedFunding) : undefined}

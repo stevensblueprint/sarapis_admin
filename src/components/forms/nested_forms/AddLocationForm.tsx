@@ -375,10 +375,14 @@ const AddLocationForm = ({
           allowClear
           showSearch
           placeholder="Select a Location"
-          options={existingData[0].map((location) => ({
-            value: JSON.stringify(location),
-            label: location.name,
-          }))}
+          options={Array.from(
+            new Set(existingData[0].map((value) => JSON.stringify(value)))
+          )
+            .map((value) => JSON.parse(value) as Location)
+            .map((location) => ({
+              value: JSON.stringify(location),
+              label: location.name,
+            }))}
           onSelect={handleSelect}
           onClear={handleClear}
           value={

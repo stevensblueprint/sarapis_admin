@@ -87,10 +87,14 @@ const AddServiceAreaForm = ({
           allowClear
           showSearch
           placeholder="Select a Service Area"
-          options={existingServiceAreas.map((serviceArea) => ({
-            value: JSON.stringify(serviceArea),
-            label: serviceArea.name,
-          }))}
+          options={Array.from(
+            new Set(existingServiceAreas.map((value) => JSON.stringify(value)))
+          )
+            .map((value) => JSON.parse(value) as ServiceArea)
+            .map((serviceArea) => ({
+              value: JSON.stringify(serviceArea),
+              label: serviceArea.name,
+            }))}
           onSelect={handleSelect}
           onClear={handleClear}
           value={

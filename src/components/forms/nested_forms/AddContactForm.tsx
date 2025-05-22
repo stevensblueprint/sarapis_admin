@@ -150,10 +150,14 @@ const AddContactForm = ({
           allowClear
           showSearch
           placeholder="Select a Contact"
-          options={existingContacts.map((contact) => ({
-            value: JSON.stringify(contact),
-            label: contact.name,
-          }))}
+          options={Array.from(
+            new Set(existingContacts.map((value) => JSON.stringify(value)))
+          )
+            .map((value) => JSON.parse(value) as Contact)
+            .map((contact) => ({
+              value: JSON.stringify(contact),
+              label: contact.name,
+            }))}
           onSelect={handleSelect}
           onClear={handleClear}
           value={selectedContact ? JSON.stringify(selectedContact) : undefined}

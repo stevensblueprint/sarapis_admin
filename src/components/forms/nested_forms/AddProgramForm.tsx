@@ -59,10 +59,14 @@ const AddProgramForm = ({
           allowClear
           showSearch
           placeholder="Select a Program"
-          options={existingPrograms.map((program) => ({
-            value: JSON.stringify(program),
-            label: `${program.name} - ${program.description}`,
-          }))}
+          options={Array.from(
+            new Set(existingPrograms.map((value) => JSON.stringify(value)))
+          )
+            .map((value) => JSON.parse(value) as Program)
+            .map((program) => ({
+              value: JSON.stringify(program),
+              label: `${program.name} - ${program.description}`,
+            }))}
           onSelect={handleSelect}
           onClear={handleClear}
           value={selectedProgram ? JSON.stringify(selectedProgram) : undefined}

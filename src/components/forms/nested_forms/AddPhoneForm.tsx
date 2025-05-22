@@ -145,12 +145,16 @@ const AddPhoneForm = ({
           allowClear
           showSearch
           placeholder="Select a Phone"
-          options={existingPhones.map((phone) => ({
-            value: JSON.stringify(phone),
-            label: phone.extension
-              ? `${phone.number} Ext. ${phone.extension}`
-              : phone.number,
-          }))}
+          options={Array.from(
+            new Set(existingPhones.map((value) => JSON.stringify(value)))
+          )
+            .map((value) => JSON.parse(value) as Phone)
+            .map((phone) => ({
+              value: JSON.stringify(phone),
+              label: phone.extension
+                ? `${phone.number} Ext. ${phone.extension}`
+                : phone.number,
+            }))}
           onSelect={handleSelect}
           onClear={handleClear}
           value={selectedPhone ? JSON.stringify(selectedPhone) : undefined}

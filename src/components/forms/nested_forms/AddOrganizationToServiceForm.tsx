@@ -1,4 +1,4 @@
-import { Modal, Button, Form, Input, Select, Divider } from 'antd';
+import { Modal, Button, Select } from 'antd';
 import { useState } from 'react';
 import Organization from '../../../interface/model/Organization';
 
@@ -57,10 +57,14 @@ const AddOrganizationToServiceForm = ({
           allowClear
           showSearch
           placeholder="Select an Organization"
-          options={existingOrganizations.map((organization) => ({
-            value: JSON.stringify(organization),
-            label: `${organization.name} - ${organization.description}`,
-          }))}
+          options={Array.from(
+            new Set(existingOrganizations.map((value) => JSON.stringify(value)))
+          )
+            .map((value) => JSON.parse(value) as Organization)
+            .map((organization) => ({
+              value: JSON.stringify(organization),
+              label: `${organization.name} - ${organization.description}`,
+            }))}
           onSelect={handleSelect}
           onClear={handleClear}
           value={

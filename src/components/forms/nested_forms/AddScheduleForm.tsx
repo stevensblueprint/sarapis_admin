@@ -118,10 +118,14 @@ const AddScheduleForm = ({
           allowClear
           showSearch
           placeholder="Select a Schedule"
-          options={existingSchedules.map((schedule) => ({
-            value: JSON.stringify(schedule),
-            label: schedule.description,
-          }))}
+          options={Array.from(
+            new Set(existingSchedules.map((value) => JSON.stringify(value)))
+          )
+            .map((value) => JSON.parse(value) as Schedule)
+            .map((schedule) => ({
+              value: JSON.stringify(schedule),
+              label: schedule.description,
+            }))}
           onSelect={handleSelect}
           onClear={handleClear}
           value={
