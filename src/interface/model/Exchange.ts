@@ -9,7 +9,7 @@ interface ActionLog {
   format: string;
   size: number | null;
   user_id: string;
-  file_imports: FileImport[];
+  data_exchange_files: FileImport[];
 }
 
 interface Exchange {

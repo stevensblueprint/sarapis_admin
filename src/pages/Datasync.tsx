@@ -12,6 +12,7 @@ import ImportModal from '../components/ImportModal';
 import { getAllActions } from '../api/lib/datasync';
 import FileImport from '../interface/model/FileImport';
 import { ActionLog } from '../interface/model/Exchange';
+import Navbar from '../components/Navbar';
 
 const { Title } = Typography;
 
@@ -60,7 +61,7 @@ const Datasync = () => {
           format: item.format,
           size: formatFileSize(item.size),
           user_id: item.user_id,
-          file_imports: item.file_imports.map(
+          data_exchange_files: item.data_exchange_files.map(
             (file: FileImport) => file.file_name
           ),
         }));
@@ -86,6 +87,7 @@ const Datasync = () => {
 
   return (
     <div>
+      <Navbar />
       <div className="m-10">
         <div className="flex flex-row justify-between">
           <Title className="mb-4" level={3}>

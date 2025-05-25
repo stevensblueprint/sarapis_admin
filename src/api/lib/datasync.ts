@@ -61,16 +61,18 @@ export const getAllFiles = async (data: {
  * @throws {DatasyncError} If the request fails
  */
 export const getAllActions = async (data?: {
-  userId?: string;
   page?: number;
   per_page?: number;
+  from_date?: string;
+  to_date?: string;
 }): Promise<AxiosResponse<Exchange>> => {
   const params: Record<string, string | number | null> = {};
 
   if (data) {
-    params.user_id = 'example_user_id';
-    if (data.page !== undefined) params.page = data.page;
-    if (data.per_page !== undefined) params.per_page = data.per_page;
+    if (data.page) params.page = data.page;
+    if (data.per_page) params.per_page = data.per_page;
+    if (data.from_date) params.from_date = data.from_date;
+    if (data.to_date) params.to_date = data.to_date;
   }
 
   return apiClient

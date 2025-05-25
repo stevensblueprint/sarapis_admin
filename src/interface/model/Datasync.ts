@@ -7,7 +7,7 @@ interface DatasyncTableRow {
   format: string;
   size: string;
   user_id: string;
-  file_imports: string[];
+  data_exchange_files: string[];
 }
 
 export default DatasyncTableRow;

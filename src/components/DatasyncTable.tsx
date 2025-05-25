@@ -78,11 +78,11 @@ const DatasyncTable = ({
     },
     {
       title: 'Files',
-      dataIndex: 'file_imports',
+      dataIndex: 'data_exchange_files',
       ellipsis: true,
       width: 300,
-      render: (file_imports: string[]) => {
-        return <p className="truncate">{file_imports.join(', ')}</p>;
+      render: (data_exchange_files: string[]) => {
+        return <p className="truncate">{data_exchange_files.join(', ')}</p>;
       },
     },
     {
