@@ -103,7 +103,7 @@ const DatasyncTable = ({
       rowsSelected(selectedRows.map((row) => row.id));
     },
     getCheckboxProps: (record: DatasyncTableRow) => ({
-      disabled: record.type === 'Export',
+      disabled: record.type === 'Export' || !record.success,
     }),
   };
 
