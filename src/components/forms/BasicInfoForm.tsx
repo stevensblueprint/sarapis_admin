@@ -1,4 +1,4 @@
-import { Form, Input, Table, Button } from 'antd';
+import { Form, Input, Table, Button, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { getAllOrganizations } from '../../api/lib/organizations';
@@ -97,19 +97,41 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
       <div className="flex flex-row justify-center gap-4">
         <div className="w-1/3 flex flex-col">
           <Form.Item
-            label="Service Name"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="The official or public name of the service."
+              >
+                Service Name
+              </Tooltip>
+            }
             name="name"
             rules={[{ required: true, message: 'Required field!' }]}
           >
             <Input />
           </Form.Item>
-          <Form.Item label="Alternate Service Name" name="alternate_name">
+          <Form.Item
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="An (optional) alternative name for this service."
+              >
+                Alternate Service Name
+              </Tooltip>
+            }
+            name="alternate_name"
+          >
             <Input />
           </Form.Item>
           <Form.Item
             label={
               <div className="flex flex-row items-center gap-2">
-                <span>Organization</span>
+                <Tooltip
+                  placement="topLeft"
+                  title="The details about each organization delivering services. Each service should be linked to the organization responsible for its delivery. One organization may deliver many services."
+                >
+                  Organization
+                </Tooltip>
                 <Button
                   icon={<PlusOutlined />}
                   onClick={() => setShowOrganizationModal(true)}
@@ -147,7 +169,14 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
             existingOrganizations={organizations ?? []}
           />
           <Form.Item
-            label="Service Email"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="An email address which can be used to contact the service provider."
+              >
+                Service Email
+              </Tooltip>
+            }
             name="email"
             rules={[{ type: 'email', message: 'Invalid Email!' }]}
           >
@@ -156,7 +185,11 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
         </div>
         <div className="w-1/3">
           <Form.Item
-            label="Service URL (website)"
+            label={
+              <Tooltip placement="topLeft" title="URL of the service.">
+                Service URL (Website)
+              </Tooltip>
+            }
             name="url"
             rules={[
               {
@@ -170,7 +203,12 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
           <Form.Item
             label={
               <div className="flex flex-row items-center gap-2 pt-2">
-                <span>Additional URLs</span>
+                <Tooltip
+                  placement="topLeft"
+                  title="The details of additional URLs for the service"
+                >
+                  Additional URLs
+                </Tooltip>
                 <Button
                   icon={<PlusOutlined />}
                   onClick={() => setShowURLModal(true)}
@@ -192,7 +230,14 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
       </div>
       <Form.Item
         className="w-1/2 self-center"
-        label="Service Description"
+        label={
+          <Tooltip
+            placement="topLeft"
+            title="A free text description of the service."
+          >
+            Service Description
+          </Tooltip>
+        }
         name="description"
       >
         <Input.TextArea rows={5} />

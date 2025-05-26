@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Table, Button } from 'antd';
+import { Form, Input, InputNumber, Table, Button, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import AddRequiredDocumentForm from './nested_forms/AddRequiredDocumentForm';
 import RequiredDocument from '../../interface/model/RequiredDocument';
@@ -119,24 +119,71 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
     <div className="flex flex-col gap-4">
       <div className="flex flex-row justify-center gap-4">
         <div className="w-1/3 flex flex-col">
-          <Form.Item label="Application Process" name="application_process">
+          <Form.Item
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="A free text description of the steps needed to access this service."
+              >
+                Application Process
+              </Tooltip>
+            }
+            name="application_process"
+          >
             <Input.TextArea rows={5} />
           </Form.Item>
           <div className="flex flex-row justify-between gap-4">
-            <Form.Item label="Minimum Age" name="minimum_age">
+            <Form.Item
+              label={
+                <Tooltip
+                  placement="topLeft"
+                  title="The minimum age of a person required to meet this eligibility requirement."
+                >
+                  Minimum Age
+                </Tooltip>
+              }
+              name="minimum_age"
+            >
               <InputNumber className="w-[100%]" />
             </Form.Item>
-            <Form.Item label="Maximum Age" name="maximum_age">
+            <Form.Item
+              label={
+                <Tooltip
+                  placement="topLeft"
+                  title="The maximum age of a person required to meet this eligibility requirement."
+                >
+                  Maximum Age
+                </Tooltip>
+              }
+              name="maximum_age"
+            >
               <InputNumber className="w-[100%]" />
             </Form.Item>
           </div>
         </div>
         <div className="w-1/3">
-          <Form.Item label="Fees Description" name="fees_description">
+          <Form.Item
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="A free text description of any charges for service users to access this service."
+              >
+                Fees Description
+              </Tooltip>
+            }
+            name="fees_description"
+          >
             <Input.TextArea rows={3} />
           </Form.Item>
           <Form.Item
-            label="Eligibility Description"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="A free text description of the type of person for whom this service is intended."
+              >
+                Eligibility Description
+              </Tooltip>
+            }
             name="eligibility_description"
           >
             <Input.TextArea rows={3} />
@@ -147,7 +194,12 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Required Documents</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of any documents that are required in order to access or use services."
+              >
+                Required Documents
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowDocumentModal(true)}
@@ -168,7 +220,12 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Cost Options</span>
+              <Tooltip
+                placement="topLeft"
+                title="The costs of a service at certain points in time."
+              >
+                Cost Options
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowCostOptionModal(true)}

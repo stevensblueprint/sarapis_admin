@@ -1,4 +1,4 @@
-import { Table, Form, Button } from 'antd';
+import { Table, Form, Button, Tooltip } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import AddScheduleForm from './nested_forms/AddScheduleForm';
 import { useState, useEffect } from 'react';
@@ -70,7 +70,12 @@ const ScheduleForm = ({ form }: { form: FormInstance }) => {
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Schedules</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of when a service or location is open."
+              >
+                Schedules
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowScheduleModal(true)}

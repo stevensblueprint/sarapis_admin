@@ -1,4 +1,4 @@
-import { Table, Input, Form, Button } from 'antd';
+import { Table, Input, Form, Button, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import AddLanguageForm from './nested_forms/AddLanguageForm';
 import { FormInstance } from 'antd';
@@ -65,7 +65,12 @@ const LanguageForm = ({ form }: { form: FormInstance }) => {
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Languages</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the languages that are spoken at locations or services. This does not include languages which can only be used with interpretation."
+              >
+                Languages
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowLanguageModal(true)}
@@ -85,7 +90,14 @@ const LanguageForm = ({ form }: { form: FormInstance }) => {
         />
         <Form.Item
           className="w-2/3 self-center"
-          label="Interpretation Services"
+          label={
+            <Tooltip
+              placement="topLeft"
+              title="A free text description of any interpretation services available for accessing this service."
+            >
+              Interpretation Services
+            </Tooltip>
+          }
           name="interpretation_services"
         >
           <Input.TextArea />

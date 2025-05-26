@@ -1,4 +1,4 @@
-import { Table, Form, Input, Button, Select } from 'antd';
+import { Table, Form, Input, Button, Select, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { FormInstance } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -141,7 +141,12 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Capacities</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of capacities of this service."
+              >
+                Capacities
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowCapacityModal(true)}
@@ -162,7 +167,12 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Funding</span>
+              <Tooltip
+                placement="topLeft"
+                title="The sources of funding for a service or organization."
+              >
+                Funding
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowFundingModal(true)}
@@ -186,7 +196,12 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
             className="w-1/2"
             label={
               <div className="flex flex-row items-center gap-2">
-                <span>Attributes</span>
+                <Tooltip
+                  placement="topLeft"
+                  title="A link between a service and one or more classifications that describe the nature of the service provided."
+                >
+                  Attributes
+                </Tooltip>
                 <Button
                   icon={<PlusOutlined />}
                   onClick={() => setShowProgramModal(true)}
@@ -202,7 +217,12 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
             className="w-1/2"
             label={
               <div className="flex flex-row items-center gap-2">
-                <span>Program</span>
+                <Tooltip
+                  placement="topLeft"
+                  title="The details of collections of related services."
+                >
+                  Program
+                </Tooltip>
                 <Button
                   icon={<PlusOutlined />}
                   onClick={() => setShowProgramModal(true)}
@@ -240,7 +260,14 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
         </div>
         <Form.Item
           className="w-2/3 self-center"
-          label="Accreditations"
+          label={
+            <Tooltip
+              placement="topLeft"
+              title="A free text description of any accreditations. Accreditation is the formal evaluation of an organization or program against best practice standards set by an accrediting organization."
+            >
+              Accreditations
+            </Tooltip>
+          }
           name="accreditations"
         >
           <Input.TextArea rows={5} />

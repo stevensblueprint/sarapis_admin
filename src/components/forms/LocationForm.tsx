@@ -1,4 +1,4 @@
-import { Table, Form, Button } from 'antd';
+import { Table, Form, Button, Tooltip } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd';
 import Organization from '../../interface/model/Organization';
@@ -119,7 +119,12 @@ const LocationForm = ({ form }: { form: FormInstance }) => {
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Service Areas</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the geographic area for which a service is available."
+              >
+                Service Areas
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowServiceAreaModal(true)}
@@ -141,7 +146,12 @@ const LocationForm = ({ form }: { form: FormInstance }) => {
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Service At Locations</span>
+              <Tooltip
+                placement="topLeft"
+                title="A link between a service and a specific location."
+              >
+                Service At Locations
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowServiceAtLocationModal(true)}

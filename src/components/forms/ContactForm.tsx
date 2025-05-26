@@ -1,4 +1,4 @@
-import { Table, Form, Button } from 'antd';
+import { Table, Form, Button, Tooltip } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import Contact from '../../interface/model/Contact';
@@ -134,7 +134,12 @@ const ContactForm = ({ form }: { form: FormInstance }) => {
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Phones</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the telephone numbers used to contact organizations, services, and locations."
+              >
+                Phones
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowPhoneModal(true)}
@@ -156,7 +161,12 @@ const ContactForm = ({ form }: { form: FormInstance }) => {
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Contacts</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the named contacts for services and organizations."
+              >
+                Contacts
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowContactModal(true)}
