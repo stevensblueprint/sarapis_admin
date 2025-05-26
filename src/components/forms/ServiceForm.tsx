@@ -97,9 +97,16 @@ const ServiceForm = ({
   };
 
   const handleCancel = () => {
-    form.resetFields();
-    setFormData({});
-    closeModal();
+    Modal.confirm({
+      title: 'Are you sure you want to exit?',
+      content: 'All entered values will be lost.',
+      onOk() {
+        form.resetFields();
+        setFormData({});
+        closeModal();
+      },
+      onCancel() {},
+    });
   };
 
   const modalFooter = () => {
