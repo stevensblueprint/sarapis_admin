@@ -1,7 +1,11 @@
 import DatasyncTableRow from '../interface/model/Datasync';
-import { Table, Modal, TableProps } from 'antd';
+import { Table, Modal, TableProps, Button, Input } from 'antd';
 import { useState } from 'react';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import {
+  InfoCircleOutlined,
+  SearchOutlined,
+  CloseOutlined,
+} from '@ant-design/icons';
 
 type TableRowSelection<T extends object = object> =
   TableProps<T>['rowSelection'];
@@ -10,11 +14,15 @@ const DatasyncTable = ({
   dataSource,
   rowsSelected,
 }: {
-  dataSource: DatasyncTableRow[] | undefined;
+  dataSource: DatasyncTableRow[];
   rowsSelected: (rowsSelected: string[]) => void;
 }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [modalContent, setModalContent] = useState<string | null>(null);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [filteredDataSource, setFilteredDataSource] = useState<
+    DatasyncTableRow[] | null
+  >(null);
 
   const showModal = (errorMessage: string | null) => {
     setModalContent(errorMessage);
@@ -32,8 +40,47 @@ const DatasyncTable = ({
       ellipsis: true,
     },
     {
-      title: 'User',
+      title: (
+        <div className="flex flex-row justify-between items-center gap-2">
+          {showSearch ? (
+            <div>
+              <Input
+                size="small"
+                onChange={(e) => {
+                  const searchText = e.target.value;
+                  const filteredData = dataSource.filter((row) =>
+                    row.user_id.toLowerCase().includes(searchText.toLowerCase())
+                  );
+                  setFilteredDataSource(filteredData);
+                }}
+              />
+            </div>
+          ) : (
+            <span>User</span>
+          )}
+          {showSearch ? (
+            <Button
+              icon={<CloseOutlined />}
+              danger
+              size="small"
+              type="link"
+              onClick={() => {
+                setFilteredDataSource(null);
+                setShowSearch(false);
+              }}
+            />
+          ) : (
+            <Button
+              icon={<SearchOutlined />}
+              size="small"
+              type="link"
+              onClick={() => setShowSearch(true)}
+            />
+          )}
+        </div>
+      ),
       dataIndex: 'user_id',
+      filterSearch: true,
       width: 100,
       ellipsis: true,
     },
@@ -112,7 +159,7 @@ const DatasyncTable = ({
       <Table
         className="w-full"
         rowSelection={rowSelection}
-        dataSource={dataSource}
+        dataSource={filteredDataSource ?? dataSource}
         pagination={{ pageSize: 10 }}
         columns={columns}
         rowKey="id"

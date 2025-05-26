@@ -66,9 +66,9 @@ const Datasync = () => {
           ),
         }));
 
-        allRows = [...allRows, ...rows];
+        allRows = [...allRows, ...rows.reverse()];
 
-        if (response.data.totalPages === page_number) {
+        if (response.data.lastPage) {
           break;
         } else {
           page_number += 1;
