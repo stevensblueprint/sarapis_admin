@@ -185,7 +185,7 @@ const DatasyncTable = ({
       width: '15%',
       ellipsis: true,
       render: (timestamp: Dayjs) => {
-        return timestamp.format('YYYY-MM-DD HH:mm:ss.SSS');
+        return timestamp.format('YYYY-MM-DD HH:mm:ss');
       },
     },
     {
