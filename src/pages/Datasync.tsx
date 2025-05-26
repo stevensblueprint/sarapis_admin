@@ -6,7 +6,7 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons';
 import DatasyncTable from '../components/DatasyncTable';
-import DatasyncTableRow from '../interface/model/Datasync';
+import DatasyncTableRow from '../interface/model/DatasyncTableRow';
 import ExportModal from '../components/ExportModal';
 import ImportModal from '../components/ImportModal';
 import { getAllActions } from '../api/lib/datasync';
@@ -15,13 +15,6 @@ import { ActionLog } from '../interface/model/Exchange';
 import Navbar from '../components/Navbar';
 
 const { Title } = Typography;
-
-const formatFileSize = (size: number | null): string => {
-  if (!size) return '';
-  return size < 1000000
-    ? `${(size / 1000).toFixed(2)} KB`
-    : `${(size / 1000000).toFixed(2)} MB`;
-};
 
 const Datasync = () => {
   const [actionHistory, setActionHistory] = useState<DatasyncTableRow[]>([]);
@@ -59,7 +52,7 @@ const Datasync = () => {
           success: item.success,
           error_message: item.error_message,
           format: item.format,
-          size: formatFileSize(item.size),
+          size: item.size,
           user_id: item.user_id,
           data_exchange_files: item.data_exchange_files.map(
             (file: FileImport) => file.file_name

@@ -1,4 +1,4 @@
-import DatasyncTableRow from '../interface/model/Datasync';
+import DatasyncTableRow from '../interface/model/DatasyncTableRow';
 import { Table, Modal, TableProps, Button, Input } from 'antd';
 import { useState } from 'react';
 import {
@@ -20,7 +20,8 @@ const DatasyncTable = ({
 }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [modalContent, setModalContent] = useState<string | null>(null);
-  const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [showUserSearch, setShowUserSearch] = useState<boolean>(false);
+  const [showFilesSearch, setShowFilesSearch] = useState<boolean>(false);
   const [filteredDataSource, setFilteredDataSource] = useState<
     DatasyncTableRow[] | null
   >(null);
@@ -50,7 +51,7 @@ const DatasyncTable = ({
     {
       title: (
         <div className="flex flex-row justify-between items-center gap-2">
-          {showSearch ? (
+          {showUserSearch ? (
             <div>
               <Input
                 size="small"
@@ -66,7 +67,7 @@ const DatasyncTable = ({
           ) : (
             <span>User</span>
           )}
-          {showSearch ? (
+          {showUserSearch ? (
             <Button
               icon={<CloseOutlined />}
               danger
@@ -74,7 +75,7 @@ const DatasyncTable = ({
               type="link"
               onClick={() => {
                 setFilteredDataSource(null);
-                setShowSearch(false);
+                setShowUserSearch(false);
               }}
             />
           ) : (
@@ -82,7 +83,7 @@ const DatasyncTable = ({
               icon={<SearchOutlined />}
               size="small"
               type="link"
-              onClick={() => setShowSearch(true)}
+              onClick={() => setShowUserSearch(true)}
             />
           )}
         </div>
@@ -195,7 +196,52 @@ const DatasyncTable = ({
       ellipsis: true,
     },
     {
-      title: 'Files',
+      title: (
+        <div className="flex flex-row justify-between items-center gap-2">
+          {showFilesSearch ? (
+            <div>
+              <Input
+                size="small"
+                onChange={(e) => {
+                  const searchValues = e.target.value
+                    .split(',')
+                    .map((s) => s.trim().toLowerCase())
+                    .filter(Boolean);
+                  const filteredData = dataSource.filter((row) =>
+                    row.data_exchange_files.some((file) =>
+                      searchValues.some((search) =>
+                        file.toLowerCase().includes(search)
+                      )
+                    )
+                  );
+                  setFilteredDataSource(filteredData);
+                }}
+              />
+            </div>
+          ) : (
+            <span>Files</span>
+          )}
+          {showFilesSearch ? (
+            <Button
+              icon={<CloseOutlined />}
+              danger
+              size="small"
+              type="link"
+              onClick={() => {
+                setFilteredDataSource(null);
+                setShowFilesSearch(false);
+              }}
+            />
+          ) : (
+            <Button
+              icon={<SearchOutlined />}
+              size="small"
+              type="link"
+              onClick={() => setShowFilesSearch(true)}
+            />
+          )}
+        </div>
+      ),
       dataIndex: 'data_exchange_files',
       ellipsis: true,
       width: '20%',
@@ -208,6 +254,16 @@ const DatasyncTable = ({
       dataIndex: 'size',
       width: '10%',
       ellipsis: true,
+      render: (size: number) => {
+        const formatFileSize = (size: number | null): string => {
+          if (!size) return '';
+          return size < 1000000
+            ? `${(size / 1000).toFixed(2)} KB`
+            : `${(size / 1000000).toFixed(2)} MB`;
+        };
+
+        return formatFileSize(size);
+      },
     },
   ];
 

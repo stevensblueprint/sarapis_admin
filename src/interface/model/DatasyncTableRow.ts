@@ -5,7 +5,7 @@ interface DatasyncTableRow {
   success: boolean;
   error_message: string | null;
   format: string;
-  size: string;
+  size: number | null;
   user_id: string;
   data_exchange_files: string[];
 }
