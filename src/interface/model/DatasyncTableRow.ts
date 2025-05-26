@@ -1,6 +1,8 @@
+import { Dayjs } from 'dayjs';
+
 interface DatasyncTableRow {
   id: string;
-  timestamp: string;
+  timestamp: Dayjs;
   type: string;
   success: boolean;
   error_message: string | null;

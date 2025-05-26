@@ -13,6 +13,7 @@ import { getAllActions } from '../api/lib/datasync';
 import FileImport from '../interface/model/FileImport';
 import { ActionLog } from '../interface/model/Exchange';
 import Navbar from '../components/Navbar';
+import dayjs from 'dayjs';
 
 const { Title } = Typography;
 
@@ -47,7 +48,7 @@ const Datasync = () => {
 
         const rows: DatasyncTableRow[] = items.map((item) => ({
           id: item.id,
-          timestamp: item.timestamp,
+          timestamp: dayjs(item.timestamp),
           type: item.type === 'EXPORT' ? 'Export' : 'Import',
           success: item.success,
           error_message: item.error_message,
