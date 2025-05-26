@@ -24,9 +24,13 @@ const DatasyncTable = ({
   const [filteredDataSource, setFilteredDataSource] = useState<
     DatasyncTableRow[] | null
   >(null);
-  const [filterIndex, setFilterIndex] = useState(0);
+  const [requestTypeFilterIndex, setRequestTypeFilterIndex] = useState(0);
+  const [statusFilterIndex, setStatusFilterIndex] = useState(0);
+  const [formatFilterIndex, setFormatFilterIndex] = useState(0);
 
-  const filters = [null, 'Export', 'Import'];
+  const requestTypeFilters = [null, 'Export', 'Import'];
+  const statusFilters = [null, true, false];
+  const formatFilters = [null, 'CSV', 'PDF'];
 
   const showModal = (errorMessage: string | null) => {
     setModalContent(errorMessage);
@@ -97,13 +101,13 @@ const DatasyncTable = ({
             size="small"
             type="link"
             onClick={() => {
-              const newFilterIndex = (filterIndex + 1) % 3;
-              setFilterIndex(newFilterIndex);
-              if (filters[newFilterIndex] === null) {
+              const newFilterIndex = (requestTypeFilterIndex + 1) % 3;
+              setRequestTypeFilterIndex(newFilterIndex);
+              if (requestTypeFilters[newFilterIndex] === null) {
                 setFilteredDataSource(null);
               } else {
                 const filteredData = dataSource.filter(
-                  (row) => row.type === filters[newFilterIndex]
+                  (row) => row.type === requestTypeFilters[newFilterIndex]
                 );
                 setFilteredDataSource(filteredData);
               }
@@ -116,7 +120,28 @@ const DatasyncTable = ({
       ellipsis: true,
     },
     {
-      title: 'Status',
+      title: (
+        <div className="flex flex-row justify-between items-center gap-2">
+          <span>Status</span>
+          <Button
+            icon={<FilterOutlined />}
+            size="small"
+            type="link"
+            onClick={() => {
+              const newFilterIndex = (statusFilterIndex + 1) % 3;
+              setStatusFilterIndex(newFilterIndex);
+              if (statusFilters[newFilterIndex] === null) {
+                setFilteredDataSource(null);
+              } else {
+                const filteredData = dataSource.filter(
+                  (row) => row.success === statusFilters[newFilterIndex]
+                );
+                setFilteredDataSource(filteredData);
+              }
+            }}
+          />
+        </div>
+      ),
       dataIndex: 'success',
       width: '10%',
       ellipsis: true,
@@ -143,7 +168,28 @@ const DatasyncTable = ({
       ellipsis: true,
     },
     {
-      title: 'Format',
+      title: (
+        <div className="flex flex-row justify-between items-center gap-2">
+          <span>Format</span>
+          <Button
+            icon={<FilterOutlined />}
+            size="small"
+            type="link"
+            onClick={() => {
+              const newFilterIndex = (formatFilterIndex + 1) % 3;
+              setFormatFilterIndex(newFilterIndex);
+              if (formatFilters[newFilterIndex] === null) {
+                setFilteredDataSource(null);
+              } else {
+                const filteredData = dataSource.filter(
+                  (row) => row.format === formatFilters[newFilterIndex]
+                );
+                setFilteredDataSource(filteredData);
+              }
+            }}
+          />
+        </div>
+      ),
       dataIndex: 'format',
       width: '10%',
       ellipsis: true,
