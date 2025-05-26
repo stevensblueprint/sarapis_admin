@@ -42,7 +42,7 @@ const handleApiError = (error: unknown, defaultMessage: string): never => {
  */
 export const getAllFiles = async (data: {
   format: string;
-  user_id: string;
+  user_id?: string;
   files: string[];
 }): Promise<AxiosResponse<Blob>> => {
   return apiClient

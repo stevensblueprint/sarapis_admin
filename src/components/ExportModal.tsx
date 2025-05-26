@@ -7,7 +7,7 @@ import {
   WarningOutlined,
 } from '@ant-design/icons';
 import { getAllFiles } from '../api/lib/datasync';
-import type { SelectProps, MenuProps } from 'antd';
+import type { MenuProps } from 'antd';
 import { Dayjs } from 'dayjs';
 
 const { Title } = Typography;
@@ -15,10 +15,11 @@ const { RangePicker } = DatePicker;
 
 type DownloadStatus = 'IDLE' | 'DOWNLOADING' | 'DONE' | 'ERROR';
 
-const tableOptions: SelectProps['options'] = [
-  { label: 'Option 1', value: 'option1' },
-  { label: 'Option 2', value: 'option2' },
-  { label: 'Option 3', value: 'option3' },
+const tableOptions = [
+  { label: 'Organizations', value: 'ORGANIZATION' },
+  { label: 'Services', value: 'SERVICE' },
+  { label: 'Locations', value: 'LOCATION' },
+  { label: 'Service At Locations', value: 'SERVICE_AT_LOCATION' },
 ];
 
 const ExportModal = ({
@@ -32,20 +33,24 @@ const ExportModal = ({
     [start: Dayjs | null, end: Dayjs | null] | null
   >(null);
   const [downloadStatus, setDownloadStatus] = useState<DownloadStatus>('IDLE');
-  const [selectedTableOptions, setSelectedTableOptions] = useState<
-    (string | number | null | undefined)[]
-  >([]);
+  const [selectedTableOptions, setSelectedTableOptions] = useState<string[]>(
+    []
+  );
 
   const items: MenuProps['items'] = [
     {
-      key: '1',
-      label: <span onClick={() => getFiles('CSV')}>CSV</span>,
+      key: 'CSV',
+      label: 'CSV',
     },
     {
-      key: '2',
-      label: <span onClick={() => getFiles('PDF')}>PDF</span>,
+      key: 'PDF',
+      label: 'PDF',
     },
   ];
+
+  const handleExportClick: MenuProps['onClick'] = (key) => {
+    getFiles(key.key);
+  };
 
   useEffect(() => {
     if (showModal) {
@@ -60,9 +65,7 @@ const ExportModal = ({
     setDateRange(dates);
   };
 
-  const handleTableSelectChange = (
-    selection: (string | number | null | undefined)[]
-  ) => {
+  const handleTableSelectChange = (selection: string[]) => {
     setSelectedTableOptions(selection);
   };
 
@@ -85,7 +88,7 @@ const ExportModal = ({
       const response = await getAllFiles({
         format: format,
         user_id: 'example_user_id',
-        files: ['Organization'],
+        files: selectedTableOptions,
       });
       const blob = new Blob([response.data], { type: 'application/zip' });
 
@@ -117,7 +120,7 @@ const ExportModal = ({
         onCancel={closeModal}
         title="Export Data"
         footer={
-          <Dropdown menu={{ items }}>
+          <Dropdown menu={{ items, onClick: handleExportClick }}>
             <Button
               type="primary"
               loading={downloadStatus == 'DOWNLOADING'}
