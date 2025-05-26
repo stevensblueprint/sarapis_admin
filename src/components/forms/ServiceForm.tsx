@@ -89,6 +89,7 @@ const ServiceForm = ({
         formData.last_modified?.format('YYYY-MM-DD[T]HH:mm:ss:SSS') ??
         undefined,
       assured_date: formData.assured_date?.format('YYYY-MM-DD') ?? undefined,
+      organization: { id: formData.organization!.id },
     };
     console.log(service);
     const response = await createService(service);
@@ -97,6 +98,7 @@ const ServiceForm = ({
 
   const handleCancel = () => {
     form.resetFields();
+    setFormData({});
     closeModal();
   };
 
