@@ -1,4 +1,8 @@
 import FileImport from './FileImport';
+import Organization from './Organization';
+import { Service } from './Service';
+import Taxonomy from './Taxonomy';
+import TaxonomyTerm from './TaxonomyTerm';
 
 interface ActionLog {
   id: string;
@@ -12,7 +16,7 @@ interface ActionLog {
   file_imports: FileImport[];
 }
 
-interface Exchange {
+interface ActionExchange {
   totalItems: number;
   totalPages: number;
   pageNumber: number;
@@ -23,4 +27,55 @@ interface Exchange {
   contents: ActionLog[];
 }
 
-export type { ActionLog, Exchange };
+interface OrganizationExchange {
+  totalItems: number;
+  totalPages: number;
+  pageNumber: number;
+  size: number;
+  firstPage: string;
+  lastPage: string;
+  empty: boolean;
+  contents: Organization[];
+}
+
+interface ServiceExchange {
+  totalItems: number;
+  totalPages: number;
+  pageNumber: number;
+  size: number;
+  firstPage: string;
+  lastPage: string;
+  empty: boolean;
+  contents: Service[];
+}
+
+interface TaxonomyExchange {
+  totalItems: number;
+  totalPages: number;
+  pageNumber: number;
+  size: number;
+  firstPage: string;
+  lastPage: string;
+  empty: boolean;
+  contents: Taxonomy[];
+}
+
+interface TaxonomyTermExchange {
+  totalItems: number;
+  totalPages: number;
+  pageNumber: number;
+  size: number;
+  firstPage: string;
+  lastPage: string;
+  empty: boolean;
+  contents: TaxonomyTerm[];
+}
+
+export type {
+  ActionLog,
+  ActionExchange,
+  OrganizationExchange,
+  ServiceExchange,
+  TaxonomyExchange,
+  TaxonomyTermExchange,
+};
