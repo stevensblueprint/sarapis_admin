@@ -5,6 +5,7 @@ import {
   InfoCircleOutlined,
   SearchOutlined,
   CloseOutlined,
+  FilterOutlined,
 } from '@ant-design/icons';
 
 type TableRowSelection<T extends object = object> =
@@ -23,6 +24,9 @@ const DatasyncTable = ({
   const [filteredDataSource, setFilteredDataSource] = useState<
     DatasyncTableRow[] | null
   >(null);
+  const [filterIndex, setFilterIndex] = useState(0);
+
+  const filters = [null, 'Export', 'Import'];
 
   const showModal = (errorMessage: string | null) => {
     setModalContent(errorMessage);
@@ -36,7 +40,7 @@ const DatasyncTable = ({
     {
       title: 'ID',
       dataIndex: 'id',
-      width: 100,
+      width: '10%',
       ellipsis: true,
     },
     {
@@ -81,19 +85,40 @@ const DatasyncTable = ({
       ),
       dataIndex: 'user_id',
       filterSearch: true,
-      width: 100,
+      width: '12%',
       ellipsis: true,
     },
     {
-      title: 'Request Type',
+      title: (
+        <div className="flex flex-row justify-between items-center gap-2">
+          <span>Request Type</span>
+          <Button
+            icon={<FilterOutlined />}
+            size="small"
+            type="link"
+            onClick={() => {
+              const newFilterIndex = (filterIndex + 1) % 3;
+              setFilterIndex(newFilterIndex);
+              if (filters[newFilterIndex] === null) {
+                setFilteredDataSource(null);
+              } else {
+                const filteredData = dataSource.filter(
+                  (row) => row.type === filters[newFilterIndex]
+                );
+                setFilteredDataSource(filteredData);
+              }
+            }}
+          />
+        </div>
+      ),
       dataIndex: 'type',
-      width: 100,
+      width: '13%',
       ellipsis: true,
     },
     {
       title: 'Status',
       dataIndex: 'success',
-      width: 100,
+      width: '10%',
       ellipsis: true,
       render: (success: boolean, record: DatasyncTableRow) => {
         return success ? (
@@ -114,20 +139,20 @@ const DatasyncTable = ({
     {
       title: 'Timestamp',
       dataIndex: 'timestamp',
-      width: 150,
+      width: '15%',
       ellipsis: true,
     },
     {
       title: 'Format',
       dataIndex: 'format',
-      width: 100,
+      width: '10%',
       ellipsis: true,
     },
     {
       title: 'Files',
       dataIndex: 'data_exchange_files',
       ellipsis: true,
-      width: 300,
+      width: '20%',
       render: (data_exchange_files: string[]) => {
         return <p className="truncate">{data_exchange_files.join(', ')}</p>;
       },
@@ -135,7 +160,7 @@ const DatasyncTable = ({
     {
       title: 'Size',
       dataIndex: 'size',
-      width: 100,
+      width: '10%',
       ellipsis: true,
     },
   ];
