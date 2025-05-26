@@ -1,4 +1,4 @@
-import { Modal, Button, Form, Input, message } from 'antd';
+import { Modal, Button, Form, Input, message, Tooltip } from 'antd';
 import Url from '../../../interface/model/Url';
 
 const AddURLForm = ({
@@ -58,11 +58,28 @@ const AddURLForm = ({
     >
       {contextHolder}
       <Form form={form} layout="vertical" requiredMark={false}>
-        <Form.Item label="Name" name="label">
+        <Form.Item
+          label={
+            <Tooltip
+              placement="topLeft"
+              title="The human-readable label for this url e.g. “Twitter” or “Website”."
+            >
+              Name
+            </Tooltip>
+          }
+          name="label"
+        >
           <Input />
         </Form.Item>
         <Form.Item
-          label="URL"
+          label={
+            <Tooltip
+              placement="topLeft"
+              title="The URL for this URL object. This must be formatted as a valid URI."
+            >
+              URL
+            </Tooltip>
+          }
           name="url"
           rules={[
             {

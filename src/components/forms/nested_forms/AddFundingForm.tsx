@@ -1,4 +1,13 @@
-import { Modal, Button, Form, Input, message, Select, Divider } from 'antd';
+import {
+  Modal,
+  Button,
+  Form,
+  Input,
+  message,
+  Select,
+  Divider,
+  Tooltip,
+} from 'antd';
 import Funding from '../../../interface/model/Funding';
 import { useState } from 'react';
 
@@ -113,7 +122,14 @@ const AddFundingForm = ({
         disabled={selectedFunding !== null}
       >
         <Form.Item
-          label="Source"
+          label={
+            <Tooltip
+              placement="topLeft"
+              title="A free text description of the source of funds for this organization or service."
+            >
+              Source
+            </Tooltip>
+          }
           name="source"
           rules={[{ required: true, message: 'Required Field!' }]}
         >

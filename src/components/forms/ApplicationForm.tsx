@@ -116,7 +116,7 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       <div className="flex flex-row justify-center gap-4">
         <div className="w-1/3 flex flex-col">
           <Form.Item
@@ -190,7 +190,7 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
           </Form.Item>
         </div>
       </div>
-      <div className="flex flex-col gap-4 w-3/4 self-center">
+      <div className="flex flex-col w-3/4 self-center">
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">

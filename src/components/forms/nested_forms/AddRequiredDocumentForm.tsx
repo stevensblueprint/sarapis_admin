@@ -1,4 +1,4 @@
-import { Modal, Button, Form, Input, message } from 'antd';
+import { Modal, Button, Form, Input, message, Tooltip } from 'antd';
 import RequiredDocument from '../../../interface/model/RequiredDocument';
 
 const AddRequiredDocumentForm = ({
@@ -64,11 +64,25 @@ const AddRequiredDocumentForm = ({
     >
       {contextHolder}
       <Form form={form} layout="vertical" requiredMark={false}>
-        <Form.Item label="Document" name="document">
+        <Form.Item
+          label={
+            <Tooltip
+              placement="topLeft"
+              title="A free text description of the document required to apply for or receive the service."
+            >
+              Document
+            </Tooltip>
+          }
+          name="document"
+        >
           <Input.TextArea rows={5} />
         </Form.Item>
         <Form.Item
-          label="URI"
+          label={
+            <Tooltip placement="topLeft" title="A web link to the document.">
+              URI
+            </Tooltip>
+          }
           name="uri"
           rules={[
             {

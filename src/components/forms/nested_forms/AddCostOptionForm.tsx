@@ -1,4 +1,12 @@
-import { Modal, Button, Form, Input, message, InputNumber } from 'antd';
+import {
+  Modal,
+  Button,
+  Form,
+  Input,
+  message,
+  InputNumber,
+  Tooltip,
+} from 'antd';
 import CostOption from '../../../interface/model/CostOption';
 import { DatePicker } from 'antd';
 
@@ -70,24 +78,73 @@ const AddCostOptionForm = ({
     >
       {contextHolder}
       <Form form={form} layout="vertical" requiredMark={false}>
-        <Form.Item label="Valid dates" name="valid_dates">
+        <Form.Item
+          label={
+            <Tooltip
+              placement="topLeft"
+              title="The dates when the price is valid."
+            >
+              Valid Dates
+            </Tooltip>
+          }
+          name="valid_dates"
+        >
           <DatePicker.RangePicker className="w-full" />
         </Form.Item>
         <div className="flex flex-row gap-2">
-          <Form.Item className="w-full" label="Currency" name="currency">
+          <Form.Item
+            className="w-full"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="The 3 letter currency code of this cost option (expected to be gbp by Open Referral UK)."
+              >
+                Currency
+              </Tooltip>
+            }
+            name="currency"
+          >
             <Input placeholder="gbp, usd, etc" />
           </Form.Item>
-          <Form.Item label="Amount" name="amount">
+          <Form.Item
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="The cost of the option, expressed as an amount."
+              >
+                Amount
+              </Tooltip>
+            }
+            name="amount"
+          >
             <InputNumber />
           </Form.Item>
         </div>
         <div className="flex flex-row gap-2">
-          <Form.Item className="w-1/2" label="Option" name="option">
+          <Form.Item
+            className="w-1/2"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="Conditions associated with the cost option."
+              >
+                Option
+              </Tooltip>
+            }
+            name="option"
+          >
             <Input.TextArea rows={5} />
           </Form.Item>
           <Form.Item
             className="w-1/2"
-            label="Description"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="Specific details qualifying the cost amount."
+              >
+                Description
+              </Tooltip>
+            }
             name="amount_description"
           >
             <Input.TextArea rows={5} />

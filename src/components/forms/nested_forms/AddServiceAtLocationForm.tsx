@@ -1,4 +1,4 @@
-import { Modal, Button, Form, Input, message, Table } from 'antd';
+import { Modal, Button, Form, Input, message, Table, Tooltip } from 'antd';
 import { useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
@@ -303,14 +303,30 @@ const AddServiceAtLocationForm = ({
       {contextHolder}
       <Form form={form} layout="vertical" requiredMark={false}>
         <div className="flex justify-center">
-          <Form.Item className="w-2/3" label="Description" name="description">
+          <Form.Item
+            className="w-2/3"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="A free text description of the service at this specific location."
+              >
+                Description
+              </Tooltip>
+            }
+            name="description"
+          >
             <Input.TextArea rows={5} />
           </Form.Item>
         </div>
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Service Areas</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the geographic area for which a service is available."
+              >
+                Service Areas
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -344,7 +360,12 @@ const AddServiceAtLocationForm = ({
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Contacts</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the named contacts for services and organizations."
+              >
+                Contacts
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -379,7 +400,12 @@ const AddServiceAtLocationForm = ({
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Phones</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the telephone numbers used to contact organizations, services, and locations."
+              >
+                Phones
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -413,7 +439,12 @@ const AddServiceAtLocationForm = ({
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Schedules</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of when a service or location is open. Entries are RFC 5545 RRULES."
+              >
+                Schedules
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -449,7 +480,12 @@ const AddServiceAtLocationForm = ({
             className="w-2/3"
             label={
               <div className="flex flex-row items-center gap-2">
-                <span>Location</span>
+                <Tooltip
+                  placement="topLeft"
+                  title="The details of the locations where organizations operate. Locations may be virtual, and one organization may have many locations."
+                >
+                  Location
+                </Tooltip>
                 <Button
                   icon={<PlusOutlined />}
                   onClick={() =>

@@ -7,6 +7,7 @@ import {
   Select,
   Divider,
   Table,
+  Tooltip,
 } from 'antd';
 import { useState } from 'react';
 import Contact from '../../../interface/model/Contact';
@@ -177,20 +178,57 @@ const AddContactForm = ({
         disabled={selectedContact !== null}
       >
         <div className="flex flex-row gap-2">
-          <Form.Item className="w-1/2" label="Name" name="name">
-            <Input />
-          </Form.Item>
-          <Form.Item className="w-1/2" label="Title" name="title">
-            <Input />
-          </Form.Item>
-        </div>
-        <div className="flex flex-row gap-2">
-          <Form.Item className="w-1/2" label="Department" name="department">
+          <Form.Item
+            className="w-1/2"
+            label={
+              <Tooltip placement="topLeft" title="The name of the contact.">
+                Name
+              </Tooltip>
+            }
+            name="name"
+          >
             <Input />
           </Form.Item>
           <Form.Item
             className="w-1/2"
-            label="Email"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="The job title of the contact."
+              >
+                Title
+              </Tooltip>
+            }
+            name="title"
+          >
+            <Input />
+          </Form.Item>
+        </div>
+        <div className="flex flex-row gap-2">
+          <Form.Item
+            className="w-1/2"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="The department that the contact is a part of."
+              >
+                Department
+              </Tooltip>
+            }
+            name="department"
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            className="w-1/2"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="The email address of the contact."
+              >
+                Email
+              </Tooltip>
+            }
             name="email"
             rules={[{ type: 'email', message: 'Invalid Email!' }]}
           >
@@ -200,7 +238,12 @@ const AddContactForm = ({
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Phones</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the telephone numbers used to contact organizations, services, and locations."
+              >
+                Phones
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowPhoneModal(true)}

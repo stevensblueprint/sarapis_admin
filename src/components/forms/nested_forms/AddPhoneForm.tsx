@@ -8,6 +8,7 @@ import {
   Divider,
   InputNumber,
   Table,
+  Tooltip,
 } from 'antd';
 import { useState } from 'react';
 import Phone from '../../../interface/model/Phone';
@@ -176,16 +177,42 @@ const AddPhoneForm = ({
         <div className="flex flex-row gap-2">
           <Form.Item
             className="w-5/12"
-            label="Number"
+            label={
+              <Tooltip placement="topLeft" title="The phone number.">
+                Number
+              </Tooltip>
+            }
             name="number"
             rules={[{ required: true, message: 'Required Field!' }]}
           >
             <Input />
           </Form.Item>
-          <Form.Item className="w-1/4" label="Extension" name="extension">
+          <Form.Item
+            className="w-1/4"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="The extension of the phone number."
+              >
+                Extension
+              </Tooltip>
+            }
+            name="extension"
+          >
             <InputNumber className="w-full" />
           </Form.Item>
-          <Form.Item className="w-1/3" label="Type" name="type">
+          <Form.Item
+            className="w-1/3"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="Indicates the type of phone service."
+              >
+                Type
+              </Tooltip>
+            }
+            name="type"
+          >
             <Select
               options={[
                 { value: 'text (for SMS)', label: 'Text (for SMS)' },
@@ -199,13 +226,28 @@ const AddPhoneForm = ({
             />
           </Form.Item>
         </div>
-        <Form.Item label="Description" name="description">
+        <Form.Item
+          label={
+            <Tooltip
+              placement="topLeft"
+              title="A free text description providing extra information about the phone service."
+            >
+              Description
+            </Tooltip>
+          }
+          name="description"
+        >
           <Input.TextArea rows={5} />
         </Form.Item>
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Languages</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the languages that are spoken at locations or services. This does not include languages which can only be used with interpretation."
+              >
+                Languages
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setShowLanguageModal(true)}

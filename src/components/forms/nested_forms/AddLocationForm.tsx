@@ -1,4 +1,14 @@
-import { Modal, Button, Form, Input, Table, Select, Divider } from 'antd';
+import {
+  Modal,
+  Button,
+  Form,
+  Input,
+  Table,
+  Select,
+  Divider,
+  Tooltip,
+  InputNumber,
+} from 'antd';
 import { useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
@@ -403,15 +413,131 @@ const AddLocationForm = ({
         requiredMark={false}
         disabled={selectedLocation !== null}
       >
-        <div className="flex justify-center">
-          <Form.Item className="w-2/3" label="Description" name="description">
-            <Input.TextArea rows={5} />
-          </Form.Item>
+        <div className="flex justify-center w-full">
+          <div className="flex flex-col w-2/3">
+            <div className="flex flex-row gap-2">
+              <Form.Item
+                className="w-1/2"
+                label={
+                  <Tooltip
+                    placement="topLeft"
+                    title="The name of the location."
+                  >
+                    Name
+                  </Tooltip>
+                }
+                name="name"
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                className="w-1/2"
+                label={
+                  <Tooltip
+                    placement="topLeft"
+                    title="An (optional) alternative name of the location."
+                  >
+                    Alternate Name
+                  </Tooltip>
+                }
+                name="alternate_name"
+              >
+                <Input />
+              </Form.Item>
+            </div>
+            <Form.Item
+              label={
+                <Tooltip
+                  placement="topLeft"
+                  title="A free text description of the location."
+                >
+                  Description
+                </Tooltip>
+              }
+              name="description"
+            >
+              <Input.TextArea rows={5} />
+            </Form.Item>
+            <Form.Item
+              label={
+                <Tooltip
+                  placement="topLeft"
+                  title="A free text description of the access to public or private transportation to and from the location."
+                >
+                  Transportation
+                </Tooltip>
+              }
+              name="transportation"
+            >
+              <Input.TextArea rows={5} />
+            </Form.Item>
+            <div className="flex flex-row gap-2 justify-center">
+              <Form.Item
+                label={
+                  <Tooltip
+                    placement="topLeft"
+                    title="The latitude of the location expressed in decimal degrees in WGS84 datum."
+                  >
+                    Latitude
+                  </Tooltip>
+                }
+                name="latitude"
+              >
+                <InputNumber className="w-full" />
+              </Form.Item>
+              <Form.Item
+                label={
+                  <Tooltip
+                    placement="topLeft"
+                    title="The longitude of the location expressed in decimal degrees in WGS84 datum."
+                  >
+                    Longitude
+                  </Tooltip>
+                }
+                name="longitude"
+              >
+                <InputNumber className="w-full" />
+              </Form.Item>
+            </div>
+            <div className="flex flex-row gap-2 justify-center">
+              <Form.Item
+                label={
+                  <Tooltip
+                    placement="topLeft"
+                    title="A third party identifier for the location, which can be drawn from other services e.g. UK UPRN."
+                  >
+                    External Identifier
+                  </Tooltip>
+                }
+                name="external_identifier"
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label={
+                  <Tooltip
+                    placement="topLeft"
+                    title="The scheme used for the location’s external_identifier e.g. UK UPRN."
+                  >
+                    External Identifier Type
+                  </Tooltip>
+                }
+                name="external_identifier_type"
+              >
+                <Input />
+              </Form.Item>
+            </div>
+          </div>
         </div>
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Languages</span>
+              <Tooltip
+                placement="topLeft"
+                title="The languages that are spoken at locations or services. This does not include languages which can only be used with interpretation."
+              >
+                Languages
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -444,7 +570,12 @@ const AddLocationForm = ({
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Addresses</span>
+              <Tooltip
+                placement="topLeft"
+                title="The addresses of locations where organizations operate."
+              >
+                Addresses
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -477,7 +608,12 @@ const AddLocationForm = ({
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Contacts</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the named contacts for services and organizations."
+              >
+                Contacts
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -512,7 +648,12 @@ const AddLocationForm = ({
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Accessibility</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the arrangements for access to locations for people who have disabilities"
+              >
+                Accessibility
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -548,7 +689,12 @@ const AddLocationForm = ({
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Phones</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of the telephone numbers used to contact organizations, services, and locations."
+              >
+                Phones
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>
@@ -582,7 +728,12 @@ const AddLocationForm = ({
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
-              <span>Schedules</span>
+              <Tooltip
+                placement="topLeft"
+                title="The details of when a service or location is open. Entries are RFC 5545 RRULES."
+              >
+                Schedules
+              </Tooltip>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() =>

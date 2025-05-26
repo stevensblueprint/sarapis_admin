@@ -1,4 +1,4 @@
-import { Modal, Button, Form, Input, Select, Divider } from 'antd';
+import { Modal, Button, Form, Input, Select, Divider, Tooltip } from 'antd';
 import { useState } from 'react';
 import Program from '../../../interface/model/Program';
 
@@ -87,7 +87,11 @@ const AddProgramForm = ({
         <div className="flex flex-row gap-2">
           <Form.Item
             className="w-1/2"
-            label="Name"
+            label={
+              <Tooltip placement="topLeft" title="The name of the program.">
+                Name
+              </Tooltip>
+            }
             name="name"
             rules={[{ required: true, message: 'Required Field!' }]}
           >
@@ -95,13 +99,30 @@ const AddProgramForm = ({
           </Form.Item>
           <Form.Item
             className="w-1/2"
-            label="Alternate Name"
+            label={
+              <Tooltip
+                placement="topLeft"
+                title="The (optional) alternative name for the program."
+              >
+                Alternate Name
+              </Tooltip>
+            }
             name="alternate_name"
           >
             <Input />
           </Form.Item>
         </div>
-        <Form.Item label="Description" name="description">
+        <Form.Item
+          label={
+            <Tooltip
+              placement="topLeft"
+              title="A free text description of the program."
+            >
+              Description
+            </Tooltip>
+          }
+          name="description"
+        >
           <Input.TextArea rows={5} />
         </Form.Item>
       </Form>

@@ -115,7 +115,7 @@ const LocationForm = ({ form }: { form: FormInstance }) => {
 
   return (
     <div className="w-[100%] flex justify-center">
-      <div className="flex flex-col gap-4 w-3/4">
+      <div className="flex flex-col w-3/4">
         <Form.Item
           label={
             <div className="flex flex-row items-center gap-2 pt-2">
