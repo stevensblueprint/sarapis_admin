@@ -63,7 +63,9 @@ const DatasyncTable = ({
                 onChange={(e) => {
                   const searchText = e.target.value;
                   const filteredData = dataSource.filter((row) =>
-                    row.user_id.toLowerCase().includes(searchText.toLowerCase())
+                    (row.user_id || '')
+                      .toLowerCase()
+                      .includes(searchText.toLowerCase())
                   );
                   setFilteredDataSource(filteredData);
                 }}
