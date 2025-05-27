@@ -35,13 +35,13 @@ const AddPhoneForm = ({
 }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [selectedPhone, setSelectedPhone] = useState<Phone | null>(null);
   const [showLanguageModal, setShowLanguageModal] = useState<boolean>(false);
   const [languageData, setLanguageData] = useState<Language[]>([]);
   const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
   const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
   const [JSONData, setJSONData] = useState<object>();
+  const [selectedPhone, setSelectedPhone] = useState<Phone | null>();
 
   const languageColumns: ColumnsType = [
     {
@@ -101,34 +101,23 @@ const AddPhoneForm = ({
 
   const handleSelect = (jsonValue: string) => {
     const phone = JSON.parse(jsonValue) as Phone;
+    form.setFieldsValue(phone);
+    setLanguageData(phone.languages ?? []);
     setSelectedPhone(phone);
   };
 
-  const handleClear = () => {
-    setSelectedPhone(null);
-  };
-
   const addNewObject = async () => {
-    if (selectedPhone) {
-      if (isDuplicate(selectedPhone)) {
-        showError();
-        return;
-      }
-      addObject(selectedPhone);
-    } else {
-      const values = await form.validateFields();
-      const newPhone: Phone = { ...values, languages: languageData };
-      if (isDuplicate(newPhone)) {
-        showError();
-        return;
-      }
-      addObject(newPhone);
+    const values = await form.validateFields();
+    const newPhone: Phone = { ...values, languages: languageData };
+    if (isDuplicate(newPhone)) {
+      showError();
+      return;
     }
-
+    addObject(newPhone);
     closeModal();
     form.resetFields();
-    setSelectedPhone(null);
     setLanguageData([]);
+    setSelectedPhone(null);
   };
 
   const showError = () => {
@@ -145,8 +134,8 @@ const AddPhoneForm = ({
       onCancel={() => {
         closeModal();
         form.resetFields();
-        setSelectedPhone(null);
         setLanguageData([]);
+        setSelectedPhone(null);
       }}
       title="Add Phone"
       footer={
@@ -164,7 +153,6 @@ const AddPhoneForm = ({
       <div className="flex flex-col gap-2 pb-2">
         <strong>Select Existing Phone</strong>
         <Select
-          allowClear
           showSearch
           placeholder="Select a Phone"
           options={Array.from(
@@ -178,7 +166,6 @@ const AddPhoneForm = ({
                 : phone.number,
             }))}
           onSelect={handleSelect}
-          onClear={handleClear}
           value={selectedPhone ? JSON.stringify(selectedPhone) : undefined}
         />
       </div>
@@ -189,12 +176,7 @@ const AddPhoneForm = ({
         <strong>Create New Phone</strong>
       </div>
 
-      <Form
-        form={form}
-        layout="vertical"
-        requiredMark={false}
-        disabled={selectedPhone !== null}
-      >
+      <Form form={form} layout="vertical" requiredMark={false}>
         <div className="flex flex-row gap-2">
           <Form.Item
             className="w-5/12"

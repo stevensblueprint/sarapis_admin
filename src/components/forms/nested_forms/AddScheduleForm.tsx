@@ -32,11 +32,11 @@ const AddScheduleForm = ({
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [usingInterval, setUsingInterval] = useState<number | null>(null);
+  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
+  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
   const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(
     null
   );
-  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
-  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
 
   const isDuplicate = (newSchedule: Schedule) => {
     return objectData.some(
@@ -52,49 +52,38 @@ const AddScheduleForm = ({
 
   const handleSelect = (jsonValue: string) => {
     const schedule = JSON.parse(jsonValue) as Schedule;
+    form.setFieldsValue(schedule);
     setSelectedSchedule(schedule);
   };
 
-  const handleClear = () => {
-    setSelectedSchedule(null);
-  };
-
   const addNewObject = async () => {
-    if (selectedSchedule) {
-      if (isDuplicate(selectedSchedule)) {
-        showError();
-        return;
-      }
-      addObject(selectedSchedule);
-    } else {
-      const values = await form.validateFields();
-      const newSchedule: Schedule = {
-        valid_from: values.valid_dates?.[0]?.format('YYYY-MM-DD') ?? undefined,
-        valid_to: values.valid_dates?.[1]?.format('YYYY-MM-DD') ?? undefined,
-        dtstart: values.occurrence?.[0]?.format('YYYY-MM-DD') ?? undefined,
-        until: values.occurrence?.[1]?.format('YYYY-MM-DD') ?? undefined,
-        timezone: values.timezone ? values.timezone : 0,
-        freq: values.freq,
-        interval: values.interval,
-        count: values.count,
-        wkst: values.wkst,
-        byday: values.byday?.join(',') ?? undefined,
-        byweekno: values.byweekno?.join(',') ?? undefined,
-        bymonthday: values.bymonthday?.join(',') ?? undefined,
-        byyearday: values.byyearday?.join(',') ?? undefined,
-        opens_at: values.valid_hours?.[0]?.format('HH:mm') ?? undefined,
-        closes_at: values.valid_hours?.[1]?.format('HH:mm') ?? undefined,
-        schedule_link: values.schedule_link,
-        description: values.description,
-        attending_type: values.attending_type,
-        notes: values.notes,
-      };
-      if (isDuplicate(newSchedule)) {
-        showError();
-        return;
-      }
-      addObject(newSchedule);
+    const values = await form.validateFields();
+    const newSchedule: Schedule = {
+      valid_from: values.valid_dates?.[0]?.format('YYYY-MM-DD') ?? undefined,
+      valid_to: values.valid_dates?.[1]?.format('YYYY-MM-DD') ?? undefined,
+      dtstart: values.occurrence?.[0]?.format('YYYY-MM-DD') ?? undefined,
+      until: values.occurrence?.[1]?.format('YYYY-MM-DD') ?? undefined,
+      timezone: values.timezone ? values.timezone : 0,
+      freq: values.freq,
+      interval: values.interval,
+      count: values.count,
+      wkst: values.wkst,
+      byday: values.byday?.join(',') ?? undefined,
+      byweekno: values.byweekno?.join(',') ?? undefined,
+      bymonthday: values.bymonthday?.join(',') ?? undefined,
+      byyearday: values.byyearday?.join(',') ?? undefined,
+      opens_at: values.valid_hours?.[0]?.format('HH:mm') ?? undefined,
+      closes_at: values.valid_hours?.[1]?.format('HH:mm') ?? undefined,
+      schedule_link: values.schedule_link,
+      description: values.description,
+      attending_type: values.attending_type,
+      notes: values.notes,
+    };
+    if (isDuplicate(newSchedule)) {
+      showError();
+      return;
     }
+    addObject(newSchedule);
     closeModal();
     form.resetFields();
     setSelectedSchedule(null);
@@ -127,7 +116,6 @@ const AddScheduleForm = ({
       <div className="flex flex-col gap-2 pb-2">
         <strong>Select Existing Schedule</strong>
         <Select
-          allowClear
           showSearch
           placeholder="Select a Schedule"
           options={Array.from(
@@ -139,7 +127,6 @@ const AddScheduleForm = ({
               label: schedule.description,
             }))}
           onSelect={handleSelect}
-          onClear={handleClear}
           value={
             selectedSchedule ? JSON.stringify(selectedSchedule) : undefined
           }
@@ -152,12 +139,7 @@ const AddScheduleForm = ({
         <strong>Create New Schedule</strong>
       </div>
 
-      <Form
-        form={form}
-        layout="vertical"
-        requiredMark={false}
-        disabled={selectedSchedule !== null}
-      >
+      <Form form={form} layout="vertical" requiredMark={false}>
         <Form.Item
           label={
             <Tooltip

@@ -49,29 +49,17 @@ const AddServiceAreaForm = ({
   const handleSelect = (jsonValue: string) => {
     const serviceArea = JSON.parse(jsonValue) as ServiceArea;
     setSelectedServiceArea(serviceArea);
-  };
-
-  const handleClear = () => {
-    setSelectedServiceArea(null);
+    form.setFieldsValue(serviceArea);
   };
 
   const addNewObject = async () => {
-    if (selectedServiceArea) {
-      if (isDuplicate(selectedServiceArea)) {
-        showError();
-        return;
-      }
-      addObject(selectedServiceArea);
-    } else {
-      const values = await form.validateFields();
-      const newServiceArea: ServiceArea = { ...values };
-      if (isDuplicate(newServiceArea)) {
-        showError();
-        return;
-      }
-      addObject(newServiceArea);
+    const values = await form.validateFields();
+    const newServiceArea: ServiceArea = { ...values };
+    if (isDuplicate(newServiceArea)) {
+      showError();
+      return;
     }
-
+    addObject(newServiceArea);
     closeModal();
     form.resetFields();
     setSelectedServiceArea(null);
@@ -104,7 +92,6 @@ const AddServiceAreaForm = ({
       <div className="flex flex-col gap-2 pb-2">
         <strong>Select Existing Service Area</strong>
         <Select
-          allowClear
           showSearch
           placeholder="Select a Service Area"
           options={Array.from(
@@ -116,7 +103,6 @@ const AddServiceAreaForm = ({
               label: serviceArea.name,
             }))}
           onSelect={handleSelect}
-          onClear={handleClear}
           value={
             selectedServiceArea
               ? JSON.stringify(selectedServiceArea)

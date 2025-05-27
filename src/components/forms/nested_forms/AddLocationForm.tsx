@@ -284,10 +284,7 @@ const AddLocationForm = ({
   const handleSelect = (jsonValue: string) => {
     const location = JSON.parse(jsonValue) as Location;
     setSelectedLocation(location);
-  };
-
-  const handleClear = () => {
-    setSelectedLocation(null);
+    form.setFieldsValue(location);
   };
 
   const handleAddLanguage = (language: Language) => {
@@ -361,22 +358,17 @@ const AddLocationForm = ({
   };
 
   const addNewObject = async () => {
-    if (selectedLocation) {
-      addObject(selectedLocation);
-    } else {
-      const values = await form.validateFields();
-      const newLocation: Location = {
-        ...values,
-        languages: languageData,
-        contacts: contactData,
-        phones: phoneData,
-        schedules: scheduleData,
-        addresses: addressData,
-        accessibility: accessibilityData,
-      };
-      addObject(newLocation);
-    }
-
+    const values = await form.validateFields();
+    const newLocation: Location = {
+      ...values,
+      languages: languageData,
+      contacts: contactData,
+      phones: phoneData,
+      schedules: scheduleData,
+      addresses: addressData,
+      accessibility: accessibilityData,
+    };
+    addObject(newLocation);
     closeModal();
     form.resetFields();
     setLanguageData([]);
@@ -418,7 +410,6 @@ const AddLocationForm = ({
       <div className="flex flex-col gap-2 pb-2">
         <strong>Select Existing Location</strong>
         <Select
-          allowClear
           showSearch
           placeholder="Select a Location"
           options={Array.from(
@@ -430,7 +421,6 @@ const AddLocationForm = ({
               label: location.name,
             }))}
           onSelect={handleSelect}
-          onClear={handleClear}
           value={
             selectedLocation ? JSON.stringify(selectedLocation) : undefined
           }

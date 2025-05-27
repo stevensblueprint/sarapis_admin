@@ -29,9 +29,9 @@ const AddFundingForm = ({
 }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const [selectedFunding, setSelectedFunding] = useState<Funding | null>(null);
   const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
+  const [selectedFunding, setSelectedFunding] = useState<Funding | null>(null);
 
   const isDuplicate = (newFunding: Funding) => {
     return objectData.some(
@@ -47,30 +47,18 @@ const AddFundingForm = ({
 
   const handleSelect = (jsonValue: string) => {
     const funding = JSON.parse(jsonValue) as Funding;
+    form.setFieldsValue(funding);
     setSelectedFunding(funding);
   };
 
-  const handleClear = () => {
-    setSelectedFunding(null);
-  };
-
   const addNewObject = async () => {
-    if (selectedFunding) {
-      if (isDuplicate(selectedFunding)) {
-        showError();
-        return;
-      }
-      addObject(selectedFunding);
-    } else {
-      const values = await form.validateFields();
-      const newFunding: Funding = { ...values, source: values.source.trim() };
-      if (isDuplicate(newFunding)) {
-        showError();
-        return;
-      }
-      addObject(newFunding);
+    const values = await form.validateFields();
+    const newFunding: Funding = { ...values, source: values.source.trim() };
+    if (isDuplicate(newFunding)) {
+      showError();
+      return;
     }
-
+    addObject(newFunding);
     closeModal();
     form.resetFields();
     setSelectedFunding(null);
@@ -103,7 +91,6 @@ const AddFundingForm = ({
       <div className="flex flex-col gap-2 pb-2">
         <strong>Select Existing Funding Source</strong>
         <Select
-          allowClear
           showSearch
           placeholder="Select a Funding Source"
           options={Array.from(
@@ -115,7 +102,6 @@ const AddFundingForm = ({
               label: funding.source,
             }))}
           onSelect={handleSelect}
-          onClear={handleClear}
           value={selectedFunding ? JSON.stringify(selectedFunding) : undefined}
         />
       </div>
@@ -126,12 +112,7 @@ const AddFundingForm = ({
         <strong>Create New Funding Source</strong>
       </div>
 
-      <Form
-        form={form}
-        layout="vertical"
-        requiredMark={false}
-        disabled={selectedFunding !== null}
-      >
+      <Form form={form} layout="vertical" requiredMark={false}>
         <Form.Item
           label={
             <Tooltip

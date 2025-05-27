@@ -17,9 +17,9 @@ const AddProgramForm = ({
   existingPrograms: Program[];
 }) => {
   const [form] = Form.useForm();
-  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
+  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
 
   const handleAddAttribute = (attribute: Attribute) => {
     const newAttributes = [...attributeData, attribute];
@@ -28,25 +28,18 @@ const AddProgramForm = ({
   };
 
   const addNewObject = async () => {
-    if (selectedProgram) {
-      addObject(selectedProgram);
-    } else {
-      const values = await form.validateFields();
-      const newProgram: Program = { ...values };
-      addObject(newProgram);
-    }
+    const values = await form.validateFields();
+    const newProgram: Program = { ...values };
+    addObject(newProgram);
     closeModal();
-    setSelectedProgram(null);
     form.resetFields();
+    setSelectedProgram(null);
   };
 
   const handleSelect = (jsonValue: string) => {
     const program = JSON.parse(jsonValue) as Program;
+    form.setFieldsValue(program);
     setSelectedProgram(program);
-  };
-
-  const handleClear = () => {
-    setSelectedProgram(null);
   };
 
   return (
@@ -54,8 +47,8 @@ const AddProgramForm = ({
       open={showModal}
       onCancel={() => {
         closeModal();
-        setSelectedProgram(null);
         form.resetFields();
+        setSelectedProgram(null);
       }}
       title="Add Program"
       footer={
@@ -67,7 +60,6 @@ const AddProgramForm = ({
       <div className="flex flex-col gap-2 pb-2">
         <strong>Select Existing Program</strong>
         <Select
-          allowClear
           showSearch
           placeholder="Select a Program"
           options={Array.from(
@@ -79,7 +71,6 @@ const AddProgramForm = ({
               label: `${program.name} - ${program.description}`,
             }))}
           onSelect={handleSelect}
-          onClear={handleClear}
           value={selectedProgram ? JSON.stringify(selectedProgram) : undefined}
         />
       </div>
@@ -89,12 +80,7 @@ const AddProgramForm = ({
       <div className="pb-2">
         <strong>Create New Program</strong>
       </div>
-      <Form
-        form={form}
-        layout="vertical"
-        requiredMark={false}
-        disabled={selectedProgram !== null}
-      >
+      <Form form={form} layout="vertical" requiredMark={false}>
         <div className="flex flex-row gap-2">
           <Form.Item
             className="w-1/2"

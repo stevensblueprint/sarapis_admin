@@ -107,29 +107,18 @@ const AddContactForm = ({
   const handleSelect = (jsonValue: string) => {
     const contact = JSON.parse(jsonValue) as Contact;
     setSelectedContact(contact);
-  };
-
-  const handleClear = () => {
-    setSelectedContact(null);
+    setPhoneData(contact.phones ?? []);
+    form.setFieldsValue(contact);
   };
 
   const addNewObject = async () => {
-    if (selectedContact) {
-      if (isDuplicate(selectedContact)) {
-        showError();
-        return;
-      }
-      addObject(selectedContact);
-    } else {
-      const values = await form.validateFields();
-      const newContact: Contact = { ...values, phones: phoneData };
-      if (isDuplicate(newContact)) {
-        showError();
-        return;
-      }
-      addObject(newContact);
+    const values = await form.validateFields();
+    const newContact: Contact = { ...values, phones: phoneData };
+    if (isDuplicate(newContact)) {
+      showError();
+      return;
     }
-
+    addObject(newContact);
     closeModal();
     form.resetFields();
     setPhoneData([]);
@@ -169,7 +158,6 @@ const AddContactForm = ({
       <div className="flex flex-col gap-2 pb-2">
         <strong>Select Existing Contact</strong>
         <Select
-          allowClear
           showSearch
           placeholder="Select a Contact"
           options={Array.from(
@@ -181,7 +169,6 @@ const AddContactForm = ({
               label: contact.name,
             }))}
           onSelect={handleSelect}
-          onClear={handleClear}
           value={selectedContact ? JSON.stringify(selectedContact) : undefined}
         />
       </div>
@@ -192,12 +179,7 @@ const AddContactForm = ({
         <strong>Create New Contact</strong>
       </div>
 
-      <Form
-        form={form}
-        layout="vertical"
-        requiredMark={false}
-        disabled={selectedContact !== null}
-      >
+      <Form form={form} layout="vertical" requiredMark={false}>
         <div className="flex flex-row gap-2">
           <Form.Item
             className="w-1/2"
