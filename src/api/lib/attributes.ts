@@ -6,7 +6,7 @@ import {
   TaxonomyTermExchange,
 } from '../../interface/model/Exchange';
 
-export class AttributeError extends Error {
+export class TaxonomyError extends Error {
   statusCode?: number;
   data?: unknown;
 
@@ -17,6 +17,9 @@ export class AttributeError extends Error {
   }
 }
 
+const TAXONOMY_BASE_URL = '/taxonomies';
+const TAXONOMY_TERM_BASE_URL = '/taxonomy_terms';
+
 const handleApiError = (error: unknown, defaultMessage: string): never => {
   const message = error instanceof Error ? error.message : defaultMessage;
 
@@ -25,7 +28,7 @@ const handleApiError = (error: unknown, defaultMessage: string): never => {
     const detailedMessage = error.response?.data?.message || error.message;
     const data = error.response?.data;
 
-    throw new AttributeError(
+    throw new TaxonomyError(
       detailedMessage
         ? `${defaultMessage}: ${detailedMessage}`
         : defaultMessage,
@@ -34,20 +37,16 @@ const handleApiError = (error: unknown, defaultMessage: string): never => {
     );
   }
 
-  throw new AttributeError(message, 500, {});
+  throw new TaxonomyError(message, 500, {});
 };
 
 const apiClient = getApiClient(process.env.REACT_APP_API_BASE_URL || '');
-
-export const getLinkTypes = () => {
-  return ['Category', 'Eligibility', 'Details'];
-};
 
 export const getAllTaxonomies = async (): Promise<
   AxiosResponse<Response<TaxonomyExchange[]>>
 > => {
   return apiClient
-    .get('/taxonomies')
+    .get(TAXONOMY_BASE_URL)
     .catch((error) => handleApiError(error, 'Failed to fetch taxonomies'));
 };
 
@@ -55,6 +54,6 @@ export const getAllTaxonomyTerms = async (): Promise<
   AxiosResponse<Response<TaxonomyTermExchange[]>>
 > => {
   return apiClient
-    .get('/taxonomy_terms')
+    .get(TAXONOMY_TERM_BASE_URL)
     .catch((error) => handleApiError(error, 'Failed to fetch taxonomy terms'));
 };

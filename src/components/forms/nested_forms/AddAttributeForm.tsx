@@ -4,11 +4,11 @@ import Taxonomy from '../../../interface/model/Taxonomy';
 import TaxonomyTerm from '../../../interface/model/TaxonomyTerm';
 import { useState, useEffect } from 'react';
 import {
-  getLinkTypes,
   getAllTaxonomies,
   getAllTaxonomyTerms,
 } from '../../../api/lib/attributes';
 import Response from '../../../interface/Response';
+import { getLinkTypes } from '../../../api/lib/linkTypes';
 
 const AddAttributeForm = ({
   showModal,
