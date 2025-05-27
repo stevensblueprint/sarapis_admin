@@ -44,22 +44,17 @@ const AddCapacityForm = ({
   };
 
   const addNewObject = async () => {
-    try {
-      const values = await form.validateFields();
-      const newCapacity: ServiceCapacity = {
-        ...values,
-        updated:
-          values.updated?.format('YYYY-MM-DD[T]HH:mm:ss:SSS') ?? undefined,
-      };
-      if (isDuplicate(newCapacity)) {
-        showError();
-      } else {
-        addObject(newCapacity);
-        closeModal();
-        form.resetFields();
-      }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+    const values = await form.validateFields();
+    const newCapacity: ServiceCapacity = {
+      ...values,
+      updated: values.updated?.format('YYYY-MM-DD[T]HH:mm:ss:SSS') ?? undefined,
+    };
+    if (isDuplicate(newCapacity)) {
+      showError();
+    } else {
+      addObject(newCapacity);
+      closeModal();
+      form.resetFields();
     }
   };
 

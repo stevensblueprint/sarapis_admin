@@ -34,21 +34,17 @@ const AddRequiredDocumentForm = ({
   };
 
   const addNewObject = async () => {
-    try {
-      const values = await form.validateFields();
-      const newDocument: RequiredDocument = {
-        ...values,
-      };
+    const values = await form.validateFields();
+    const newDocument: RequiredDocument = {
+      ...values,
+    };
 
-      if (isDuplicate(newDocument)) {
-        showError();
-      } else {
-        addObject(newDocument);
-        closeModal();
-        form.resetFields();
-      }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+    if (isDuplicate(newDocument)) {
+      showError();
+    } else {
+      addObject(newDocument);
+      closeModal();
+      form.resetFields();
     }
   };
 

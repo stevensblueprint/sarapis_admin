@@ -29,30 +29,18 @@ const AddAttributeForm = ({
 
   useEffect(() => {
     const fetchLinkTypes = async () => {
-      try {
-        const response = getLinkTypes();
-        setLinkTypes(response);
-      } catch (error) {
-        console.error(error);
-      }
+      const response = getLinkTypes();
+      setLinkTypes(response);
     };
     const fetchTaxonomyData = async () => {
-      try {
-        const response = await getAllTaxonomies();
-        const data = response.data as Response<Taxonomy[]>;
-        setTaxonomyData(data.contents || []);
-      } catch (error) {
-        console.error(error);
-      }
+      const response = await getAllTaxonomies();
+      const data = response.data as Response<Taxonomy[]>;
+      setTaxonomyData(data.contents || []);
     };
     const fetchTaxonomyTermData = async () => {
-      try {
-        const response = await getAllTaxonomyTerms();
-        const data = response.data as Response<TaxonomyTerm[]>;
-        setTaxonomyTermData(data.contents || []);
-      } catch (error) {
-        console.error(error);
-      }
+      const response = await getAllTaxonomyTerms();
+      const data = response.data as Response<TaxonomyTerm[]>;
+      setTaxonomyTermData(data.contents || []);
     };
     fetchLinkTypes();
     fetchTaxonomyData();
@@ -66,22 +54,18 @@ const AddAttributeForm = ({
   };
 
   const addNewObject = async () => {
-    try {
-      const values = await form.validateFields();
-      const newAttribute: Attribute = {
-        ...values,
-        taxonomy_term: JSON.parse(values.taxonomy_term) as TaxonomyTerm,
-        taxonomy: JSON.parse(values.taxonomy) as Taxonomy,
-      };
-      if (isDuplicate(newAttribute)) {
-        showError();
-      } else {
-        addObject(newAttribute);
-        closeModal();
-        form.resetFields();
-      }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+    const values = await form.validateFields();
+    const newAttribute: Attribute = {
+      ...values,
+      taxonomy_term: JSON.parse(values.taxonomy_term) as TaxonomyTerm,
+      taxonomy: JSON.parse(values.taxonomy) as Taxonomy,
+    };
+    if (isDuplicate(newAttribute)) {
+      showError();
+    } else {
+      addObject(newAttribute);
+      closeModal();
+      form.resetFields();
     }
   };
 

@@ -278,31 +278,27 @@ const AddServiceAtLocationForm = ({
   };
 
   const addNewObject = async () => {
-    try {
-      const values = await form.validateFields();
-      const newServiceAtLocation: ServiceAtLocation = {
-        ...values,
-        service_areas: serviceAreaData,
-        contacts: contactData,
-        phones: phoneData,
-        schedules: scheduleData,
-        location: selectedLocation,
-      };
+    const values = await form.validateFields();
+    const newServiceAtLocation: ServiceAtLocation = {
+      ...values,
+      service_areas: serviceAreaData,
+      contacts: contactData,
+      phones: phoneData,
+      schedules: scheduleData,
+      location: selectedLocation,
+    };
 
-      if (isDuplicate(newServiceAtLocation)) {
-        showError();
-      } else {
-        addObject(newServiceAtLocation);
-        closeModal();
-        form.resetFields();
-        setServiceAreaData([]);
-        setContactData([]);
-        setPhoneData([]);
-        setScheduleData([]);
-        setSelectedLocation(undefined);
-      }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+    if (isDuplicate(newServiceAtLocation)) {
+      showError();
+    } else {
+      addObject(newServiceAtLocation);
+      closeModal();
+      form.resetFields();
+      setServiceAreaData([]);
+      setContactData([]);
+      setPhoneData([]);
+      setScheduleData([]);
+      setSelectedLocation(undefined);
     }
   };
 

@@ -34,19 +34,15 @@ const AddURLForm = ({
   };
 
   const addNewObject = async () => {
-    try {
-      const values = await form.validateFields();
-      const newURL: Url = { ...values, url: values.url.trim() };
+    const values = await form.validateFields();
+    const newURL: Url = { ...values, url: values.url.trim() };
 
-      if (isDuplicate(newURL)) {
-        showError();
-      } else {
-        addObject(newURL);
-        closeModal();
-        form.resetFields();
-      }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+    if (isDuplicate(newURL)) {
+      showError();
+    } else {
+      addObject(newURL);
+      closeModal();
+      form.resetFields();
     }
   };
 

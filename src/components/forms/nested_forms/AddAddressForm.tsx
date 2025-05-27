@@ -34,20 +34,16 @@ const AddAddressForm = ({
   };
 
   const addNewObject = async () => {
-    try {
-      const values = await form.validateFields();
-      const newAddress: Address = {
-        ...values,
-      };
-      if (isDuplicate(newAddress)) {
-        showError();
-      } else {
-        addObject(newAddress);
-        closeModal();
-        form.resetFields();
-      }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+    const values = await form.validateFields();
+    const newAddress: Address = {
+      ...values,
+    };
+    if (isDuplicate(newAddress)) {
+      showError();
+    } else {
+      addObject(newAddress);
+      closeModal();
+      form.resetFields();
     }
   };
 

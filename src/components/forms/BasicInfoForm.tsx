@@ -33,13 +33,9 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
 
   useEffect(() => {
     const fetchOrganizations = async () => {
-      try {
-        const response = await getAllOrganizations();
-        const data = response.data as Response<Organization[]>;
-        setOrganizations(data.contents || []);
-      } catch (error) {
-        console.error(error);
-      }
+      const response = await getAllOrganizations();
+      const data = response.data as Response<Organization[]>;
+      setOrganizations(data.contents || []);
     };
     fetchOrganizations();
   }, []);

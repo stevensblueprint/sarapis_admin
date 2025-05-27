@@ -34,21 +34,17 @@ const AddLanguageForm = ({
   };
 
   const addNewObject = async () => {
-    try {
-      const values = await form.validateFields();
-      const newLanguage: Language = {
-        ...values,
-      };
+    const values = await form.validateFields();
+    const newLanguage: Language = {
+      ...values,
+    };
 
-      if (isDuplicate(newLanguage)) {
-        showError();
-      } else {
-        addObject(newLanguage);
-        closeModal();
-        form.resetFields();
-      }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+    if (isDuplicate(newLanguage)) {
+      showError();
+    } else {
+      addObject(newLanguage);
+      closeModal();
+      form.resetFields();
     }
   };
 

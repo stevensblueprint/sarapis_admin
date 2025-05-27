@@ -25,6 +25,8 @@ const ServiceForm = ({
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [form] = Form.useForm();
   const [formData, setFormData] = useState<ServiceFormObject>({});
+  const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false);
+  const [submitModalData, setSubmitModalData] = useState<string>('');
 
   const steps = [
     {
@@ -91,9 +93,14 @@ const ServiceForm = ({
       assured_date: formData.assured_date?.format('YYYY-MM-DD') ?? undefined,
       organization: { id: formData.organization!.id },
     };
-    console.log(service);
-    const response = await createService(service);
-    console.log(response);
+    try {
+      await createService(service);
+      setSubmitModalData('Service creation successful!');
+      setShowSubmitModal(true);
+    } catch (error) {
+      setSubmitModalData(`Error creating service: ${error}`);
+      setShowSubmitModal(true);
+    }
   };
 
   const handleCancel = () => {
@@ -135,29 +142,39 @@ const ServiceForm = ({
   };
 
   return (
-    <Modal
-      title={steps[currentStep].title}
-      open={showServiceModal}
-      onCancel={handleCancel}
-      footer={modalFooter()}
-      centered
-      width="70%"
-    >
-      <Form form={form} layout="vertical" requiredMark={false}>
-        <Steps current={currentStep} className="mb-6">
-          <Step />
-          <Step />
-          <Step />
-          <Step />
-          <Step />
-          <Step />
-          <Step />
-          <Step />
-        </Steps>
+    <div>
+      <Modal
+        title={steps[currentStep].title}
+        open={showServiceModal}
+        onCancel={handleCancel}
+        footer={modalFooter()}
+        centered
+        width="70%"
+      >
+        <Form form={form} layout="vertical" requiredMark={false}>
+          <Steps current={currentStep} className="mb-6">
+            <Step />
+            <Step />
+            <Step />
+            <Step />
+            <Step />
+            <Step />
+            <Step />
+            <Step />
+          </Steps>
 
-        {steps[currentStep].content}
-      </Form>
-    </Modal>
+          {steps[currentStep].content}
+        </Form>
+      </Modal>
+      <Modal
+        title="Status"
+        open={showSubmitModal}
+        onCancel={() => setShowSubmitModal(false)}
+        footer={null}
+      >
+        {submitModalData}
+      </Modal>
+    </div>
   );
 };
 

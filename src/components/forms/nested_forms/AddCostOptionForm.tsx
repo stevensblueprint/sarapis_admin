@@ -44,26 +44,22 @@ const AddCostOptionForm = ({
   };
 
   const addNewObject = async () => {
-    try {
-      const values = await form.validateFields();
-      const newCostOption: CostOption = {
-        amount: values.amount,
-        amount_description: values.amount_description,
-        currency: values.currency,
-        option: values.option,
-        valid_from: values.valid_dates?.[0]?.format('YYYY-MM-DD') ?? undefined,
-        valid_to: values.valid_dates?.[1]?.format('YYYY-MM-DD') ?? undefined,
-      };
+    const values = await form.validateFields();
+    const newCostOption: CostOption = {
+      amount: values.amount,
+      amount_description: values.amount_description,
+      currency: values.currency,
+      option: values.option,
+      valid_from: values.valid_dates?.[0]?.format('YYYY-MM-DD') ?? undefined,
+      valid_to: values.valid_dates?.[1]?.format('YYYY-MM-DD') ?? undefined,
+    };
 
-      if (isDuplicate(newCostOption)) {
-        showError();
-      } else {
-        addObject(newCostOption);
-        closeModal();
-        form.resetFields();
-      }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+    if (isDuplicate(newCostOption)) {
+      showError();
+    } else {
+      addObject(newCostOption);
+      closeModal();
+      form.resetFields();
     }
   };
 

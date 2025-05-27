@@ -35,20 +35,16 @@ const AddAccessibilityForm = ({
   };
 
   const addNewObject = async () => {
-    try {
-      const values = await form.validateFields();
-      const newAccessibility: Accessibility = {
-        ...values,
-      };
-      if (isDuplicate(newAccessibility)) {
-        showError();
-      } else {
-        addObject(newAccessibility);
-        closeModal();
-        form.resetFields();
-      }
-    } catch (error) {
-      console.error('Form validation failed:', error);
+    const values = await form.validateFields();
+    const newAccessibility: Accessibility = {
+      ...values,
+    };
+    if (isDuplicate(newAccessibility)) {
+      showError();
+    } else {
+      addObject(newAccessibility);
+      closeModal();
+      form.resetFields();
     }
   };
 
