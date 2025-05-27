@@ -27,14 +27,18 @@ const AddURLForm = ({
     form.setFieldsValue({ attributes: newAttributes });
   };
 
+  const isDuplicate = (newURL: Url) => {
+    return objectData.some(
+      (existing) => JSON.stringify(existing) === JSON.stringify(newURL)
+    );
+  };
+
   const addNewObject = async () => {
     try {
       const values = await form.validateFields();
       const newURL: Url = { ...values, url: values.url.trim() };
 
-      const exists = objectData.some((existing) => existing.url === newURL);
-
-      if (exists) {
+      if (isDuplicate(newURL)) {
         showError();
       } else {
         addObject(newURL);

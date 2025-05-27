@@ -40,6 +40,7 @@ const AddProgramForm = ({
     const program = JSON.parse(jsonValue) as Program;
     form.setFieldsValue(program);
     setSelectedProgram(program);
+    setAttributeData(program.attributes ?? []);
   };
 
   return (

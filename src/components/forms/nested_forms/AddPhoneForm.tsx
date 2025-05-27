@@ -104,6 +104,7 @@ const AddPhoneForm = ({
     form.setFieldsValue(phone);
     setLanguageData(phone.languages ?? []);
     setSelectedPhone(phone);
+    setAttributeData(phone.attributes ?? []);
   };
 
   const addNewObject = async () => {
@@ -156,7 +157,12 @@ const AddPhoneForm = ({
           showSearch
           placeholder="Select a Phone"
           options={Array.from(
-            new Set(existingPhones.map((value) => JSON.stringify(value)))
+            new Set(
+              existingPhones.map((value) => {
+                delete value.metadata;
+                return JSON.stringify(value);
+              })
+            )
           )
             .map((value) => JSON.parse(value) as Phone)
             .map((phone) => ({
@@ -177,6 +183,9 @@ const AddPhoneForm = ({
       </div>
 
       <Form form={form} layout="vertical" requiredMark={false}>
+        <Form.Item label="ID" name="id">
+          <Input disabled value={selectedPhone?.id ?? undefined} />
+        </Form.Item>
         <div className="flex flex-row gap-2">
           <Form.Item
             className="w-5/12"

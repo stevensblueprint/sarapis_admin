@@ -54,6 +54,7 @@ const AddScheduleForm = ({
     const schedule = JSON.parse(jsonValue) as Schedule;
     form.setFieldsValue(schedule);
     setSelectedSchedule(schedule);
+    setAttributeData(schedule.attributes ?? []);
   };
 
   const addNewObject = async () => {

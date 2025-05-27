@@ -50,6 +50,7 @@ const AddServiceAreaForm = ({
     const serviceArea = JSON.parse(jsonValue) as ServiceArea;
     setSelectedServiceArea(serviceArea);
     form.setFieldsValue(serviceArea);
+    setAttributeData(serviceArea.attributes ?? []);
   };
 
   const addNewObject = async () => {
@@ -117,12 +118,7 @@ const AddServiceAreaForm = ({
         <strong>Create New Service Area</strong>
       </div>
 
-      <Form
-        form={form}
-        layout="vertical"
-        requiredMark={false}
-        disabled={selectedServiceArea !== null}
-      >
+      <Form form={form} layout="vertical" requiredMark={false}>
         <Form.Item
           label={
             <Tooltip

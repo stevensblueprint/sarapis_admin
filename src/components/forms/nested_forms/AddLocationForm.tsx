@@ -284,6 +284,13 @@ const AddLocationForm = ({
   const handleSelect = (jsonValue: string) => {
     const location = JSON.parse(jsonValue) as Location;
     setSelectedLocation(location);
+    setLanguageData(location.languages ?? []);
+    setAddressData(location.addresses ?? []);
+    setContactData(location.contacts ?? []);
+    setAccessibilityData(location.accessibility ?? []);
+    setPhoneData(location.phones ?? []);
+    setScheduleData(location.schedules ?? []);
+    setAttributeData(location.attributes ?? []);
     form.setFieldsValue(location);
   };
 
@@ -413,7 +420,12 @@ const AddLocationForm = ({
           showSearch
           placeholder="Select a Location"
           options={Array.from(
-            new Set(existingData[0].map((value) => JSON.stringify(value)))
+            new Set(
+              existingData[0].map((value) => {
+                delete value.metadata;
+                return JSON.stringify(value);
+              })
+            )
           )
             .map((value) => JSON.parse(value) as Location)
             .map((location) => ({
@@ -433,14 +445,12 @@ const AddLocationForm = ({
         <strong>Create New Location</strong>
       </div>
 
-      <Form
-        form={form}
-        layout="vertical"
-        requiredMark={false}
-        disabled={selectedLocation !== null}
-      >
+      <Form form={form} layout="vertical" requiredMark={false}>
         <div className="flex justify-center w-full">
           <div className="flex flex-col w-2/3">
+            <Form.Item label="ID" name="id">
+              <Input disabled value={selectedLocation?.id ?? undefined} />
+            </Form.Item>
             <div className="flex flex-row gap-2">
               <Form.Item
                 className="w-1/2"

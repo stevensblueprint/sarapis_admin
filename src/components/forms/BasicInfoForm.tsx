@@ -83,7 +83,7 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
   };
 
   const handleDeleteURL = (urlToDelete: Url) => {
-    const updatedURLs = URLData.filter((url) => url.url !== urlToDelete.url);
+    const updatedURLs = URLData.filter((url) => url !== urlToDelete);
     setURLData(updatedURLs);
     form.setFieldsValue({ additional_urls: updatedURLs });
   };

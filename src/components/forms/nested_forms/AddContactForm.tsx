@@ -108,6 +108,7 @@ const AddContactForm = ({
     const contact = JSON.parse(jsonValue) as Contact;
     setSelectedContact(contact);
     setPhoneData(contact.phones ?? []);
+    setAttributeData(contact.attributes ?? []);
     form.setFieldsValue(contact);
   };
 
@@ -161,7 +162,12 @@ const AddContactForm = ({
           showSearch
           placeholder="Select a Contact"
           options={Array.from(
-            new Set(existingContacts.map((value) => JSON.stringify(value)))
+            new Set(
+              existingContacts.map((value) => {
+                delete value.metadata;
+                return JSON.stringify(value);
+              })
+            )
           )
             .map((value) => JSON.parse(value) as Contact)
             .map((contact) => ({
@@ -180,6 +186,9 @@ const AddContactForm = ({
       </div>
 
       <Form form={form} layout="vertical" requiredMark={false}>
+        <Form.Item label="ID" name="id">
+          <Input disabled value={selectedContact?.id ?? undefined} />
+        </Form.Item>
         <div className="flex flex-row gap-2">
           <Form.Item
             className="w-1/2"
