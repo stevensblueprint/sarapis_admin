@@ -190,6 +190,7 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
                 setJSONData(record);
                 setShowJSONModal(true);
               },
+              className: 'hover:cursor-pointer',
             })}
           />
         </Form.Item>
@@ -225,6 +226,7 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
                 setJSONData(record);
                 setShowJSONModal(true);
               },
+              className: 'hover:cursor-pointer',
             })}
           />
         </Form.Item>
