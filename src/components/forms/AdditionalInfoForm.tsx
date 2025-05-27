@@ -11,15 +11,19 @@ import Funding from '../../interface/model/Funding';
 import Organization from '../../interface/model/Organization';
 import AddProgramForm from './nested_forms/AddProgramForm';
 import Program from '../../interface/model/Program';
+import AddAttributeForm from './nested_forms/AddAttributeForm';
+import Attribute from '../../interface/model/Attribute';
 
 const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
   const [showCapacityModal, setShowCapacityModal] = useState<boolean>(false);
   const [showFundingModal, setShowFundingModal] = useState<boolean>(false);
   const [showProgramModal, setShowProgramModal] = useState<boolean>(false);
+  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
   const [capacityData, setCapacityData] = useState<ServiceCapacity[]>([]);
   const [fundingData, setFundingData] = useState<Funding[]>([]);
   const [selectedProgram, setSelectedProgram] = useState<Program>();
   const [organization, setOrganization] = useState<Organization | undefined>();
+  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
 
   const capacitiesColumns: ColumnsType = [
     {
@@ -95,6 +99,8 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
     const selectedOrganization =
       form.getFieldValue('organization') ?? undefined;
     setOrganization(selectedOrganization);
+    const existingAttributes = form.getFieldValue('attributes') ?? [];
+    setAttributeData(existingAttributes);
   }, [form]);
 
   const handleAddCapacity = (capacity: ServiceCapacity) => {
@@ -133,6 +139,12 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
   const handleDeleteProgram = () => {
     setSelectedProgram(undefined);
     form.setFieldsValue({ program: undefined });
+  };
+
+  const handleAddAttribute = (attribute: Attribute) => {
+    const newAttributes = [...attributeData, attribute];
+    setAttributeData(newAttributes);
+    form.setFieldsValue({ attributes: newAttributes });
   };
 
   return (
@@ -204,7 +216,7 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
                 </Tooltip>
                 <Button
                   icon={<PlusOutlined />}
-                  onClick={() => setShowProgramModal(true)}
+                  onClick={() => setShowAttributeModal(true)}
                   size="small"
                 />
               </div>
@@ -213,6 +225,12 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
           >
             <Select mode="multiple" showSearch allowClear />
           </Form.Item>
+          <AddAttributeForm
+            showModal={showAttributeModal}
+            closeModal={() => setShowAttributeModal(false)}
+            addObject={handleAddAttribute}
+            objectData={attributeData}
+          />
           <Form.Item
             className="w-1/2"
             label={

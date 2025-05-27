@@ -65,6 +65,7 @@ const AddAddressForm = ({
       <Form form={form} layout="vertical" requiredMark={false}>
         <div className="flex flex-row gap-2">
           <Form.Item
+            className="w-1/2"
             label={
               <Tooltip
                 placement="topLeft"
@@ -78,6 +79,7 @@ const AddAddressForm = ({
             <Input />
           </Form.Item>
           <Form.Item
+            className="w-1/2"
             label={
               <Tooltip
                 placement="topLeft"
@@ -101,6 +103,7 @@ const AddAddressForm = ({
         </div>
         <div className="flex flex-row gap-2">
           <Form.Item
+            className="w-1/2"
             label={
               <Tooltip
                 placement="topLeft"
@@ -115,6 +118,7 @@ const AddAddressForm = ({
             <Input />
           </Form.Item>
           <Form.Item
+            className="w-1/2"
             label={
               <Tooltip
                 placement="topLeft"
@@ -130,6 +134,7 @@ const AddAddressForm = ({
         </div>
         <div className="flex flex-row gap-2">
           <Form.Item
+            className="w-1/2"
             label={
               <Tooltip
                 placement="topLeft"
@@ -144,6 +149,7 @@ const AddAddressForm = ({
             <Input />
           </Form.Item>
           <Form.Item
+            className="w-1/2"
             label={
               <Tooltip
                 placement="topLeft"
