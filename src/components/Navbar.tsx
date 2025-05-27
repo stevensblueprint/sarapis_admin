@@ -21,7 +21,7 @@ const Navbar = () => {
           <Link to="/services">Services</Link>
         </p>
         <p>
-          <Link to="/organizations">Organizations</Link>
+          <Link to="/">Organizations</Link>
         </p>
         <p>
           {isAuthenticated ? (
