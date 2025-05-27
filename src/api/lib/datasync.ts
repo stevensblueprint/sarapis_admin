@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import getApiClient from '../apiClient';
-import { Exchange } from '../../interface/model/Exchange';
+import { ActionExchange } from '../../interface/model/Exchange';
 
 export class DatasyncError extends Error {
   statusCode?: number;
@@ -64,7 +64,7 @@ export const getAllActions = async (data?: {
   userId?: string;
   page?: number;
   per_page?: number;
-}): Promise<AxiosResponse<Exchange>> => {
+}): Promise<AxiosResponse<ActionExchange>> => {
   const params: Record<string, string | number | null> = {};
 
   if (data) {
