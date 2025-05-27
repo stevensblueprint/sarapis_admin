@@ -16,6 +16,8 @@ import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import Language from '../../../interface/model/Language';
 import AddLanguageForm from './AddLanguageForm';
+import AddAttributeForm from './AddAttributeForm';
+import Attribute from '../../../interface/model/Attribute';
 
 const AddPhoneForm = ({
   showModal,
@@ -35,6 +37,8 @@ const AddPhoneForm = ({
   const [selectedPhone, setSelectedPhone] = useState<Phone | null>(null);
   const [showLanguageModal, setShowLanguageModal] = useState<boolean>(false);
   const [languageData, setLanguageData] = useState<Language[]>([]);
+  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
+  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
 
   const languageColumns: ColumnsType = [
     {
@@ -64,6 +68,12 @@ const AddPhoneForm = ({
       ),
     },
   ];
+
+  const handleAddAttribute = (attribute: Attribute) => {
+    const newAttributes = [...attributeData, attribute];
+    setAttributeData(newAttributes);
+    form.setFieldsValue({ attributes: newAttributes });
+  };
 
   const handleAddLanguage = (language: Language) => {
     const newLanguages = [...languageData, language];
@@ -264,6 +274,32 @@ const AddPhoneForm = ({
           closeModal={() => setShowLanguageModal(false)}
           addObject={handleAddLanguage}
           objectData={languageData}
+        />
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2">
+              <Tooltip
+                placement="topLeft"
+                title="A link between a service and one or more classifications that describe the nature of the service provided."
+              >
+                Attributes
+              </Tooltip>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowAttributeModal(true)}
+                size="small"
+              />
+            </div>
+          }
+          name="attributes"
+        >
+          <Select mode="multiple" allowClear />
+        </Form.Item>
+        <AddAttributeForm
+          showModal={showAttributeModal}
+          closeModal={() => setShowAttributeModal(false)}
+          addObject={handleAddAttribute}
+          objectData={attributeData}
         />
       </Form>
     </Modal>

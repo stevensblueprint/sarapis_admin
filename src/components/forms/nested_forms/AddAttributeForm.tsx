@@ -135,6 +135,7 @@ const AddAttributeForm = ({
           rules={[{ required: true, message: 'Required Field!' }]}
         >
           <Select
+            showSearch
             options={linkTypes.map((type) => ({ value: type, label: type }))}
           />
         </Form.Item>
@@ -144,6 +145,7 @@ const AddAttributeForm = ({
           rules={[{ required: true, message: 'Required Field!' }]}
         >
           <Select
+            showSearch
             options={taxonomyTermData.map((taxonomyTerm) => ({
               value: JSON.stringify(taxonomyTerm),
               label: `${taxonomyTerm.name} - ${taxonomyTerm.description}`,
@@ -163,6 +165,7 @@ const AddAttributeForm = ({
           rules={[{ required: true, message: 'Required Field!' }]}
         >
           <Select
+            showSearch
             options={taxonomyData.map((taxonomy) => ({
               value: JSON.stringify(taxonomy),
               label: `${taxonomy.name} - ${taxonomy.description}`,

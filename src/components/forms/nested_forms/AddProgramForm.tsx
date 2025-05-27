@@ -1,6 +1,9 @@
 import { Modal, Button, Form, Input, Select, Divider, Tooltip } from 'antd';
 import { useState } from 'react';
 import Program from '../../../interface/model/Program';
+import AddAttributeForm from './AddAttributeForm';
+import Attribute from '../../../interface/model/Attribute';
+import { PlusOutlined } from '@ant-design/icons';
 
 const AddProgramForm = ({
   showModal,
@@ -15,6 +18,14 @@ const AddProgramForm = ({
 }) => {
   const [form] = Form.useForm();
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
+  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
+
+  const handleAddAttribute = (attribute: Attribute) => {
+    const newAttributes = [...attributeData, attribute];
+    setAttributeData(newAttributes);
+    form.setFieldsValue({ attributes: newAttributes });
+  };
 
   const addNewObject = async () => {
     if (selectedProgram) {
@@ -125,6 +136,32 @@ const AddProgramForm = ({
         >
           <Input.TextArea rows={5} />
         </Form.Item>
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2">
+              <Tooltip
+                placement="topLeft"
+                title="A link between a service and one or more classifications that describe the nature of the service provided."
+              >
+                Attributes
+              </Tooltip>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowAttributeModal(true)}
+                size="small"
+              />
+            </div>
+          }
+          name="attributes"
+        >
+          <Select mode="multiple" allowClear />
+        </Form.Item>
+        <AddAttributeForm
+          showModal={showAttributeModal}
+          closeModal={() => setShowAttributeModal(false)}
+          addObject={handleAddAttribute}
+          objectData={attributeData}
+        />
       </Form>
     </Modal>
   );

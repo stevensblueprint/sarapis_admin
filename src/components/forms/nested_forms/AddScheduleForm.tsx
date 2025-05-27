@@ -12,6 +12,9 @@ import {
 } from 'antd';
 import Schedule from '../../../interface/model/Schedule';
 import { useState } from 'react';
+import AddAttributeForm from './AddAttributeForm';
+import Attribute from '../../../interface/model/Attribute';
+import { PlusOutlined } from '@ant-design/icons';
 
 const AddScheduleForm = ({
   showModal,
@@ -32,11 +35,19 @@ const AddScheduleForm = ({
   const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(
     null
   );
+  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
+  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
 
   const isDuplicate = (newSchedule: Schedule) => {
     return objectData.some(
       (existing) => JSON.stringify(existing) === JSON.stringify(newSchedule)
     );
+  };
+
+  const handleAddAttribute = (attribute: Attribute) => {
+    const newAttributes = [...attributeData, attribute];
+    setAttributeData(newAttributes);
+    form.setFieldsValue({ attributes: newAttributes });
   };
 
   const handleSelect = (jsonValue: string) => {
@@ -412,6 +423,32 @@ const AddScheduleForm = ({
             <Input.TextArea rows={5} />
           </Form.Item>
         </div>
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2">
+              <Tooltip
+                placement="topLeft"
+                title="A link between a service and one or more classifications that describe the nature of the service provided."
+              >
+                Attributes
+              </Tooltip>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowAttributeModal(true)}
+                size="small"
+              />
+            </div>
+          }
+          name="attributes"
+        >
+          <Select mode="multiple" allowClear />
+        </Form.Item>
+        <AddAttributeForm
+          showModal={showAttributeModal}
+          closeModal={() => setShowAttributeModal(false)}
+          addObject={handleAddAttribute}
+          objectData={attributeData}
+        />
       </Form>
     </Modal>
   );

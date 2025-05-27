@@ -6,9 +6,14 @@ import {
   message,
   InputNumber,
   Tooltip,
+  Select,
+  DatePicker,
 } from 'antd';
 import CostOption from '../../../interface/model/CostOption';
-import { DatePicker } from 'antd';
+import AddAttributeForm from './AddAttributeForm';
+import Attribute from '../../../interface/model/Attribute';
+import { useState } from 'react';
+import { PlusOutlined } from '@ant-design/icons';
 
 const AddCostOptionForm = ({
   showModal,
@@ -23,11 +28,19 @@ const AddCostOptionForm = ({
 }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
+  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
+  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
 
   const isDuplicate = (newCostOption: CostOption) => {
     return objectData.some(
       (existing) => JSON.stringify(existing) === JSON.stringify(newCostOption)
     );
+  };
+
+  const handleAddAttribute = (attribute: Attribute) => {
+    const newAttributes = [...attributeData, attribute];
+    setAttributeData(newAttributes);
+    form.setFieldsValue({ attributes: newAttributes });
   };
 
   const addNewObject = async () => {
@@ -150,6 +163,32 @@ const AddCostOptionForm = ({
             <Input.TextArea rows={5} />
           </Form.Item>
         </div>
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2">
+              <Tooltip
+                placement="topLeft"
+                title="A link between a service and one or more classifications that describe the nature of the service provided."
+              >
+                Attributes
+              </Tooltip>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowAttributeModal(true)}
+                size="small"
+              />
+            </div>
+          }
+          name="attributes"
+        >
+          <Select mode="multiple" allowClear />
+        </Form.Item>
+        <AddAttributeForm
+          showModal={showAttributeModal}
+          closeModal={() => setShowAttributeModal(false)}
+          addObject={handleAddAttribute}
+          objectData={attributeData}
+        />
       </Form>
     </Modal>
   );

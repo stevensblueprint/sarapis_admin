@@ -223,7 +223,7 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
             }
             name="attributes"
           >
-            <Select mode="multiple" showSearch allowClear />
+            <Select mode="multiple" allowClear />
           </Form.Item>
           <AddAttributeForm
             showModal={showAttributeModal}

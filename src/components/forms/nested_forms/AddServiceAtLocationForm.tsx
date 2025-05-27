@@ -1,4 +1,13 @@
-import { Modal, Button, Form, Input, message, Table, Tooltip } from 'antd';
+import {
+  Modal,
+  Button,
+  Form,
+  Input,
+  message,
+  Table,
+  Tooltip,
+  Select,
+} from 'antd';
 import { useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
@@ -13,6 +22,8 @@ import AddContactForm from './AddContactForm';
 import AddPhoneForm from './AddPhoneForm';
 import AddScheduleForm from './AddScheduleForm';
 import AddLocationForm from './AddLocationForm';
+import AddAttributeForm from './AddAttributeForm';
+import Attribute from '../../../interface/model/Attribute';
 
 const AddServiceAtLocationForm = ({
   showModal,
@@ -41,6 +52,8 @@ const AddServiceAtLocationForm = ({
   const [phoneData, setPhoneData] = useState<Phone[]>([]);
   const [scheduleData, setScheduleData] = useState<Schedule[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Location>();
+  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
+  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
 
   const serviceAreaColumns: ColumnsType = [
     {
@@ -181,6 +194,12 @@ const AddServiceAtLocationForm = ({
       ),
     },
   ];
+
+  const handleAddAttribute = (attribute: Attribute) => {
+    const newAttributes = [...attributeData, attribute];
+    setAttributeData(newAttributes);
+    form.setFieldsValue({ attributes: newAttributes });
+  };
 
   const handleAddServiceArea = (serviceArea: ServiceArea) => {
     const newServiceAreas = [...serviceAreaData, serviceArea];
@@ -537,6 +556,32 @@ const AddServiceAtLocationForm = ({
             existingData[2],
             existingData[3],
           ]}
+        />
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2">
+              <Tooltip
+                placement="topLeft"
+                title="A link between a service and one or more classifications that describe the nature of the service provided."
+              >
+                Attributes
+              </Tooltip>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowAttributeModal(true)}
+                size="small"
+              />
+            </div>
+          }
+          name="attributes"
+        >
+          <Select mode="multiple" allowClear />
+        </Form.Item>
+        <AddAttributeForm
+          showModal={showAttributeModal}
+          closeModal={() => setShowAttributeModal(false)}
+          addObject={handleAddAttribute}
+          objectData={attributeData}
         />
       </Form>
     </Modal>

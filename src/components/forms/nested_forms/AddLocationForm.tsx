@@ -25,6 +25,8 @@ import Address from '../../../interface/model/Address';
 import AddLanguageForm from './AddLanguageForm';
 import AddAddressForm from './AddAddressForm';
 import AddAccessibilityForm from './AddAccessibilityForm';
+import AddAttributeForm from './AddAttributeForm';
+import Attribute from '../../../interface/model/Attribute';
 
 const AddLocationForm = ({
   showModal,
@@ -57,6 +59,8 @@ const AddLocationForm = ({
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null
   );
+  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
+  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
 
   const languageColumns: ColumnsType = [
     {
@@ -249,6 +253,12 @@ const AddLocationForm = ({
       ),
     },
   ];
+
+  const handleAddAttribute = (attribute: Attribute) => {
+    const newAttributes = [...attributeData, attribute];
+    setAttributeData(newAttributes);
+    form.setFieldsValue({ attributes: newAttributes });
+  };
 
   const handleSelect = (jsonValue: string) => {
     const location = JSON.parse(jsonValue) as Location;
@@ -764,6 +774,35 @@ const AddLocationForm = ({
           objectData={scheduleData}
           existingSchedules={existingData[3]}
         />
+        <div className="w-full flex justify-center">
+          <Form.Item
+            className="w-2/3"
+            label={
+              <div className="flex flex-row items-center gap-2">
+                <Tooltip
+                  placement="topLeft"
+                  title="A link between a service and one or more classifications that describe the nature of the service provided."
+                >
+                  Attributes
+                </Tooltip>
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() => setShowAttributeModal(true)}
+                  size="small"
+                />
+              </div>
+            }
+            name="attributes"
+          >
+            <Select mode="multiple" allowClear />
+          </Form.Item>
+          <AddAttributeForm
+            showModal={showAttributeModal}
+            closeModal={() => setShowAttributeModal(false)}
+            addObject={handleAddAttribute}
+            objectData={attributeData}
+          />
+        </div>
       </Form>
     </Modal>
   );
