@@ -15,6 +15,7 @@ import { useState } from 'react';
 import AddAttributeForm from './AddAttributeForm';
 import Attribute from '../../../interface/model/Attribute';
 import { PlusOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
 const AddScheduleForm = ({
   showModal,
@@ -52,7 +53,21 @@ const AddScheduleForm = ({
 
   const handleSelect = (jsonValue: string) => {
     const schedule = JSON.parse(jsonValue) as Schedule;
-    form.setFieldsValue(schedule);
+    form.setFieldsValue({
+      ...schedule,
+      valid_dates: [
+        schedule.valid_from ? dayjs(schedule.valid_from) : null,
+        schedule.valid_to ? dayjs(schedule.valid_to) : null,
+      ],
+      occurrence: [
+        schedule.dtstart ? dayjs(schedule.dtstart) : null,
+        schedule.until ? dayjs(schedule.until) : null,
+      ],
+      valid_hours: [
+        schedule.opens_at ? dayjs(schedule.opens_at, 'HH:mm') : null,
+        schedule.closes_at ? dayjs(schedule.closes_at, 'HH:mm') : null,
+      ],
+    });
     setSelectedSchedule(schedule);
     setAttributeData(schedule.attributes ?? []);
   };
