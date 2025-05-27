@@ -13,6 +13,7 @@ import AddProgramForm from './nested_forms/AddProgramForm';
 import Program from '../../interface/model/Program';
 import AddAttributeForm from './nested_forms/AddAttributeForm';
 import Attribute from '../../interface/model/Attribute';
+import JSONDataModal from '../JSONDataModal';
 
 const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
   const [showCapacityModal, setShowCapacityModal] = useState<boolean>(false);
@@ -24,6 +25,8 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
   const [selectedProgram, setSelectedProgram] = useState<Program>();
   const [organization, setOrganization] = useState<Organization | undefined>();
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
+  const [JSONData, setJSONData] = useState<object>();
 
   const capacitiesColumns: ColumnsType = [
     {
@@ -60,7 +63,10 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteCapacity(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteCapacity(record);
+          }}
         />
       ),
     },
@@ -83,7 +89,10 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteFunding(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteFunding(record);
+          }}
         />
       ),
     },
@@ -149,6 +158,11 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
 
   return (
     <div className="w-[100%] flex justify-center">
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={JSONData ?? {}}
+      />
       <div className="flex flex-col w-3/4">
         <Form.Item
           label={
@@ -168,7 +182,16 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
           }
           name="capacities"
         >
-          <Table columns={capacitiesColumns} dataSource={capacityData} />
+          <Table
+            columns={capacitiesColumns}
+            dataSource={capacityData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddCapacityForm
           showModal={showCapacityModal}
@@ -194,7 +217,16 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
           }
           name="funding"
         >
-          <Table columns={fundingColumns} dataSource={fundingData} />
+          <Table
+            columns={fundingColumns}
+            dataSource={fundingData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddFundingForm
           showModal={showFundingModal}

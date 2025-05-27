@@ -10,6 +10,7 @@ import type { FormInstance } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import AddOrganizationToServiceForm from './nested_forms/AddOrganizationToServiceForm';
+import JSONDataModal from '../JSONDataModal';
 
 const BasicInfoForm = ({ form }: { form: FormInstance }) => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -19,6 +20,8 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
   const [URLData, setURLData] = useState<Url[]>([]);
   const [selectedOrganization, setSelectedOrganization] =
     useState<Organization>();
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
+  const [JSONData, setJSONData] = useState<object>();
 
   useEffect(() => {
     const existingURLs = form.getFieldValue('additional_urls') || [];
@@ -64,7 +67,10 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteURL(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteURL(record);
+          }}
         />
       ),
     },
@@ -94,6 +100,11 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
 
   return (
     <div className="w-[100%] flex flex-col justify-center pt-4">
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={JSONData ?? {}}
+      />
       <div className="flex flex-row justify-center gap-4">
         <div className="w-1/3 flex flex-col">
           <Form.Item
@@ -218,7 +229,16 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
             }
             name="additional_urls"
           >
-            <Table columns={columns} dataSource={URLData} />
+            <Table
+              columns={columns}
+              dataSource={URLData}
+              onRow={(record) => ({
+                onClick: () => {
+                  setJSONData(record);
+                  setShowJSONModal(true);
+                },
+              })}
+            />
           </Form.Item>
           <AddURLForm
             showModal={showURLModal}

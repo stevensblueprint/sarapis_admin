@@ -8,6 +8,7 @@ import { ColumnsType } from 'antd/es/table';
 import AddServiceAreaForm from './nested_forms/AddServiceAreaForm';
 import AddServiceAtLocationForm from './nested_forms/AddServiceAtLocationForm';
 import ServiceAtLocation from '../../interface/model/ServiceAtLocation';
+import JSONDataModal from '../JSONDataModal';
 
 const LocationForm = ({ form }: { form: FormInstance }) => {
   const [showServiceAreaModal, setShowServiceAreaModal] =
@@ -19,6 +20,8 @@ const LocationForm = ({ form }: { form: FormInstance }) => {
     ServiceAtLocation[]
   >([]);
   const [organization, setOrganization] = useState<Organization | undefined>();
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
+  const [JSONData, setJSONData] = useState<object>();
 
   const serviceAreaColumns: ColumnsType = [
     {
@@ -43,7 +46,10 @@ const LocationForm = ({ form }: { form: FormInstance }) => {
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteServiceArea(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteServiceArea(record);
+          }}
         />
       ),
     },
@@ -66,7 +72,10 @@ const LocationForm = ({ form }: { form: FormInstance }) => {
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteServiceAtLocation(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteServiceAtLocation(record);
+          }}
         />
       ),
     },
@@ -115,6 +124,11 @@ const LocationForm = ({ form }: { form: FormInstance }) => {
 
   return (
     <div className="w-[100%] flex justify-center">
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={JSONData ?? {}}
+      />
       <div className="flex flex-col w-3/4">
         <Form.Item
           label={
@@ -134,7 +148,16 @@ const LocationForm = ({ form }: { form: FormInstance }) => {
           }
           name="service_areas"
         >
-          <Table columns={serviceAreaColumns} dataSource={serviceAreaData} />
+          <Table
+            columns={serviceAreaColumns}
+            dataSource={serviceAreaData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddServiceAreaForm
           showModal={showServiceAreaModal}
@@ -164,6 +187,12 @@ const LocationForm = ({ form }: { form: FormInstance }) => {
           <Table
             columns={serviceAtLocationColumns}
             dataSource={serviceAtLocationData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
           />
         </Form.Item>
         <AddServiceAtLocationForm

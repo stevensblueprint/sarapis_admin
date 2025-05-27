@@ -27,6 +27,7 @@ import AddAddressForm from './AddAddressForm';
 import AddAccessibilityForm from './AddAccessibilityForm';
 import AddAttributeForm from './AddAttributeForm';
 import Attribute from '../../../interface/model/Attribute';
+import JSONDataModal from '../../JSONDataModal';
 
 const AddLocationForm = ({
   showModal,
@@ -61,6 +62,8 @@ const AddLocationForm = ({
   );
   const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
+  const [JSONData, setJSONData] = useState<object>();
 
   const languageColumns: ColumnsType = [
     {
@@ -85,7 +88,10 @@ const AddLocationForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteLanguage(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteLanguage(record);
+          }}
         />
       ),
     },
@@ -114,7 +120,10 @@ const AddLocationForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteAddress(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteAddress(record);
+          }}
         />
       ),
     },
@@ -155,7 +164,10 @@ const AddLocationForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteContact(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteContact(record);
+          }}
         />
       ),
     },
@@ -178,7 +190,10 @@ const AddLocationForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteAccessibility(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteAccessibility(record);
+          }}
         />
       ),
     },
@@ -213,7 +228,10 @@ const AddLocationForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeletePhone(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeletePhone(record);
+          }}
         />
       ),
     },
@@ -248,7 +266,10 @@ const AddLocationForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteSchedule(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteSchedule(record);
+          }}
         />
       ),
     },
@@ -389,6 +410,11 @@ const AddLocationForm = ({
         </Button>
       }
     >
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={JSONData ?? {}}
+      />
       <div className="flex flex-col gap-2 pb-2">
         <strong>Select Existing Location</strong>
         <Select
@@ -563,7 +589,16 @@ const AddLocationForm = ({
           }
           name="languages"
         >
-          <Table columns={languageColumns} dataSource={languageData} />
+          <Table
+            columns={languageColumns}
+            dataSource={languageData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddLanguageForm
           showModal={showModals[0]}
@@ -601,7 +636,16 @@ const AddLocationForm = ({
           }
           name="addresses"
         >
-          <Table columns={addressColumns} dataSource={addressData} />
+          <Table
+            columns={addressColumns}
+            dataSource={addressData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddAddressForm
           showModal={showModals[1]}
@@ -639,7 +683,16 @@ const AddLocationForm = ({
           }
           name="contacts"
         >
-          <Table columns={contactColumns} dataSource={contactData} />
+          <Table
+            columns={contactColumns}
+            dataSource={contactData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddContactForm
           showModal={showModals[2]}
@@ -682,6 +735,12 @@ const AddLocationForm = ({
           <Table
             columns={accessibilityColumns}
             dataSource={accessibilityData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
           />
         </Form.Item>
         <AddAccessibilityForm
@@ -720,7 +779,16 @@ const AddLocationForm = ({
           }
           name="phones"
         >
-          <Table columns={phoneColumns} dataSource={phoneData} />
+          <Table
+            columns={phoneColumns}
+            dataSource={phoneData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddPhoneForm
           showModal={showModals[4]}
@@ -759,7 +827,16 @@ const AddLocationForm = ({
           }
           name="schedules"
         >
-          <Table columns={scheduleColumns} dataSource={scheduleData} />
+          <Table
+            columns={scheduleColumns}
+            dataSource={scheduleData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddScheduleForm
           showModal={showModals[5]}

@@ -17,6 +17,7 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import AddPhoneForm from './AddPhoneForm';
 import AddAttributeForm from './AddAttributeForm';
 import Attribute from '../../../interface/model/Attribute';
+import JSONDataModal from '../../JSONDataModal';
 
 const AddContactForm = ({
   showModal,
@@ -40,6 +41,8 @@ const AddContactForm = ({
   const [phoneData, setPhoneData] = useState<Phone[]>([]);
   const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
+  const [JSONData, setJSONData] = useState<object>();
 
   const phoneColumns: ColumnsType = [
     {
@@ -70,7 +73,10 @@ const AddContactForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeletePhone(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeletePhone(record);
+          }}
         />
       ),
     },
@@ -154,6 +160,11 @@ const AddContactForm = ({
         </Button>
       }
     >
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={JSONData ?? {}}
+      />
       {contextHolder}
       <div className="flex flex-col gap-2 pb-2">
         <strong>Select Existing Contact</strong>
@@ -263,7 +274,16 @@ const AddContactForm = ({
           }
           name="phones"
         >
-          <Table columns={phoneColumns} dataSource={phoneData} />
+          <Table
+            columns={phoneColumns}
+            dataSource={phoneData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddPhoneForm
           showModal={showPhoneModal}

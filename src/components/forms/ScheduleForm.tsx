@@ -5,10 +5,13 @@ import { useState, useEffect } from 'react';
 import Schedule from '../../interface/model/Schedule';
 import { ColumnsType } from 'antd/es/table';
 import { FormInstance } from 'antd';
+import JSONDataModal from '../JSONDataModal';
 
 const ScheduleForm = ({ form }: { form: FormInstance }) => {
   const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false);
   const [scheduleData, setScheduleData] = useState<Schedule[]>([]);
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
+  const [JSONData, setJSONData] = useState<object>();
 
   const scheduleColumns: ColumnsType = [
     {
@@ -39,7 +42,10 @@ const ScheduleForm = ({ form }: { form: FormInstance }) => {
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteSchedule(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteSchedule(record);
+          }}
         />
       ),
     },
@@ -66,6 +72,11 @@ const ScheduleForm = ({ form }: { form: FormInstance }) => {
 
   return (
     <div className="w-[100%] flex justify-center">
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={JSONData ?? {}}
+      />
       <div className="flex flex-col w-3/4">
         <Form.Item
           label={
@@ -85,7 +96,16 @@ const ScheduleForm = ({ form }: { form: FormInstance }) => {
           }
           name="schedules"
         >
-          <Table columns={scheduleColumns} dataSource={scheduleData} />
+          <Table
+            columns={scheduleColumns}
+            dataSource={scheduleData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddScheduleForm
           showModal={showScheduleModal}

@@ -24,6 +24,7 @@ import AddScheduleForm from './AddScheduleForm';
 import AddLocationForm from './AddLocationForm';
 import AddAttributeForm from './AddAttributeForm';
 import Attribute from '../../../interface/model/Attribute';
+import JSONDataModal from '../../JSONDataModal';
 
 const AddServiceAtLocationForm = ({
   showModal,
@@ -54,6 +55,8 @@ const AddServiceAtLocationForm = ({
   const [selectedLocation, setSelectedLocation] = useState<Location>();
   const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
+  const [JSONData, setJSONData] = useState<object>();
 
   const serviceAreaColumns: ColumnsType = [
     {
@@ -78,7 +81,10 @@ const AddServiceAtLocationForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteServiceArea(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteServiceArea(record);
+          }}
         />
       ),
     },
@@ -119,7 +125,10 @@ const AddServiceAtLocationForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteContact(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteContact(record);
+          }}
         />
       ),
     },
@@ -154,7 +163,10 @@ const AddServiceAtLocationForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeletePhone(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeletePhone(record);
+          }}
         />
       ),
     },
@@ -189,7 +201,10 @@ const AddServiceAtLocationForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteSchedule(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteSchedule(record);
+          }}
         />
       ),
     },
@@ -319,6 +334,11 @@ const AddServiceAtLocationForm = ({
         </Button>
       }
     >
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={JSONData ?? {}}
+      />
       {contextHolder}
       <Form form={form} layout="vertical" requiredMark={false}>
         <div className="flex justify-center">
@@ -361,7 +381,16 @@ const AddServiceAtLocationForm = ({
           }
           name="service_areas"
         >
-          <Table columns={serviceAreaColumns} dataSource={serviceAreaData} />
+          <Table
+            columns={serviceAreaColumns}
+            dataSource={serviceAreaData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddServiceAreaForm
           showModal={showModals[0]}
@@ -400,7 +429,16 @@ const AddServiceAtLocationForm = ({
           }
           name="contacts"
         >
-          <Table columns={contactColumns} dataSource={contactData} />
+          <Table
+            columns={contactColumns}
+            dataSource={contactData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddContactForm
           showModal={showModals[1]}
@@ -440,7 +478,16 @@ const AddServiceAtLocationForm = ({
           }
           name="phones"
         >
-          <Table columns={phoneColumns} dataSource={phoneData} />
+          <Table
+            columns={phoneColumns}
+            dataSource={phoneData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddPhoneForm
           showModal={showModals[2]}
@@ -479,7 +526,16 @@ const AddServiceAtLocationForm = ({
           }
           name="schedules"
         >
-          <Table columns={scheduleColumns} dataSource={scheduleData} />
+          <Table
+            columns={scheduleColumns}
+            dataSource={scheduleData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddScheduleForm
           showModal={showModals[3]}

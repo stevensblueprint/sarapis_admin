@@ -18,6 +18,7 @@ import Language from '../../../interface/model/Language';
 import AddLanguageForm from './AddLanguageForm';
 import AddAttributeForm from './AddAttributeForm';
 import Attribute from '../../../interface/model/Attribute';
+import JSONDataModal from '../../JSONDataModal';
 
 const AddPhoneForm = ({
   showModal,
@@ -39,6 +40,8 @@ const AddPhoneForm = ({
   const [languageData, setLanguageData] = useState<Language[]>([]);
   const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
+  const [JSONData, setJSONData] = useState<object>();
 
   const languageColumns: ColumnsType = [
     {
@@ -63,7 +66,10 @@ const AddPhoneForm = ({
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteLanguage(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteLanguage(record);
+          }}
         />
       ),
     },
@@ -149,6 +155,11 @@ const AddPhoneForm = ({
         </Button>
       }
     >
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={JSONData ?? {}}
+      />
       {contextHolder}
       <div className="flex flex-col gap-2 pb-2">
         <strong>Select Existing Phone</strong>
@@ -267,7 +278,16 @@ const AddPhoneForm = ({
           }
           name="languages"
         >
-          <Table columns={languageColumns} dataSource={languageData} />
+          <Table
+            columns={languageColumns}
+            dataSource={languageData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddLanguageForm
           showModal={showLanguageModal}

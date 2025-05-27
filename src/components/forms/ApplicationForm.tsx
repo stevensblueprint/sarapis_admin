@@ -8,6 +8,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd';
 import CostOption from '../../interface/model/CostOption';
 import AddCostOptionForm from './nested_forms/AddCostOptionForm';
+import JSONDataModal from '../JSONDataModal';
 
 const ApplicationForm = ({ form }: { form: FormInstance }) => {
   const [showDocumentModal, setShowDocumentModal] = useState<boolean>(false);
@@ -15,6 +16,8 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
   const [showCostOptionModal, setShowCostOptionModal] =
     useState<boolean>(false);
   const [costOptionData, setCostOptionData] = useState<CostOption[]>([]);
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
+  const [JSONData, setJSONData] = useState<object>();
 
   const documentColumns: ColumnsType = [
     {
@@ -39,7 +42,10 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteDocument(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteDocument(record);
+          }}
         />
       ),
     },
@@ -74,7 +80,10 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteCostOption(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteCostOption(record);
+          }}
         />
       ),
     },
@@ -117,6 +126,11 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
 
   return (
     <div className="flex flex-col">
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={JSONData ?? {}}
+      />
       <div className="flex flex-row justify-center gap-4">
         <div className="w-1/3 flex flex-col">
           <Form.Item
@@ -209,7 +223,16 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
           }
           name="required_documents"
         >
-          <Table columns={documentColumns} dataSource={documentData} />
+          <Table
+            columns={documentColumns}
+            dataSource={documentData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddRequiredDocumentForm
           showModal={showDocumentModal}
@@ -235,7 +258,16 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
           }
           name="cost_options"
         >
-          <Table columns={costOptionColumns} dataSource={costOptionData} />
+          <Table
+            columns={costOptionColumns}
+            dataSource={costOptionData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddCostOptionForm
           showModal={showCostOptionModal}

@@ -8,6 +8,7 @@ import { ColumnsType } from 'antd/es/table';
 import Organization from '../../interface/model/Organization';
 import AddPhoneForm from './nested_forms/AddPhoneForm';
 import Phone from '../../interface/model/Phone';
+import JSONDataModal from '../JSONDataModal';
 
 const ContactForm = ({ form }: { form: FormInstance }) => {
   const [showContactModal, setShowContactModal] = useState<boolean>(false);
@@ -15,6 +16,8 @@ const ContactForm = ({ form }: { form: FormInstance }) => {
   const [showPhoneModal, setShowPhoneModal] = useState<boolean>(false);
   const [phoneData, setPhoneData] = useState<Phone[]>([]);
   const [organization, setOrganization] = useState<Organization | undefined>();
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
+  const [JSONData, setJSONData] = useState<object>();
 
   const contactColumns: ColumnsType = [
     {
@@ -51,7 +54,10 @@ const ContactForm = ({ form }: { form: FormInstance }) => {
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeleteContact(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteContact(record);
+          }}
         />
       ),
     },
@@ -86,7 +92,10 @@ const ContactForm = ({ form }: { form: FormInstance }) => {
           danger
           icon={<DeleteOutlined />}
           size="small"
-          onClick={() => handleDeletePhone(record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeletePhone(record);
+          }}
         />
       ),
     },
@@ -130,6 +139,11 @@ const ContactForm = ({ form }: { form: FormInstance }) => {
 
   return (
     <div className="w-[100%] flex justify-center">
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={JSONData ?? {}}
+      />
       <div className="flex flex-col w-3/4">
         <Form.Item
           label={
@@ -149,7 +163,16 @@ const ContactForm = ({ form }: { form: FormInstance }) => {
           }
           name="phones"
         >
-          <Table columns={phoneColumns} dataSource={phoneData} />
+          <Table
+            columns={phoneColumns}
+            dataSource={phoneData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddPhoneForm
           showModal={showPhoneModal}
@@ -176,7 +199,16 @@ const ContactForm = ({ form }: { form: FormInstance }) => {
           }
           name="contacts"
         >
-          <Table columns={contactColumns} dataSource={contactData} />
+          <Table
+            columns={contactColumns}
+            dataSource={contactData}
+            onRow={(record) => ({
+              onClick: () => {
+                setJSONData(record);
+                setShowJSONModal(true);
+              },
+            })}
+          />
         </Form.Item>
         <AddContactForm
           showModal={showContactModal}
