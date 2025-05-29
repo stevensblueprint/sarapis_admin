@@ -1,4 +1,3 @@
-import { getLinkTypes } from '../../../api/lib/linkTypes';
 import { Form, Tooltip, Input, Select } from 'antd';
 import {
   useState,
@@ -13,21 +12,24 @@ import {
   getAllTaxonomies,
   getAllTaxonomyTerms,
 } from '../../../api/lib/attributes';
+import { getAllLinkTypes } from '../../../api/lib/linkTypes';
 import Response from '../../../interface/Response';
+import LinkType from '../../../interface/model/LinkType';
 
 const AddAttributeForm = forwardRef((_, ref): JSX.Element => {
   useImperativeHandle(ref, () => ({
     resetState: () => {},
   }));
 
-  const [linkTypes, setLinkTypes] = useState<string[]>([]);
+  const [linkTypes, setLinkTypes] = useState<LinkType[]>([]);
   const [taxonomyData, setTaxonomyData] = useState<Taxonomy[]>([]);
   const [taxonomyTermData, setTaxonomyTermData] = useState<TaxonomyTerm[]>([]);
 
   useEffect(() => {
     const fetchLinkTypes = async () => {
-      const response = getLinkTypes();
-      setLinkTypes(response);
+      const response = await getAllLinkTypes();
+      const data = response.data as Response<LinkType[]>;
+      setLinkTypes(data.contents || []);
     };
     const fetchTaxonomyData = async () => {
       const response = await getAllTaxonomies();
@@ -73,7 +75,10 @@ const AddAttributeForm = forwardRef((_, ref): JSX.Element => {
       >
         <Select
           showSearch
-          options={linkTypes.map((type) => ({ value: type, label: type }))}
+          options={linkTypes.map((type) => ({
+            value: JSON.stringify(type),
+            label: type.link_type,
+          }))}
         />
       </Form.Item>
       <Form.Item

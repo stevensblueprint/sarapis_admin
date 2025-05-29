@@ -1,4 +1,5 @@
 import FileImport from './FileImport';
+import LinkType from './LinkType';
 import Organization from './Organization';
 import { Service } from './Service';
 import Taxonomy from './Taxonomy';
@@ -71,6 +72,17 @@ interface TaxonomyTermExchange {
   contents: TaxonomyTerm[];
 }
 
+interface LinkTypeExchange {
+  totalItems: number;
+  totalPages: number;
+  pageNumber: number;
+  size: number;
+  firstPage: string;
+  lastPage: string;
+  empty: boolean;
+  contents: LinkType[];
+}
+
 export type {
   ActionLog,
   ActionExchange,
@@ -78,4 +90,5 @@ export type {
   ServiceExchange,
   TaxonomyExchange,
   TaxonomyTermExchange,
+  LinkTypeExchange,
 };
