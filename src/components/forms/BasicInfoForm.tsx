@@ -175,41 +175,10 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
             tooltipTitle="The details of additional URLs for the service."
             formLabel="Additional URLs"
             formProps={{
-              existingObjects: [
-                {
-                  label: 'test label',
-                  url: 'test url',
-                  attributes: [
-                    {
-                      label: 'test attribute',
-                    },
-                  ],
-                  metadata: [
-                    {
-                      id: 'test',
-                    },
-                  ],
-                },
-                {
-                  label: 'test label',
-                  url: 'test url',
-                  attributes: [
-                    {
-                      label: 'test attribute',
-                    },
-                  ],
-                  metadata: [
-                    {
-                      id: 'test2',
-                    },
-                  ],
-                },
-              ],
-              existingLabels: ['label', 'url'],
+              existingObjects: [],
+              existingLabels: [],
               formTitle: 'Add Additional URL',
-              formItems: (form, ref) => (
-                <AddURLForm parentForm={form} ref={ref} />
-              ),
+              formItems: (_, ref) => <AddURLForm ref={ref} />,
               parseFields: {},
               parseObject: {},
             }}

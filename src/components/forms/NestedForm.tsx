@@ -1,4 +1,5 @@
-import { Form, message, Modal, Button, Select, Divider } from 'antd';
+import { Form, message, Modal, Button, Select, Divider, Tooltip } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
 import {
   handleAddObject,
@@ -6,6 +7,8 @@ import {
   NestedFormProps,
   getNestedValue,
 } from '../../utils/form/FormUtils';
+import AddAttributeForm from './nested_forms/AddAttributeForm';
+import Attribute from '../../interface/model/Attribute';
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
@@ -24,6 +27,8 @@ const NestedForm = <T extends { metadata?: any }>({
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedObject, setSelectedObject] = useState<T | null>(null);
+  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
+  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
   const formRef = useRef<{ resetState: () => void }>(null);
 
   const createSelectOptions = (
@@ -55,6 +60,7 @@ const NestedForm = <T extends { metadata?: any }>({
         closeModal();
         form.resetFields();
         setSelectedObject(null);
+        setAttributeData([]);
         formRef.current?.resetState();
       }}
       title={formTitle}
@@ -72,6 +78,7 @@ const NestedForm = <T extends { metadata?: any }>({
               () => formRef.current?.resetState()
             );
             setSelectedObject(null);
+            setAttributeData([]);
           }}
         >
           Add
@@ -106,6 +113,33 @@ const NestedForm = <T extends { metadata?: any }>({
       )}
       <Form form={form} layout="vertical" requiredMark={false}>
         {formItems(form, formRef)}
+        <Form.Item
+          label={
+            <div className="flex flex-row items-center gap-2">
+              <Tooltip
+                placement="topLeft"
+                title="A link between a service and one or more classifications that describe the nature of the service provided."
+              >
+                Attributes
+              </Tooltip>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowAttributeModal(true)}
+                size="small"
+              />
+            </div>
+          }
+          name="attributes"
+        >
+          <Select mode="multiple" allowClear />
+        </Form.Item>
+        <AddAttributeForm
+          parentForm={form}
+          showModal={showAttributeModal}
+          closeModal={() => setShowAttributeModal(false)}
+          objectData={attributeData}
+          addObject={(attributes: Attribute[]) => setAttributeData(attributes)}
+        />
       </Form>
     </Modal>
   );

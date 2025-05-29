@@ -6,12 +6,12 @@ import { ColumnsType } from 'antd/es/table';
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-type SetterEntry<T> = {
+export type SetterEntry<T> = {
   setObjectState: React.Dispatch<React.SetStateAction<T>>;
   formLabel: string;
 };
 
-type ParseFieldEntry = {
+export type ParseFieldEntry = {
   parser: (val: any) => any;
   inputPath?: string;
 };
@@ -26,7 +26,7 @@ export interface NestedFormProps<T> {
   formItems: (form: FormInstance, ref: React.Ref<any>) => JSX.Element;
   formTitle: string;
   parseFields: Record<string, ParseFieldEntry>;
-  parseObject: Record<string, (val: any) => any>;
+  parseObject: Record<string, ParseFieldEntry>;
 }
 
 export interface DisplayTableProps<T> {
@@ -42,7 +42,7 @@ export interface DisplayTableProps<T> {
     formItems: (form: FormInstance, ref: React.Ref<any>) => JSX.Element;
     formTitle: string;
     parseFields: Record<string, ParseFieldEntry>;
-    parseObject: Record<string, (val: any) => any>;
+    parseObject: Record<string, ParseFieldEntry>;
   };
 }
 
@@ -64,6 +64,16 @@ const setNestedValue = (obj: any, path: string, value: any): void => {
   }, obj);
   target[lastKey] = value;
 };
+
+function deleteNestedValue(obj: any, path: string) {
+  const keys = path.split('.');
+  let current = obj;
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (!(keys[i] in current)) return;
+    current = current[keys[i]];
+  }
+  delete current[keys[keys.length - 1]];
+}
 
 export const isDuplicate = <T>(newObject: T, objectData: T[]): boolean => {
   return objectData.some(
@@ -115,16 +125,22 @@ export const handleAddObject = async <T>(
 
     const newObject = { ...values } as T;
 
-    console.log(newObject);
-
     Object.entries(parseFields).forEach(
-      ([outputKey, { parser, inputPath }]) => {
-        const targetPath = inputPath ?? outputKey;
+      ([outputPath, { parser, inputPath }]) => {
+        const targetPath = inputPath ?? outputPath;
         const rawValue = getNestedValue(values, targetPath);
         const parsedValue = parser(rawValue);
-        setNestedValue(newObject, targetPath, parsedValue);
+        setNestedValue(newObject, outputPath, parsedValue);
       }
     );
+
+    Object.entries(parseFields).forEach(([outputPath, { inputPath }]) => {
+      if (inputPath && inputPath !== outputPath) {
+        deleteNestedValue(newObject, inputPath);
+      }
+    });
+
+    console.log(newObject);
 
     if (isDuplicate(newObject, objectData)) {
       showError('Duplicate objects not allowed!', messageApi);
@@ -150,9 +166,10 @@ export const handleSelect = <T extends Record<string, any>>(
   const newObj = { ...rawObj };
 
   Object.entries(parseFields).forEach(([outputKey, { parser, inputPath }]) => {
-    const rawVal = getNestedValue(rawObj, inputPath ?? outputKey);
-    const parsed = parser(rawVal);
-    setNestedValue(newObj, inputPath ?? outputKey, parsed);
+    const targetPath = inputPath ?? outputKey;
+    const rawValue = getNestedValue(rawObj, targetPath);
+    const parsedValue = parser(rawValue);
+    setNestedValue(newObj, outputKey, parsedValue);
   });
 
   setters.forEach(({ setObjectState, formLabel }) => {

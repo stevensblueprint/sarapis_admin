@@ -14,6 +14,11 @@ import Program from '../../interface/model/Program';
 import AddAttributeForm from './nested_forms/AddAttributeForm';
 import Attribute from '../../interface/model/Attribute';
 import JSONDataModal from '../JSONDataModal';
+import NestedForm from './NestedForm';
+import { handleAddNestedObject } from '../../utils/form/FormUtils';
+import LinkType from '../../interface/model/LinkType';
+import TaxonomyTerm from '../../interface/model/TaxonomyTerm';
+import Taxonomy from '../../interface/model/Taxonomy';
 
 const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
   const [showCapacityModal, setShowCapacityModal] = useState<boolean>(false);
@@ -150,12 +155,6 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
     form.setFieldsValue({ program: undefined });
   };
 
-  const handleAddAttribute = (attribute: Attribute) => {
-    const newAttributes = [...attributeData, attribute];
-    setAttributeData(newAttributes);
-    form.setFieldsValue({ attributes: newAttributes });
-  };
-
   return (
     <div className="w-[100%] flex justify-center">
       <JSONDataModal
@@ -259,11 +258,37 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
           >
             <Select mode="multiple" allowClear />
           </Form.Item>
-          <AddAttributeForm
+          <NestedForm<Attribute>
             showModal={showAttributeModal}
             closeModal={() => setShowAttributeModal(false)}
-            addObject={handleAddAttribute}
+            addObject={(attribute: Attribute) =>
+              setAttributeData(
+                handleAddNestedObject(
+                  attribute,
+                  attributeData,
+                  'attributes',
+                  form
+                )
+              )
+            }
             objectData={attributeData}
+            existingObjects={[]}
+            existingLabels={['label', 'taxonomy_term.name']}
+            formItems={(_, ref) => <AddAttributeForm ref={ref} />}
+            formTitle="Add Attribute"
+            parseFields={{
+              link_type: {
+                parser: (value: string) => JSON.parse(value) as LinkType,
+              },
+              taxonomy_term: {
+                parser: (value: string) => JSON.parse(value) as TaxonomyTerm,
+              },
+              'taxonomy_term.taxonomy_detail': {
+                parser: (value: string) => JSON.parse(value) as Taxonomy,
+                inputPath: 'taxonomy',
+              },
+            }}
+            parseObject={{}}
           />
           <Form.Item
             className="w-1/2"
