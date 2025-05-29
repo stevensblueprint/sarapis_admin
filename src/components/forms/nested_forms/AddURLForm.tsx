@@ -5,8 +5,8 @@ import Attribute from '../../../interface/model/Attribute';
 import NestedForm from '../NestedForm';
 import { handleAddNestedObject } from '../../../utils/form/FormUtils';
 import AddAttributeForm from './AddAttributeForm';
-import Taxonomy from '../../../interface/model/Taxonomy';
 import TaxonomyTerm from '../../../interface/model/TaxonomyTerm';
+import LinkType from '../../../interface/model/LinkType';
 
 const AddURLForm = forwardRef(
   ({ parentForm }: { parentForm?: FormInstance }, ref): JSX.Element => {
@@ -80,11 +80,13 @@ const AddURLForm = forwardRef(
           showModal={showAttributeModal}
           closeModal={() => setShowAttributeModal(false)}
           addObject={(attribute: Attribute) =>
-            handleAddNestedObject(
-              attribute,
-              attributeData,
-              'attributes',
-              parentForm!
+            setAttributeData(
+              handleAddNestedObject(
+                attribute,
+                attributeData,
+                'attributes',
+                parentForm!
+              )
             )
           }
           objectData={attributeData}
@@ -93,9 +95,16 @@ const AddURLForm = forwardRef(
           formItems={(_, ref) => <AddAttributeForm ref={ref} />}
           formTitle="Add Attribute"
           parseFields={{
-            taxonomy_term: (value) =>
-              JSON.parse(value.taxonomy_term) as TaxonomyTerm,
-            taxonomy: (value) => JSON.parse(value.taxonomy) as Taxonomy,
+            link_type: {
+              parser: (value: string) => JSON.parse(value) as LinkType,
+            },
+            taxonomy_term: {
+              parser: (value: string) => JSON.parse(value) as TaxonomyTerm,
+            },
+            'taxonomy_term.taxonomy_detail': {
+              parser: (value: string) => JSON.parse(value) as TaxonomyTerm,
+              inputPath: 'taxonomy',
+            },
           }}
           parseObject={{}}
         />

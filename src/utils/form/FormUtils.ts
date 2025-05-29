@@ -1,9 +1,20 @@
 import { FormInstance } from 'antd';
 import { MessageInstance } from 'antd/es/message/interface';
 import { JSX } from 'react';
+import React from 'react';
 import { ColumnsType } from 'antd/es/table';
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
+
+type SetterEntry<T> = {
+  setObjectState: React.Dispatch<React.SetStateAction<T>>;
+  formLabel: string;
+};
+
+type ParseFieldEntry = {
+  parser: (val: any) => any;
+  inputPath?: string;
+};
 
 export interface NestedFormProps<T> {
   showModal: boolean;
@@ -14,7 +25,7 @@ export interface NestedFormProps<T> {
   existingLabels: string[];
   formItems: (form: FormInstance, ref: React.Ref<any>) => JSX.Element;
   formTitle: string;
-  parseFields: Record<string, (val: any) => any>;
+  parseFields: Record<string, ParseFieldEntry>;
   parseObject: Record<string, (val: any) => any>;
 }
 
@@ -30,10 +41,29 @@ export interface DisplayTableProps<T> {
     existingLabels: string[];
     formItems: (form: FormInstance, ref: React.Ref<any>) => JSX.Element;
     formTitle: string;
-    parseFields: Record<string, (val: any) => any>;
+    parseFields: Record<string, ParseFieldEntry>;
     parseObject: Record<string, (val: any) => any>;
   };
 }
+
+export const getNestedValue = (obj: any, path: string): any => {
+  return path.split('.').reduce((acc, key) => {
+    if (acc && typeof acc === 'object' && key in acc) {
+      return acc[key];
+    }
+    return undefined;
+  }, obj);
+};
+
+const setNestedValue = (obj: any, path: string, value: any): void => {
+  const keys = path.split('.');
+  const lastKey = keys.pop()!;
+  const target = keys.reduce((acc, key) => {
+    if (!acc[key]) acc[key] = {};
+    return acc[key];
+  }, obj);
+  target[lastKey] = value;
+};
 
 export const isDuplicate = <T>(newObject: T, objectData: T[]): boolean => {
   return objectData.some(
@@ -77,47 +107,60 @@ export const handleAddObject = async <T>(
   messageApi: MessageInstance,
   addObject: (newObject: T) => void,
   closeModal: () => void,
-  parseFields: Record<string, (val: any) => any>,
+  parseFields: Record<string, ParseFieldEntry>,
   resetState: () => void
-) => {
-  const values = await form.validateFields();
-  const newObject = {
-    ...values,
-    ...Object.fromEntries(
-      Object.entries(parseFields).map(([key, parser]) => [
-        key,
-        parser(values[key]),
-      ])
-    ),
-  };
+): Promise<void> => {
+  try {
+    const values = await form.validateFields();
 
-  if (isDuplicate(newObject, objectData)) {
-    showError('Duplicate URLs not allowed!', messageApi);
-  } else {
+    const newObject = { ...values } as T;
+
+    console.log(newObject);
+
+    Object.entries(parseFields).forEach(
+      ([outputKey, { parser, inputPath }]) => {
+        const targetPath = inputPath ?? outputKey;
+        const rawValue = getNestedValue(values, targetPath);
+        const parsedValue = parser(rawValue);
+        setNestedValue(newObject, targetPath, parsedValue);
+      }
+    );
+
+    if (isDuplicate(newObject, objectData)) {
+      showError('Duplicate objects not allowed!', messageApi);
+      return;
+    }
+
     addObject(newObject);
     closeModal();
     form.resetFields();
     resetState();
+  } catch (err) {
+    console.error('Form validation failed:', err);
   }
 };
 
 export const handleSelect = <T extends Record<string, any>>(
   jsonValue: string,
-  parseFields: Record<string, (val: any) => any>,
-  form: FormInstance
+  parseFields: Record<string, ParseFieldEntry>,
+  form: FormInstance,
+  setters: SetterEntry<any>[]
 ): T => {
-  const obj = JSON.parse(jsonValue) as T;
-  const parsedFields = Object.fromEntries(
-    Object.entries(parseFields).map(([key, parser]) => [key, parser(obj[key])])
-  );
-  // todo set nested form data
-  form.setFieldsValue({
-    ...obj,
-    ...parsedFields,
+  const rawObj = JSON.parse(jsonValue) as T;
+  const newObj = { ...rawObj };
+
+  Object.entries(parseFields).forEach(([outputKey, { parser, inputPath }]) => {
+    const rawVal = getNestedValue(rawObj, inputPath ?? outputKey);
+    const parsed = parser(rawVal);
+    setNestedValue(newObj, inputPath ?? outputKey, parsed);
   });
 
-  return {
-    ...obj,
-    ...parsedFields,
-  };
+  setters.forEach(({ setObjectState, formLabel }) => {
+    const value = getNestedValue(newObj, formLabel);
+    setObjectState(value);
+  });
+
+  form.setFieldsValue(newObj);
+
+  return newObj;
 };

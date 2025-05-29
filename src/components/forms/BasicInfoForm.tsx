@@ -1,4 +1,4 @@
-import { Form, Input, Table, Button, Tooltip } from 'antd';
+import { Form, Input, Button, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { getAllOrganizations } from '../../api/lib/organizations';
@@ -10,24 +10,16 @@ import type { FormInstance } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import AddOrganizationToServiceForm from './nested_forms/AddOrganizationToServiceForm';
-import JSONDataModal from '../JSONDataModal';
-import NestedForm from './NestedForm';
 import DisplayTable from './DisplayTable';
 
 const BasicInfoForm = ({ form }: { form: FormInstance }) => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [showURLModal, setShowURLModal] = useState<boolean>(false);
   const [showOrganizationModal, setShowOrganizationModal] =
     useState<boolean>(false);
-  const [URLData, setURLData] = useState<Url[]>([]);
   const [selectedOrganization, setSelectedOrganization] =
     useState<Organization>();
-  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
-  const [JSONData, setJSONData] = useState<object>();
 
   useEffect(() => {
-    const existingURLs = form.getFieldValue('additional_urls') || [];
-    setURLData(existingURLs);
     const existingOrganization: Organization =
       form.getFieldValue('organization') ?? undefined;
     setSelectedOrganization(existingOrganization);
@@ -57,18 +49,6 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
     },
   ];
 
-  const handleAddURL = (url: Url) => {
-    const newURLs = [...URLData, url];
-    setURLData(newURLs);
-    form.setFieldsValue({ additional_urls: newURLs });
-  };
-
-  const handleDeleteURL = (urlToDelete: Url) => {
-    const updatedURLs = URLData.filter((url) => url !== urlToDelete);
-    setURLData(updatedURLs);
-    form.setFieldsValue({ additional_urls: updatedURLs });
-  };
-
   const handleAddOrganization = (organization: Organization) => {
     setSelectedOrganization(organization);
     form.setFieldsValue({ organization: organization });
@@ -81,11 +61,6 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
 
   return (
     <div className="w-[100%] flex flex-col justify-center pt-4">
-      <JSONDataModal
-        showModal={showJSONModal}
-        closeModal={() => setShowJSONModal(false)}
-        data={JSONData ?? {}}
-      />
       <div className="flex flex-row justify-center gap-4">
         <div className="w-1/3 flex flex-col">
           <Form.Item

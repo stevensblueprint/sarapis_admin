@@ -4,6 +4,7 @@ import {
   handleAddObject,
   handleSelect,
   NestedFormProps,
+  getNestedValue,
 } from '../../utils/form/FormUtils';
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -24,14 +25,6 @@ const NestedForm = <T extends { metadata?: any }>({
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedObject, setSelectedObject] = useState<T | null>(null);
   const formRef = useRef<{ resetState: () => void }>(null);
-
-  const getNestedValue = (obj: any, path: string): any =>
-    path.split('.').reduce((acc, key) => {
-      if (acc && typeof acc === 'object' && key in acc) {
-        return acc[key];
-      }
-      return undefined;
-    }, obj);
 
   const createSelectOptions = (
     existingObjects: T[]
@@ -95,7 +88,9 @@ const NestedForm = <T extends { metadata?: any }>({
               placeholder="Select..."
               options={createSelectOptions(existingObjects)}
               onSelect={(value) =>
-                setSelectedObject(handleSelect(value, parseObject, form) as T)
+                setSelectedObject(
+                  handleSelect(value, parseObject, form, []) as T
+                )
               }
               value={
                 selectedObject ? JSON.stringify(selectedObject) : undefined
