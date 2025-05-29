@@ -11,6 +11,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import AddOrganizationToServiceForm from './nested_forms/AddOrganizationToServiceForm';
 import JSONDataModal from '../JSONDataModal';
+import NestedForm from './NestedForm';
 
 const BasicInfoForm = ({ form }: { form: FormInstance }) => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -237,11 +238,18 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
               })}
             />
           </Form.Item>
-          <AddURLForm
+          <NestedForm<Url>
             showModal={showURLModal}
             closeModal={() => setShowURLModal(false)}
             addObject={handleAddURL}
             objectData={URLData}
+            existingObjects={[]}
+            existingLabels={['label', 'url']}
+            formItems={(form, ref) => (
+              <AddURLForm parentForm={form} ref={ref} />
+            )}
+            formTitle="Add Additional URL"
+            parseFields={{}}
           />
         </div>
       </div>

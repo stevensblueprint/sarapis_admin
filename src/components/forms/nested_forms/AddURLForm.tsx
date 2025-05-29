@@ -1,75 +1,25 @@
-import { Modal, Button, Form, Input, message, Tooltip, Select } from 'antd';
-import Url from '../../../interface/model/Url';
-import AddAttributeForm from './AddAttributeForm';
-import Attribute from '../../../interface/model/Attribute';
+import { Form, Tooltip, Input, Button, Select, FormInstance } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import { useState, JSX, forwardRef, useImperativeHandle } from 'react';
+import Attribute from '../../../interface/model/Attribute';
+import NestedForm from '../NestedForm';
+import { handleAddNestedObject } from '../../../utils/form/FormUtils';
+import AddAttributeForm from './AddAttributeForm';
+import Taxonomy from '../../../interface/model/Taxonomy';
+import TaxonomyTerm from '../../../interface/model/TaxonomyTerm';
 
-const AddURLForm = ({
-  showModal,
-  closeModal,
-  addObject,
-  objectData,
-}: {
-  showModal: boolean;
-  closeModal: () => void;
-  addObject: (url: Url) => void;
-  objectData: Url[];
-}) => {
-  const [form] = Form.useForm();
-  const [messageApi, contextHolder] = message.useMessage();
-  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
-  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
+const AddURLForm = forwardRef(
+  ({ parentForm }: { parentForm?: FormInstance }, ref): JSX.Element => {
+    const [showAttributeModal, setShowAttributeModal] =
+      useState<boolean>(false);
+    const [attributeData, setAttributeData] = useState<Attribute[]>([]);
 
-  const handleAddAttribute = (attribute: Attribute) => {
-    const newAttributes = [...attributeData, attribute];
-    setAttributeData(newAttributes);
-    form.setFieldsValue({ attributes: newAttributes });
-  };
+    useImperativeHandle(ref, () => ({
+      resetState: () => setAttributeData([]),
+    }));
 
-  const isDuplicate = (newURL: Url) => {
-    return objectData.some(
-      (existing) => JSON.stringify(existing) === JSON.stringify(newURL)
-    );
-  };
-
-  const addNewObject = async () => {
-    const values = await form.validateFields();
-    const newURL: Url = { ...values, url: values.url.trim() };
-
-    if (isDuplicate(newURL)) {
-      showError();
-    } else {
-      addObject(newURL);
-      closeModal();
-      form.resetFields();
-    }
-  };
-
-  const showError = () => {
-    messageApi.open({
-      type: 'error',
-      content: 'Duplicate URLs not allowed!',
-      duration: 5,
-    });
-  };
-
-  return (
-    <Modal
-      open={showModal}
-      onCancel={() => {
-        closeModal();
-        form.resetFields();
-      }}
-      title="Add Additional URL"
-      footer={
-        <Button type="primary" onClick={addNewObject}>
-          Add
-        </Button>
-      }
-    >
-      {contextHolder}
-      <Form form={form} layout="vertical" requiredMark={false}>
+    return (
+      <>
         <Form.Item
           label={
             <Tooltip
@@ -126,15 +76,38 @@ const AddURLForm = ({
         >
           <Select mode="multiple" allowClear />
         </Form.Item>
-        <AddAttributeForm
+        <NestedForm<Attribute>
           showModal={showAttributeModal}
           closeModal={() => setShowAttributeModal(false)}
-          addObject={handleAddAttribute}
+          addObject={(attribute: Attribute) =>
+            handleAddNestedObject(
+              attribute,
+              attributeData,
+              'attributes',
+              parentForm!
+            )
+          }
           objectData={attributeData}
+          existingObjects={[
+            {
+              label: 'test',
+              taxonomy_term: {
+                name: 'test2',
+              },
+            },
+          ]}
+          existingLabels={['label', 'taxonomy_term.name']}
+          formItems={(_, ref) => <AddAttributeForm ref={ref} />}
+          formTitle="Add Attribute"
+          parseFields={{
+            taxonomy_term: (value) =>
+              JSON.parse(value.taxonomy_term) as TaxonomyTerm,
+            taxonomy: (value) => JSON.parse(value.taxonomy) as Taxonomy,
+          }}
         />
-      </Form>
-    </Modal>
-  );
-};
+      </>
+    );
+  }
+);
 
 export default AddURLForm;

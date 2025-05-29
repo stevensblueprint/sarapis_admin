@@ -108,9 +108,9 @@ const ServiceForm = ({
       title: 'Are you sure you want to exit?',
       content: 'All entered values will be lost.',
       onOk() {
+        closeModal();
         form.resetFields();
         setFormData({});
-        closeModal();
       },
       onCancel() {},
     });
@@ -150,6 +150,7 @@ const ServiceForm = ({
         footer={modalFooter()}
         centered
         width="70%"
+        destroyOnClose
       >
         <Form form={form} layout="vertical" requiredMark={false}>
           <Steps current={currentStep} className="mb-6">
