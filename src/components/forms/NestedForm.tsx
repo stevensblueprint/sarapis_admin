@@ -1,30 +1,12 @@
+import { Form, message, Modal, Button, Select, Divider } from 'antd';
+import { useRef, useState } from 'react';
 import {
-  Form,
-  message,
-  Modal,
-  Button,
-  Select,
-  Divider,
-  FormInstance,
-} from 'antd';
-import { JSX, useRef, useState } from 'react';
-import React from 'react';
-import { handleAddObject, handleSelect } from '../../utils/form/FormUtils';
+  handleAddObject,
+  handleSelect,
+  NestedFormProps,
+} from '../../utils/form/FormUtils';
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-
-interface NestedFormProps<T> {
-  showModal: boolean;
-  closeModal: () => void;
-  addObject: (object: T) => void;
-  objectData: T[];
-  existingObjects: T[];
-  existingLabels: string[];
-  formItems: (form: FormInstance, ref: React.Ref<any>) => JSX.Element;
-  formTitle: string;
-  parseFields: Record<string, (val: any) => any>;
-  parseObject: Record<string, (val: any) => any>;
-}
 
 const NestedForm = <T extends { metadata?: any }>({
   showModal,
@@ -112,7 +94,9 @@ const NestedForm = <T extends { metadata?: any }>({
               showSearch
               placeholder="Select..."
               options={createSelectOptions(existingObjects)}
-              onSelect={(value) => handleSelect(value, parseObject, form)}
+              onSelect={(value) =>
+                setSelectedObject(handleSelect(value, parseObject, form) as T)
+              }
               value={
                 selectedObject ? JSON.stringify(selectedObject) : undefined
               }

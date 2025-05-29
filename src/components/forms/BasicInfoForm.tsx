@@ -12,6 +12,7 @@ import { ColumnsType } from 'antd/es/table';
 import AddOrganizationToServiceForm from './nested_forms/AddOrganizationToServiceForm';
 import JSONDataModal from '../JSONDataModal';
 import NestedForm from './NestedForm';
+import DisplayTable from './DisplayTable';
 
 const BasicInfoForm = ({ form }: { form: FormInstance }) => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -53,23 +54,6 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
       dataIndex: 'url',
       width: 100,
       ellipsis: true,
-    },
-    {
-      title: '',
-      key: 'delete',
-      width: 30,
-      align: 'center',
-      render: (record: Url) => (
-        <Button
-          danger
-          icon={<DeleteOutlined />}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteURL(record);
-          }}
-        />
-      ),
     },
   ];
 
@@ -208,78 +192,52 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            label={
-              <div className="flex flex-row items-center gap-2 pt-2">
-                <Tooltip
-                  placement="topLeft"
-                  title="The details of additional URLs for the service"
-                >
-                  Additional URLs
-                </Tooltip>
-                <Button
-                  icon={<PlusOutlined />}
-                  onClick={() => setShowURLModal(true)}
-                  size="small"
-                />
-              </div>
-            }
-            name="additional_urls"
-          >
-            <Table
-              columns={columns}
-              dataSource={URLData}
-              onRow={(record) => ({
-                onClick: () => {
-                  setJSONData(record);
-                  setShowJSONModal(true);
+          <DisplayTable<Url>
+            columns={columns}
+            deleteWidth={30}
+            parentForm={form}
+            fieldLabel="additional_urls"
+            tooltipTitle="The details of additional URLs for the service."
+            formLabel="Additional URLs"
+            formProps={{
+              existingObjects: [
+                {
+                  label: 'test label',
+                  url: 'test url',
+                  attributes: [
+                    {
+                      label: 'test attribute',
+                    },
+                  ],
+                  metadata: [
+                    {
+                      id: 'test',
+                    },
+                  ],
                 },
-                className: 'hover:cursor-pointer',
-              })}
-            />
-          </Form.Item>
-          <NestedForm<Url>
-            showModal={showURLModal}
-            closeModal={() => setShowURLModal(false)}
-            addObject={handleAddURL}
-            objectData={URLData}
-            existingObjects={[
-              {
-                label: 'test label',
-                url: 'test url',
-                attributes: [
-                  {
-                    label: 'test attribute',
-                  },
-                ],
-                metadata: [
-                  {
-                    id: 'test',
-                  },
-                ],
-              },
-              {
-                label: 'test label',
-                url: 'test url',
-                attributes: [
-                  {
-                    label: 'test attribute',
-                  },
-                ],
-                metadata: [
-                  {
-                    id: 'test2',
-                  },
-                ],
-              },
-            ]}
-            existingLabels={['label', 'url']}
-            formItems={(form, ref) => (
-              <AddURLForm parentForm={form} ref={ref} />
-            )}
-            formTitle="Add Additional URL"
-            parseFields={{}}
-            parseObject={{}}
+                {
+                  label: 'test label',
+                  url: 'test url',
+                  attributes: [
+                    {
+                      label: 'test attribute',
+                    },
+                  ],
+                  metadata: [
+                    {
+                      id: 'test2',
+                    },
+                  ],
+                },
+              ],
+              existingLabels: ['label', 'url'],
+              formTitle: 'Add Additional URL',
+              formItems: (form, ref) => (
+                <AddURLForm parentForm={form} ref={ref} />
+              ),
+              parseFields: {},
+              parseObject: {},
+            }}
           />
         </div>
       </div>
