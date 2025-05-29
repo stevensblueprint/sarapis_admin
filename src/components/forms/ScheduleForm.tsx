@@ -1,18 +1,11 @@
-import { Table, Form, Button, Tooltip } from 'antd';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import AddScheduleForm from './nested_forms/AddScheduleForm';
-import { useState, useEffect } from 'react';
 import Schedule from '../../interface/model/Schedule';
 import { ColumnsType } from 'antd/es/table';
 import { FormInstance } from 'antd';
-import JSONDataModal from '../JSONDataModal';
+import DisplayTable from './DisplayTable';
+import { scheduleParser } from '../../utils/form/ParseUtils';
 
-const ScheduleForm = ({ form }: { form: FormInstance }) => {
-  const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false);
-  const [scheduleData, setScheduleData] = useState<Schedule[]>([]);
-  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
-  const [JSONData, setJSONData] = useState<object>();
-
+const ScheduleForm = ({ parentForm }: { parentForm: FormInstance }) => {
   const scheduleColumns: ColumnsType = [
     {
       title: 'Opens At',
@@ -32,88 +25,25 @@ const ScheduleForm = ({ form }: { form: FormInstance }) => {
       width: '60%',
       ellipsis: true,
     },
-    {
-      title: '',
-      key: 'delete',
-      width: '10%',
-      align: 'center',
-      render: (record: Schedule) => (
-        <Button
-          danger
-          icon={<DeleteOutlined />}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteSchedule(record);
-          }}
-        />
-      ),
-    },
   ];
-
-  useEffect(() => {
-    const existingSchedules = form.getFieldValue('schedules') || [];
-    setScheduleData(existingSchedules);
-  }, [form]);
-
-  const handleAddSchedule = (schedule: Schedule) => {
-    const newSchedules = [...scheduleData, schedule];
-    setScheduleData(newSchedules);
-    form.setFieldsValue({ schedules: newSchedules });
-  };
-
-  const handleDeleteSchedule = (scheduleToDelete: Schedule) => {
-    const updatedSchedules = scheduleData.filter(
-      (schedule) => schedule !== scheduleToDelete
-    );
-    setScheduleData(updatedSchedules);
-    form.setFieldsValue({ schedules: updatedSchedules });
-  };
 
   return (
     <div className="w-[100%] flex justify-center">
-      <JSONDataModal
-        showModal={showJSONModal}
-        closeModal={() => setShowJSONModal(false)}
-        data={JSONData ?? {}}
-      />
       <div className="flex flex-col w-3/4">
-        <Form.Item
-          label={
-            <div className="flex flex-row items-center gap-2 pt-2">
-              <Tooltip
-                placement="topLeft"
-                title="The details of when a service or location is open."
-              >
-                Schedules
-              </Tooltip>
-              <Button
-                icon={<PlusOutlined />}
-                onClick={() => setShowScheduleModal(true)}
-                size="small"
-              />
-            </div>
-          }
-          name="schedules"
-        >
-          <Table
-            columns={scheduleColumns}
-            dataSource={scheduleData}
-            onRow={(record) => ({
-              onClick: () => {
-                setJSONData(record);
-                setShowJSONModal(true);
-              },
-              className: 'hover:cursor-pointer',
-            })}
-          />
-        </Form.Item>
-        <AddScheduleForm
-          showModal={showScheduleModal}
-          closeModal={() => setShowScheduleModal(false)}
-          addObject={handleAddSchedule}
-          objectData={scheduleData}
-          existingSchedules={[]}
+        <DisplayTable<Schedule>
+          columns={scheduleColumns}
+          parentForm={parentForm}
+          fieldLabel="schedules"
+          tooltipTitle="The details of when a service or location is open."
+          formLabel="Schedules"
+          formProps={{
+            existingObjects: [],
+            existingLabels: [],
+            formTitle: 'Add Schedule',
+            formItems: (_, ref) => <AddScheduleForm ref={ref} />,
+            parseFields: scheduleParser,
+            parseObject: {},
+          }}
         />
       </div>
     </div>
