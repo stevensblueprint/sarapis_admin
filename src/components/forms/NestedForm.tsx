@@ -13,8 +13,6 @@ import { handleAddObject, handleSelect } from '../../utils/form/FormUtils';
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-type WithoutMetadata<T> = Omit<T, 'metadata'>;
-
 interface NestedFormProps<T> {
   showModal: boolean;
   closeModal: () => void;
@@ -28,7 +26,7 @@ interface NestedFormProps<T> {
   parseObject: Record<string, (val: any) => any>;
 }
 
-const NestedForm = <T,>({
+const NestedForm = <T extends { metadata?: any }>({
   showModal,
   closeModal,
   addObject,
@@ -52,6 +50,28 @@ const NestedForm = <T,>({
       }
       return undefined;
     }, obj);
+
+  const createSelectOptions = (
+    existingObjects: T[]
+  ): { value: string; label: string }[] => {
+    const options = Array.from(
+      new Set(
+        existingObjects.map((obj) => {
+          delete obj.metadata;
+          return JSON.stringify(obj);
+        })
+      )
+    )
+      .map((value) => JSON.parse(value) as T)
+      .map((obj) => ({
+        value: JSON.stringify(obj),
+        label: existingLabels
+          .map((label) => getNestedValue(obj, label))
+          .join(' - '),
+      }));
+
+    return options;
+  };
 
   return (
     <Modal
@@ -91,20 +111,7 @@ const NestedForm = <T,>({
             <Select
               showSearch
               placeholder="Select..."
-              options={Array.from(
-                new Set(
-                  existingObjects.map((value: WithoutMetadata<T>) => {
-                    return JSON.stringify(value);
-                  })
-                )
-              )
-                .map((value) => JSON.parse(value) as T)
-                .map((obj) => ({
-                  value: JSON.stringify(obj),
-                  label: existingLabels
-                    .map((label) => getNestedValue(obj, label))
-                    .join(' - '),
-                }))}
+              options={createSelectOptions(existingObjects)}
               onSelect={(value) => handleSelect(value, parseObject, form)}
               value={
                 selectedObject ? JSON.stringify(selectedObject) : undefined

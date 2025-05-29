@@ -88,14 +88,7 @@ const AddURLForm = forwardRef(
             )
           }
           objectData={attributeData}
-          existingObjects={[
-            {
-              label: 'test',
-              taxonomy_term: {
-                name: 'test2',
-              },
-            },
-          ]}
+          existingObjects={[]}
           existingLabels={['label', 'taxonomy_term.name']}
           formItems={(_, ref) => <AddAttributeForm ref={ref} />}
           formTitle="Add Attribute"
@@ -104,7 +97,7 @@ const AddURLForm = forwardRef(
               JSON.parse(value.taxonomy_term) as TaxonomyTerm,
             taxonomy: (value) => JSON.parse(value.taxonomy) as Taxonomy,
           }}
-          parseObject={{ label: () => 'asasdkfjalsdk' }}
+          parseObject={{}}
         />
       </>
     );

@@ -243,7 +243,36 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
             closeModal={() => setShowURLModal(false)}
             addObject={handleAddURL}
             objectData={URLData}
-            existingObjects={[]}
+            existingObjects={[
+              {
+                label: 'test label',
+                url: 'test url',
+                attributes: [
+                  {
+                    label: 'test attribute',
+                  },
+                ],
+                metadata: [
+                  {
+                    id: 'test',
+                  },
+                ],
+              },
+              {
+                label: 'test label',
+                url: 'test url',
+                attributes: [
+                  {
+                    label: 'test attribute',
+                  },
+                ],
+                metadata: [
+                  {
+                    id: 'test2',
+                  },
+                ],
+              },
+            ]}
             existingLabels={['label', 'url']}
             formItems={(form, ref) => (
               <AddURLForm parentForm={form} ref={ref} />
