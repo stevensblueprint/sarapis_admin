@@ -104,6 +104,7 @@ const AddURLForm = forwardRef(
               JSON.parse(value.taxonomy_term) as TaxonomyTerm,
             taxonomy: (value) => JSON.parse(value.taxonomy) as Taxonomy,
           }}
+          parseObject={{ label: () => 'asasdkfjalsdk' }}
         />
       </>
     );

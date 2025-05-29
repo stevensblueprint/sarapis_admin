@@ -250,6 +250,7 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
             )}
             formTitle="Add Additional URL"
             parseFields={{}}
+            parseObject={{}}
           />
         </div>
       </div>

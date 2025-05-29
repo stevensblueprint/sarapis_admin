@@ -57,3 +57,20 @@ export const handleAddObject = async <T>(
     resetState();
   }
 };
+
+export const handleSelect = <T extends Record<string, any>>(
+  jsonValue: string,
+  parseFields: Record<string, (val: any) => any>,
+  form: FormInstance
+) => {
+  const obj = JSON.parse(jsonValue) as T;
+  const parsedFields = Object.fromEntries(
+    Object.entries(parseFields).map(([key, parser]) => [key, parser(obj[key])])
+  );
+  console.log(parsedFields);
+  // todo set nested form data
+  form.setFieldsValue({
+    ...obj,
+    ...parsedFields,
+  });
+};

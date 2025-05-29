@@ -9,7 +9,7 @@ import {
 } from 'antd';
 import { JSX, useRef, useState } from 'react';
 import React from 'react';
-import { handleAddObject } from '../../utils/form/FormUtils';
+import { handleAddObject, handleSelect } from '../../utils/form/FormUtils';
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
@@ -25,6 +25,7 @@ interface NestedFormProps<T> {
   formItems: (form: FormInstance, ref: React.Ref<any>) => JSX.Element;
   formTitle: string;
   parseFields: Record<string, (val: any) => any>;
+  parseObject: Record<string, (val: any) => any>;
 }
 
 const NestedForm = <T,>({
@@ -37,18 +38,12 @@ const NestedForm = <T,>({
   formItems,
   formTitle,
   parseFields,
+  parseObject,
 }: NestedFormProps<T>) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedObject, setSelectedObject] = useState<T | null>(null);
   const formRef = useRef<{ resetState: () => void }>(null);
-
-  const handleSelect = (jsonValue: string) => {
-    const obj = JSON.parse(jsonValue) as T;
-    setSelectedObject(obj);
-    // todo set nested form data
-    form.setFieldsValue(obj);
-  };
 
   const getNestedValue = (obj: any, path: string): any =>
     path.split('.').reduce((acc, key) => {
@@ -110,7 +105,7 @@ const NestedForm = <T,>({
                     .map((label) => getNestedValue(obj, label))
                     .join(' - '),
                 }))}
-              onSelect={handleSelect}
+              onSelect={(value) => handleSelect(value, parseObject, form)}
               value={
                 selectedObject ? JSON.stringify(selectedObject) : undefined
               }
