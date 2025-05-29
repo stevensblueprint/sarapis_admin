@@ -12,7 +12,7 @@ import { ColumnsType } from 'antd/es/table';
 import AddOrganizationToServiceForm from './nested_forms/AddOrganizationToServiceForm';
 import DisplayTable from './DisplayTable';
 
-const BasicInfoForm = ({ form }: { form: FormInstance }) => {
+const BasicInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [showOrganizationModal, setShowOrganizationModal] =
     useState<boolean>(false);
@@ -20,10 +20,10 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
     useState<Organization>();
 
   useEffect(() => {
-    const existingOrganization: Organization =
-      form.getFieldValue('organization') ?? undefined;
-    setSelectedOrganization(existingOrganization);
-  }, [form]);
+    setSelectedOrganization(
+      parentForm.getFieldValue('organization') ?? undefined
+    );
+  }, [parentForm]);
 
   useEffect(() => {
     const fetchOrganizations = async () => {
@@ -34,7 +34,7 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
     fetchOrganizations();
   }, []);
 
-  const columns: ColumnsType = [
+  const URLColumns: ColumnsType = [
     {
       title: 'Name',
       dataIndex: 'label',
@@ -51,12 +51,12 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
 
   const handleAddOrganization = (organization: Organization) => {
     setSelectedOrganization(organization);
-    form.setFieldsValue({ organization: organization });
+    parentForm.setFieldsValue({ organization: organization });
   };
 
   const handleDeleteOrganization = () => {
     setSelectedOrganization(undefined);
-    form.setFieldsValue({ organization: undefined });
+    parentForm.setFieldsValue({ organization: undefined });
   };
 
   return (
@@ -168,9 +168,9 @@ const BasicInfoForm = ({ form }: { form: FormInstance }) => {
             <Input />
           </Form.Item>
           <DisplayTable<Url>
-            columns={columns}
+            columns={URLColumns}
             deleteWidth={30}
-            parentForm={form}
+            parentForm={parentForm}
             fieldLabel="additional_urls"
             tooltipTitle="The details of additional URLs for the service."
             formLabel="Additional URLs"

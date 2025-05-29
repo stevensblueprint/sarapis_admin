@@ -1,37 +1,27 @@
-import { Table, Form, Input, Button, Select, Tooltip } from 'antd';
+import { Form, Input, Button, Select, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { FormInstance } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { useState, useEffect } from 'react';
-import ServiceCapacity from '../../interface/model/ServiceCapacity';
 import AddCapacityForm from './nested_forms/AddCapacityForm';
 import AddFundingForm from './nested_forms/AddFundingForm';
-import Funding from '../../interface/model/Funding';
 import Organization from '../../interface/model/Organization';
 import AddProgramForm from './nested_forms/AddProgramForm';
 import Program from '../../interface/model/Program';
 import AddAttributeForm from './nested_forms/AddAttributeForm';
 import Attribute from '../../interface/model/Attribute';
-import JSONDataModal from '../JSONDataModal';
-import NestedForm from './NestedForm';
-import { handleAddNestedObject } from '../../utils/form/FormUtils';
-import LinkType from '../../interface/model/LinkType';
-import TaxonomyTerm from '../../interface/model/TaxonomyTerm';
-import Taxonomy from '../../interface/model/Taxonomy';
+import DisplayTable from './DisplayTable';
+import ServiceCapacity from '../../interface/model/ServiceCapacity';
+import { Dayjs } from 'dayjs';
+import Funding from '../../interface/model/Funding';
 
-const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
-  const [showCapacityModal, setShowCapacityModal] = useState<boolean>(false);
-  const [showFundingModal, setShowFundingModal] = useState<boolean>(false);
+const AdditionalInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
   const [showProgramModal, setShowProgramModal] = useState<boolean>(false);
   const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
-  const [capacityData, setCapacityData] = useState<ServiceCapacity[]>([]);
-  const [fundingData, setFundingData] = useState<Funding[]>([]);
   const [selectedProgram, setSelectedProgram] = useState<Program>();
   const [organization, setOrganization] = useState<Organization | undefined>();
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
-  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
-  const [JSONData, setJSONData] = useState<object>();
 
   const capacitiesColumns: ColumnsType = [
     {
@@ -58,23 +48,6 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
       width: '40%',
       ellipsis: true,
     },
-    {
-      title: '',
-      key: 'delete',
-      width: '10%',
-      align: 'center',
-      render: (record: ServiceCapacity) => (
-        <Button
-          danger
-          icon={<DeleteOutlined />}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteCapacity(record);
-          }}
-        />
-      ),
-    },
   ];
 
   const fundingColumns: ColumnsType = [
@@ -84,157 +57,61 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
       width: '90%',
       ellipsis: true,
     },
-    {
-      title: '',
-      key: 'delete',
-      width: '10%',
-      align: 'center',
-      render: (record: Funding) => (
-        <Button
-          danger
-          icon={<DeleteOutlined />}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteFunding(record);
-          }}
-        />
-      ),
-    },
   ];
 
   useEffect(() => {
-    const existingCapacities = form.getFieldValue('capacities') || [];
-    setCapacityData(existingCapacities);
-    const existingFunding = form.getFieldValue('funding') || [];
-    setFundingData(existingFunding);
-    const existingProgram = form.getFieldValue('program') ?? undefined;
-    setSelectedProgram(existingProgram);
-    const selectedOrganization =
-      form.getFieldValue('organization') ?? undefined;
-    setOrganization(selectedOrganization);
-    const existingAttributes = form.getFieldValue('attributes') ?? [];
-    setAttributeData(existingAttributes);
-  }, [form]);
-
-  const handleAddCapacity = (capacity: ServiceCapacity) => {
-    const newCapacities = [...capacityData, capacity];
-    setCapacityData(newCapacities);
-    form.setFieldsValue({ capacities: newCapacities });
-  };
-
-  const handleDeleteCapacity = (capacityToDelete: ServiceCapacity) => {
-    const updatedCapacities = capacityData.filter(
-      (capacity) => capacity !== capacityToDelete
-    );
-    setCapacityData(updatedCapacities);
-    form.setFieldsValue({ capacities: updatedCapacities });
-  };
-
-  const handleAddFunding = (funding: Funding) => {
-    const newFunding = [...fundingData, funding];
-    setFundingData(newFunding);
-    form.setFieldsValue({ funding: newFunding });
-  };
-
-  const handleDeleteFunding = (fundingToDelete: Funding) => {
-    const updatedFunding = fundingData.filter(
-      (funding) => funding !== fundingToDelete
-    );
-    setFundingData(updatedFunding);
-    form.setFieldsValue({ funding: updatedFunding });
-  };
+    setSelectedProgram(parentForm.getFieldValue('program') ?? undefined);
+    setOrganization(parentForm.getFieldValue('organization') ?? undefined);
+    setAttributeData(parentForm.getFieldValue('attributes') ?? []);
+  }, [parentForm]);
 
   const handleAddProgram = (program: Program) => {
     setSelectedProgram(program);
-    form.setFieldsValue({ program: program });
+    parentForm.setFieldsValue({ program: program });
   };
 
   const handleDeleteProgram = () => {
     setSelectedProgram(undefined);
-    form.setFieldsValue({ program: undefined });
+    parentForm.setFieldsValue({ program: undefined });
   };
 
   return (
     <div className="w-[100%] flex justify-center">
-      <JSONDataModal
-        showModal={showJSONModal}
-        closeModal={() => setShowJSONModal(false)}
-        data={JSONData ?? {}}
-      />
       <div className="flex flex-col w-3/4">
-        <Form.Item
-          label={
-            <div className="flex flex-row items-center gap-2 pt-2">
-              <Tooltip
-                placement="topLeft"
-                title="The details of capacities of this service."
-              >
-                Capacities
-              </Tooltip>
-              <Button
-                icon={<PlusOutlined />}
-                onClick={() => setShowCapacityModal(true)}
-                size="small"
-              />
-            </div>
-          }
-          name="capacities"
-        >
-          <Table
-            columns={capacitiesColumns}
-            dataSource={capacityData}
-            onRow={(record) => ({
-              onClick: () => {
-                setJSONData(record);
-                setShowJSONModal(true);
+        <DisplayTable<ServiceCapacity>
+          columns={capacitiesColumns}
+          parentForm={parentForm}
+          fieldLabel="capacities"
+          tooltipTitle="The details of capacities of this service."
+          formLabel="Service Capacities"
+          formProps={{
+            existingObjects: [],
+            existingLabels: [],
+            formTitle: 'Add Service Capacity',
+            formItems: (_, ref) => <AddCapacityForm ref={ref} />,
+            parseFields: {
+              updated: {
+                parser: (value: Dayjs) =>
+                  value.format('YYYY-MM-DD[T]HH:mm:ss:SSS') ?? undefined,
               },
-              className: 'hover:cursor-pointer',
-            })}
-          />
-        </Form.Item>
-        <AddCapacityForm
-          showModal={showCapacityModal}
-          closeModal={() => setShowCapacityModal(false)}
-          addObject={handleAddCapacity}
-          objectData={capacityData}
+            },
+            parseObject: {},
+          }}
         />
-        <Form.Item
-          label={
-            <div className="flex flex-row items-center gap-2 pt-2">
-              <Tooltip
-                placement="topLeft"
-                title="The sources of funding for a service or organization."
-              >
-                Funding
-              </Tooltip>
-              <Button
-                icon={<PlusOutlined />}
-                onClick={() => setShowFundingModal(true)}
-                size="small"
-              />
-            </div>
-          }
-          name="funding"
-        >
-          <Table
-            columns={fundingColumns}
-            dataSource={fundingData}
-            onRow={(record) => ({
-              onClick: () => {
-                setJSONData(record);
-                setShowJSONModal(true);
-              },
-              className: 'hover:cursor-pointer',
-            })}
-          />
-        </Form.Item>
-        <AddFundingForm
-          showModal={showFundingModal}
-          closeModal={() => setShowFundingModal(false)}
-          addObject={handleAddFunding}
-          objectData={fundingData}
-          existingFunding={organization?.funding ?? []}
+        <DisplayTable<Funding>
+          columns={fundingColumns}
+          parentForm={parentForm}
+          fieldLabel="funding"
+          tooltipTitle="The sources of funding for a service or organization."
+          formLabel="Funding Sources"
+          formProps={{
+            existingObjects: organization?.funding ?? [],
+            existingLabels: ['source'],
+            formTitle: 'Add Funding Source',
+            formItems: (_, ref) => <AddFundingForm ref={ref} />,
+            parseFields: {},
+            parseObject: {},
+          }}
         />
         <div className="flex flex-row gap-4">
           <Form.Item
@@ -258,37 +135,14 @@ const AdditionalInfoForm = ({ form }: { form: FormInstance }) => {
           >
             <Select mode="multiple" allowClear />
           </Form.Item>
-          <NestedForm<Attribute>
+          <AddAttributeForm
+            parentForm={parentForm}
             showModal={showAttributeModal}
             closeModal={() => setShowAttributeModal(false)}
-            addObject={(attribute: Attribute) =>
-              setAttributeData(
-                handleAddNestedObject(
-                  attribute,
-                  attributeData,
-                  'attributes',
-                  form
-                )
-              )
-            }
             objectData={attributeData}
-            existingObjects={[]}
-            existingLabels={['label', 'taxonomy_term.name']}
-            formItems={(_, ref) => <AddAttributeForm ref={ref} />}
-            formTitle="Add Attribute"
-            parseFields={{
-              link_type: {
-                parser: (value: string) => JSON.parse(value) as LinkType,
-              },
-              taxonomy_term: {
-                parser: (value: string) => JSON.parse(value) as TaxonomyTerm,
-              },
-              'taxonomy_term.taxonomy_detail': {
-                parser: (value: string) => JSON.parse(value) as Taxonomy,
-                inputPath: 'taxonomy',
-              },
-            }}
-            parseObject={{}}
+            addObject={(attributes: Attribute[]) =>
+              setAttributeData(attributes)
+            }
           />
           <Form.Item
             className="w-1/2"

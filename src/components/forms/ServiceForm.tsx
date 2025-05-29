@@ -31,11 +31,11 @@ const ServiceForm = ({
   const steps = [
     {
       title: 'Basic Info',
-      content: <BasicInfoForm form={form} />,
+      content: <BasicInfoForm parentForm={form} />,
     },
     {
       title: 'Additional Info',
-      content: <AdditionalInfoForm form={form} />,
+      content: <AdditionalInfoForm parentForm={form} />,
     },
     {
       title: 'Status',
