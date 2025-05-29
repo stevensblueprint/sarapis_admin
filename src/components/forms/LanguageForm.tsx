@@ -1,19 +1,11 @@
-import { Table, Input, Form, Button, Tooltip } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Input, Form, Tooltip } from 'antd';
 import AddLanguageForm from './nested_forms/AddLanguageForm';
 import { FormInstance } from 'antd';
 import Language from '../../interface/model/Language';
-import { useState, useEffect } from 'react';
 import { ColumnsType } from 'antd/es/table';
-import { DeleteOutlined } from '@ant-design/icons';
-import JSONDataModal from '../JSONDataModal';
+import DisplayTable from './DisplayTable';
 
-const LanguageForm = ({ form }: { form: FormInstance }) => {
-  const [showLanguageModal, setShowLanguageModal] = useState<boolean>(false);
-  const [languageData, setLanguageData] = useState<Language[]>([]);
-  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
-  const [JSONData, setJSONData] = useState<object>();
-
+const LanguageForm = ({ parentForm }: { parentForm: FormInstance }) => {
   const languageColumns: ColumnsType = [
     {
       title: 'Name',
@@ -27,87 +19,25 @@ const LanguageForm = ({ form }: { form: FormInstance }) => {
       width: '60%',
       ellipsis: true,
     },
-    {
-      title: '',
-      key: 'delete',
-      width: '10%',
-      align: 'center',
-      render: (record: Language) => (
-        <Button
-          danger
-          icon={<DeleteOutlined />}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteLanguage(record);
-          }}
-        />
-      ),
-    },
   ];
-
-  useEffect(() => {
-    const existingLanguages = form.getFieldValue('languages') || [];
-    setLanguageData(existingLanguages);
-  }, [form]);
-
-  const handleAddLanguage = (language: Language) => {
-    const newLanguages = [...languageData, language];
-    setLanguageData(newLanguages);
-    form.setFieldsValue({ languages: newLanguages });
-  };
-
-  const handleDeleteLanguage = (languageToDelete: Language) => {
-    const updatedLanguages = languageData.filter(
-      (language) => language !== languageToDelete
-    );
-    setLanguageData(updatedLanguages);
-    form.setFieldsValue({ languages: updatedLanguages });
-  };
 
   return (
     <div className="w-[100%] flex justify-center">
-      <JSONDataModal
-        showModal={showJSONModal}
-        closeModal={() => setShowJSONModal(false)}
-        data={JSONData ?? {}}
-      />
       <div className="flex flex-col w-3/4">
-        <Form.Item
-          label={
-            <div className="flex flex-row items-center gap-2 pt-2">
-              <Tooltip
-                placement="topLeft"
-                title="The details of the languages that are spoken at locations or services. This does not include languages which can only be used with interpretation."
-              >
-                Languages
-              </Tooltip>
-              <Button
-                icon={<PlusOutlined />}
-                onClick={() => setShowLanguageModal(true)}
-                size="small"
-              />
-            </div>
-          }
-          name="languages"
-        >
-          <Table
-            columns={languageColumns}
-            dataSource={languageData}
-            onRow={(record) => ({
-              onClick: () => {
-                setJSONData(record);
-                setShowJSONModal(true);
-              },
-              className: 'hover:cursor-pointer',
-            })}
-          />
-        </Form.Item>
-        <AddLanguageForm
-          showModal={showLanguageModal}
-          closeModal={() => setShowLanguageModal(false)}
-          addObject={handleAddLanguage}
-          objectData={languageData}
+        <DisplayTable<Language>
+          columns={languageColumns}
+          parentForm={parentForm}
+          fieldLabel="languages"
+          tooltipTitle="The details of the languages that are spoken at locations or services. This does not include languages which can only be used with interpretation."
+          formLabel="Languages"
+          formProps={{
+            existingObjects: [],
+            existingLabels: [],
+            formTitle: 'Add Language',
+            formItems: (_, ref) => <AddLanguageForm ref={ref} />,
+            parseFields: {},
+            parseObject: {},
+          }}
         />
         <Form.Item
           className="w-2/3 self-center"

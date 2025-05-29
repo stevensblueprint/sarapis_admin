@@ -141,8 +141,6 @@ export const handleAddObject = async <T>(
       }
     });
 
-    console.log(newObject);
-
     if (isDuplicate(newObject, objectData)) {
       showError('Duplicate objects not allowed!', messageApi);
       return;
@@ -163,22 +161,28 @@ export const handleSelect = <T extends Record<string, any>>(
   form: FormInstance,
   setters: SetterEntry<any>[]
 ): T => {
-  const rawObj = JSON.parse(jsonValue) as T;
-  const newObj = { ...rawObj };
+  const rawObject = JSON.parse(jsonValue) as T;
+  const newObject = { ...rawObject };
 
-  Object.entries(parseFields).forEach(([outputKey, { parser, inputPath }]) => {
-    const targetPath = inputPath ?? outputKey;
-    const rawValue = getNestedValue(rawObj, targetPath);
+  Object.entries(parseFields).forEach(([outputPath, { parser, inputPath }]) => {
+    const targetPath = inputPath ?? outputPath;
+    const rawValue = getNestedValue(rawObject, targetPath);
     const parsedValue = parser(rawValue);
-    setNestedValue(newObj, outputKey, parsedValue);
+    setNestedValue(newObject, outputPath, parsedValue);
   });
 
   setters.forEach(({ setObjectState, formLabel }) => {
-    const value = getNestedValue(newObj, formLabel);
+    const value = getNestedValue(newObject, formLabel);
     setObjectState(value);
   });
 
-  form.setFieldsValue(newObj);
+  Object.entries(parseFields).forEach(([outputPath, { inputPath }]) => {
+    if (inputPath && inputPath !== outputPath) {
+      deleteNestedValue(newObject, inputPath);
+    }
+  });
 
-  return newObj;
+  form.setFieldsValue(newObject);
+
+  return newObject;
 };

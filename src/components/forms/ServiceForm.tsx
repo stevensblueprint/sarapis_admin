@@ -43,23 +43,23 @@ const ServiceForm = ({
     },
     {
       title: 'Language',
-      content: <LanguageForm form={form} />,
+      content: <LanguageForm parentForm={form} />,
     },
     {
       title: 'Application',
-      content: <ApplicationForm form={form} />,
+      content: <ApplicationForm parentForm={form} />,
     },
     {
       title: 'Schedule',
-      content: <ScheduleForm form={form} />,
+      content: <ScheduleForm parentForm={form} />,
     },
     {
       title: 'Contact',
-      content: <ContactForm form={form} />,
+      content: <ContactForm parentForm={form} />,
     },
     {
       title: 'Location',
-      content: <LocationForm form={form} />,
+      content: <LocationForm parentForm={form} />,
     },
   ];
 
