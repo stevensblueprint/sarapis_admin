@@ -1,24 +1,14 @@
-import { Form, Input, InputNumber, Table, Button, Tooltip } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Form, Input, InputNumber, Tooltip } from 'antd';
 import AddRequiredDocumentForm from './nested_forms/AddRequiredDocumentForm';
 import RequiredDocument from '../../interface/model/RequiredDocument';
-import { useState, useEffect } from 'react';
 import { ColumnsType } from 'antd/es/table';
-import { DeleteOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd';
 import CostOption from '../../interface/model/CostOption';
 import AddCostOptionForm from './nested_forms/AddCostOptionForm';
-import JSONDataModal from '../JSONDataModal';
+import DisplayTable from './DisplayTable';
+import { costOptionParser } from '../../utils/form/ParseUtils';
 
-const ApplicationForm = ({ form }: { form: FormInstance }) => {
-  const [showDocumentModal, setShowDocumentModal] = useState<boolean>(false);
-  const [documentData, setDocumentData] = useState<RequiredDocument[]>([]);
-  const [showCostOptionModal, setShowCostOptionModal] =
-    useState<boolean>(false);
-  const [costOptionData, setCostOptionData] = useState<CostOption[]>([]);
-  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
-  const [JSONData, setJSONData] = useState<object>();
-
+const ApplicationForm = ({ parentForm }: { parentForm: FormInstance }) => {
   const documentColumns: ColumnsType = [
     {
       title: 'Document',
@@ -31,23 +21,6 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
       dataIndex: 'uri',
       width: '30%',
       ellipsis: true,
-    },
-    {
-      title: '',
-      key: 'delete',
-      width: '10%',
-      align: 'center',
-      render: (record: RequiredDocument) => (
-        <Button
-          danger
-          icon={<DeleteOutlined />}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteDocument(record);
-          }}
-        />
-      ),
     },
   ];
 
@@ -70,67 +43,10 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
       width: '60%',
       ellipsis: true,
     },
-    {
-      title: '',
-      key: 'delete',
-      width: '10%',
-      align: 'center',
-      render: (record: CostOption) => (
-        <Button
-          danger
-          icon={<DeleteOutlined />}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteCostOption(record);
-          }}
-        />
-      ),
-    },
   ];
-
-  useEffect(() => {
-    const existingDocuments = form.getFieldValue('required_documents') || [];
-    setDocumentData(existingDocuments);
-    const existingCostOptions = form.getFieldValue('cost_options') || [];
-    setCostOptionData(existingCostOptions);
-  }, [form]);
-
-  const handleAddDocument = (document: RequiredDocument) => {
-    const newDocuments = [...documentData, document];
-    setDocumentData(newDocuments);
-    form.setFieldsValue({ required_documents: newDocuments });
-  };
-
-  const handleDeleteDocument = (documentToDelete: RequiredDocument) => {
-    const updatedDocuments = documentData.filter(
-      (document) => document !== documentToDelete
-    );
-    setDocumentData(updatedDocuments);
-    form.setFieldsValue({ required_documents: updatedDocuments });
-  };
-
-  const handleAddCostOption = (costOption: CostOption) => {
-    const newCostOptions = [...costOptionData, costOption];
-    setCostOptionData(newCostOptions);
-    form.setFieldsValue({ cost_options: newCostOptions });
-  };
-
-  const handleDeleteCostOption = (costOptionToDelete: CostOption) => {
-    const updatedCostOptions = costOptionData.filter(
-      (costOption) => costOption !== costOptionToDelete
-    );
-    setCostOptionData(updatedCostOptions);
-    form.setFieldsValue({ cost_options: updatedCostOptions });
-  };
 
   return (
     <div className="flex flex-col">
-      <JSONDataModal
-        showModal={showJSONModal}
-        closeModal={() => setShowJSONModal(false)}
-        data={JSONData ?? {}}
-      />
       <div className="flex flex-row justify-center gap-4">
         <div className="w-1/3 flex flex-col">
           <Form.Item
@@ -205,77 +121,35 @@ const ApplicationForm = ({ form }: { form: FormInstance }) => {
         </div>
       </div>
       <div className="flex flex-col w-3/4 self-center">
-        <Form.Item
-          label={
-            <div className="flex flex-row items-center gap-2 pt-2">
-              <Tooltip
-                placement="topLeft"
-                title="The details of any documents that are required in order to access or use services."
-              >
-                Required Documents
-              </Tooltip>
-              <Button
-                icon={<PlusOutlined />}
-                onClick={() => setShowDocumentModal(true)}
-                size="small"
-              />
-            </div>
-          }
-          name="required_documents"
-        >
-          <Table
-            columns={documentColumns}
-            dataSource={documentData}
-            onRow={(record) => ({
-              onClick: () => {
-                setJSONData(record);
-                setShowJSONModal(true);
-              },
-              className: 'hover:cursor-pointer',
-            })}
-          />
-        </Form.Item>
-        <AddRequiredDocumentForm
-          showModal={showDocumentModal}
-          closeModal={() => setShowDocumentModal(false)}
-          addObject={handleAddDocument}
-          objectData={documentData}
+        <DisplayTable<RequiredDocument>
+          columns={documentColumns}
+          parentForm={parentForm}
+          fieldLabel="required_documents"
+          tooltipTitle="The details of any documents that are required in order to access or use services."
+          formLabel="Required Documents"
+          formProps={{
+            existingObjects: [],
+            existingLabels: [],
+            formTitle: 'Add Required Document',
+            formItems: (_, ref) => <AddRequiredDocumentForm ref={ref} />,
+            parseFields: {},
+            parseObject: {},
+          }}
         />
-        <Form.Item
-          label={
-            <div className="flex flex-row items-center gap-2 pt-2">
-              <Tooltip
-                placement="topLeft"
-                title="The costs of a service at certain points in time."
-              >
-                Cost Options
-              </Tooltip>
-              <Button
-                icon={<PlusOutlined />}
-                onClick={() => setShowCostOptionModal(true)}
-                size="small"
-              />
-            </div>
-          }
-          name="cost_options"
-        >
-          <Table
-            columns={costOptionColumns}
-            dataSource={costOptionData}
-            onRow={(record) => ({
-              onClick: () => {
-                setJSONData(record);
-                setShowJSONModal(true);
-              },
-              className: 'hover:cursor-pointer',
-            })}
-          />
-        </Form.Item>
-        <AddCostOptionForm
-          showModal={showCostOptionModal}
-          closeModal={() => setShowCostOptionModal(false)}
-          addObject={handleAddCostOption}
-          objectData={costOptionData}
+        <DisplayTable<CostOption>
+          columns={costOptionColumns}
+          parentForm={parentForm}
+          fieldLabel="cost_options"
+          tooltipTitle="The costs of a service at certain points in time."
+          formLabel="Cost Options"
+          formProps={{
+            existingObjects: [],
+            existingLabels: [],
+            formTitle: 'Add Cost Option',
+            formItems: (_, ref) => <AddCostOptionForm ref={ref} />,
+            parseFields: costOptionParser,
+            parseObject: {},
+          }}
         />
       </div>
     </div>
