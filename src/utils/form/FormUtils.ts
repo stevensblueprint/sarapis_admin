@@ -27,6 +27,7 @@ export interface NestedFormProps<T> {
   formTitle: string;
   parseFields: Record<string, ParseFieldEntry>;
   parseObject: Record<string, ParseFieldEntry>;
+  attributeClassName?: string;
 }
 
 export interface DisplayTableProps<T> {

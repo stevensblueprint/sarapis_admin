@@ -23,6 +23,7 @@ const NestedForm = <T extends { metadata?: any }>({
   formTitle,
   parseFields,
   parseObject,
+  attributeClassName,
 }: NestedFormProps<T>) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
@@ -114,6 +115,7 @@ const NestedForm = <T extends { metadata?: any }>({
       <Form form={form} layout="vertical" requiredMark={false}>
         {formItems(form, formRef)}
         <Form.Item
+          className={`${attributeClassName ?? ''}`}
           label={
             <div className="flex flex-row items-center gap-2">
               <Tooltip
