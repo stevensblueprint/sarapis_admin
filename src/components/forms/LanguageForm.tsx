@@ -2,25 +2,10 @@ import { Input, Form, Tooltip } from 'antd';
 import AddLanguageForm from './nested_forms/AddLanguageForm';
 import { FormInstance } from 'antd';
 import Language from '../../interface/model/Language';
-import { ColumnsType } from 'antd/es/table';
+import { languageColumns } from '../../data/FormTableColumns';
 import DisplayTable from './DisplayTable';
 
 const LanguageForm = ({ parentForm }: { parentForm: FormInstance }) => {
-  const languageColumns: ColumnsType = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      width: '30%',
-      ellipsis: true,
-    },
-    {
-      title: 'Note',
-      dataIndex: 'note',
-      width: '60%',
-      ellipsis: true,
-    },
-  ];
-
   return (
     <div className="w-[100%] flex justify-center">
       <div className="flex flex-col w-3/4">

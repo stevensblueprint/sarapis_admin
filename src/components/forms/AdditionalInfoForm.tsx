@@ -2,7 +2,7 @@ import { Form, Input, Button, Select, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { FormInstance } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import { ColumnsType } from 'antd/es/table';
+import { fundingColumns, capacitiesColumns } from '../../data/FormTableColumns';
 import { useState, useEffect } from 'react';
 import AddCapacityForm from './nested_forms/AddCapacityForm';
 import AddFundingForm from './nested_forms/AddFundingForm';
@@ -24,42 +24,6 @@ const AdditionalInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
   const [organization, setOrganization] = useState<Organization | undefined>();
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
   const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
-
-  const capacitiesColumns: ColumnsType = [
-    {
-      title: 'Name',
-      dataIndex: ['unit', 'name'],
-      width: '20%',
-      ellipsis: true,
-    },
-    {
-      title: 'Available',
-      dataIndex: 'available',
-      width: '15%',
-      ellipsis: true,
-    },
-    {
-      title: 'Maximum',
-      dataIndex: 'maximum',
-      width: '15%',
-      ellipsis: true,
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      width: '40%',
-      ellipsis: true,
-    },
-  ];
-
-  const fundingColumns: ColumnsType = [
-    {
-      title: 'Source',
-      dataIndex: 'source',
-      width: '90%',
-      ellipsis: true,
-    },
-  ];
 
   useEffect(() => {
     setSelectedProgram(parentForm.getFieldValue('program') ?? undefined);

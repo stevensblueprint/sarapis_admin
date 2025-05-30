@@ -1,9 +1,9 @@
 import { Form, Tooltip, Input, Select, InputNumber, FormInstance } from 'antd';
-import { ColumnsType } from 'antd/es/table';
 import { JSX, forwardRef, useImperativeHandle } from 'react';
 import DisplayTable from '../DisplayTable';
 import Language from '../../../interface/model/Language';
 import AddLanguageForm from './AddLanguageForm';
+import { languageColumns } from '../../../data/FormTableColumns';
 
 interface AddPhoneFormProps {
   parentForm: FormInstance;
@@ -15,21 +15,6 @@ const AddPhoneForm = forwardRef(
     useImperativeHandle(ref, () => ({
       resetState: () => {},
     }));
-
-    const languageColumns: ColumnsType = [
-      {
-        title: 'Name',
-        dataIndex: 'name',
-        width: '30%',
-        ellipsis: true,
-      },
-      {
-        title: 'Note',
-        dataIndex: 'note',
-        width: '60%',
-        ellipsis: true,
-      },
-    ];
 
     return (
       <>

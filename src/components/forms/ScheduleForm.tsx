@@ -1,32 +1,11 @@
 import AddScheduleForm from './nested_forms/AddScheduleForm';
 import Schedule from '../../interface/model/Schedule';
-import { ColumnsType } from 'antd/es/table';
+import { scheduleColumns } from '../../data/FormTableColumns';
 import { FormInstance } from 'antd';
 import DisplayTable from './DisplayTable';
 import { scheduleParser } from '../../utils/form/ParseUtils';
 
 const ScheduleForm = ({ parentForm }: { parentForm: FormInstance }) => {
-  const scheduleColumns: ColumnsType = [
-    {
-      title: 'Opens At',
-      dataIndex: 'opens_at',
-      width: '15%',
-      ellipsis: true,
-    },
-    {
-      title: 'Closes At',
-      dataIndex: 'closes_at',
-      width: '15%',
-      ellipsis: true,
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      width: '60%',
-      ellipsis: true,
-    },
-  ];
-
   return (
     <div className="w-[100%] flex justify-center">
       <div className="flex flex-col w-3/4">

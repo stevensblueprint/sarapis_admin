@@ -2,9 +2,9 @@ import { Form, Tooltip, Input, FormInstance } from 'antd';
 import { JSX, forwardRef, useImperativeHandle } from 'react';
 import DisplayTable from '../DisplayTable';
 import Phone from '../../../interface/model/Phone';
-import { ColumnsType } from 'antd/es/table';
 import AddPhoneForm from './AddPhoneForm';
 import Language from '../../../interface/model/Language';
+import { phoneColumns } from '../../../data/FormTableColumns';
 
 interface AddContactFormProps {
   parentForm: FormInstance;
@@ -20,27 +20,6 @@ const AddContactForm = forwardRef(
     useImperativeHandle(ref, () => ({
       resetState: () => {},
     }));
-
-    const phoneColumns: ColumnsType = [
-      {
-        title: 'Number',
-        dataIndex: 'number',
-        width: '25%',
-        ellipsis: true,
-      },
-      {
-        title: 'Extension',
-        dataIndex: 'extension',
-        width: '15%',
-        ellipsis: true,
-      },
-      {
-        title: 'Description',
-        dataIndex: 'description',
-        width: '50%',
-        ellipsis: true,
-      },
-    ];
 
     return (
       <>

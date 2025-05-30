@@ -8,7 +8,7 @@ import Url from '../../interface/model/Url';
 import AddURLForm from './nested_forms/AddURLForm';
 import type { FormInstance } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import { ColumnsType } from 'antd/es/table';
+import { URLColumns } from '../../data/FormTableColumns';
 import AddOrganizationToServiceForm from './nested_forms/AddOrganizationToServiceForm';
 import DisplayTable from './DisplayTable';
 import JSONDataModal from '../JSONDataModal';
@@ -35,21 +35,6 @@ const BasicInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
     };
     fetchOrganizations();
   }, []);
-
-  const URLColumns: ColumnsType = [
-    {
-      title: 'Name',
-      dataIndex: 'label',
-      width: 50,
-      ellipsis: true,
-    },
-    {
-      title: 'URL',
-      dataIndex: 'url',
-      width: 100,
-      ellipsis: true,
-    },
-  ];
 
   const handleAddOrganization = (organization: Organization) => {
     setSelectedOrganization(organization);

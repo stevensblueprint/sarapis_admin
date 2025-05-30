@@ -2,7 +2,10 @@ import { FormInstance } from 'antd';
 import Organization from '../../interface/model/Organization';
 import { useState, useEffect } from 'react';
 import ServiceArea from '../../interface/model/ServiceArea';
-import { ColumnsType } from 'antd/es/table';
+import {
+  serviceAreaColumns,
+  serviceAtLocationColumns,
+} from '../../data/FormTableColumns';
 import AddServiceAreaForm from './nested_forms/AddServiceAreaForm';
 import AddServiceAtLocationForm from './nested_forms/AddServiceAtLocationForm';
 import ServiceAtLocation from '../../interface/model/ServiceAtLocation';
@@ -33,30 +36,6 @@ const LocationForm = ({ parentForm }: LocationFormProps) => {
     setExistingSchedules(parentForm.getFieldValue('schedules') ?? []);
     setExistingServiceAreas(parentForm.getFieldValue('service_areas') ?? []);
   }, [parentForm]);
-
-  const serviceAreaColumns: ColumnsType = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      width: '30%',
-      ellipsis: true,
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      width: '60%',
-      ellipsis: true,
-    },
-  ];
-
-  const serviceAtLocationColumns: ColumnsType = [
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      width: '90%',
-      ellipsis: true,
-    },
-  ];
 
   useEffect(() => {
     setOrganization(parentForm.getFieldValue('organization') ?? undefined);

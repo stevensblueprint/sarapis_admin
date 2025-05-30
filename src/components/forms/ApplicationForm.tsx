@@ -1,7 +1,10 @@
 import { Form, Input, InputNumber, Tooltip } from 'antd';
 import AddRequiredDocumentForm from './nested_forms/AddRequiredDocumentForm';
 import RequiredDocument from '../../interface/model/RequiredDocument';
-import { ColumnsType } from 'antd/es/table';
+import {
+  documentColumns,
+  costOptionColumns,
+} from '../../data/FormTableColumns';
 import { FormInstance } from 'antd';
 import CostOption from '../../interface/model/CostOption';
 import AddCostOptionForm from './nested_forms/AddCostOptionForm';
@@ -9,42 +12,6 @@ import DisplayTable from './DisplayTable';
 import { costOptionParser } from '../../utils/form/ParseUtils';
 
 const ApplicationForm = ({ parentForm }: { parentForm: FormInstance }) => {
-  const documentColumns: ColumnsType = [
-    {
-      title: 'Document',
-      dataIndex: 'document',
-      width: '60%',
-      ellipsis: true,
-    },
-    {
-      title: 'URL',
-      dataIndex: 'uri',
-      width: '30%',
-      ellipsis: true,
-    },
-  ];
-
-  const costOptionColumns: ColumnsType = [
-    {
-      title: 'Currency',
-      dataIndex: 'currency',
-      width: '15%',
-      ellipsis: true,
-    },
-    {
-      title: 'Amount',
-      dataIndex: 'amount',
-      width: '15%',
-      ellipsis: true,
-    },
-    {
-      title: 'Description',
-      dataIndex: 'amount_description',
-      width: '60%',
-      ellipsis: true,
-    },
-  ];
-
   return (
     <div className="flex flex-col">
       <div className="flex flex-row justify-center gap-4">
