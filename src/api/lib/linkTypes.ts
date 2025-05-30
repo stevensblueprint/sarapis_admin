@@ -15,7 +15,6 @@ export class LinkTypeError extends Error {
 }
 
 const LINK_TYPES_BASE_URL = '/link_types';
-const LINK_TYPE_BASE_URL = '/link_type';
 
 const handleApiError = (error: unknown, defaultMessage: string): never => {
   const message = error instanceof Error ? error.message : defaultMessage;
