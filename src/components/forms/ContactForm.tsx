@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import Contact from '../../interface/model/Contact';
 import { FormInstance } from 'antd';
 import AddContactForm from './nested_forms/AddContactForm';
-import { ColumnsType } from 'antd/es/table';
 import Organization from '../../interface/model/Organization';
 import AddPhoneForm from './nested_forms/AddPhoneForm';
 import Phone from '../../interface/model/Phone';
 import DisplayTable from './DisplayTable';
 import Language from '../../interface/model/Language';
+import { contactColumns, phoneColumns } from '../../data/FormTableColumns';
 
 interface ContactFormProps {
   parentForm: FormInstance;
@@ -21,57 +21,6 @@ const ContactForm = ({ parentForm }: ContactFormProps) => {
   useEffect(() => {
     setExistingLanguages(parentForm.getFieldValue('languages') ?? []);
     setExistingPhones(parentForm.getFieldValue('phones') ?? []);
-  }, [parentForm]);
-
-  const contactColumns: ColumnsType = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      width: '20%',
-      ellipsis: true,
-    },
-    {
-      title: 'Title',
-      dataIndex: 'title',
-      width: '25%',
-      ellipsis: true,
-    },
-    {
-      title: 'Department',
-      dataIndex: 'department',
-      width: '20%',
-      ellipsis: true,
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      width: '25%',
-      ellipsis: true,
-    },
-  ];
-
-  const phoneColumns: ColumnsType = [
-    {
-      title: 'Number',
-      dataIndex: 'number',
-      width: '25%',
-      ellipsis: true,
-    },
-    {
-      title: 'Extension',
-      dataIndex: 'extension',
-      width: '15%',
-      ellipsis: true,
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      width: '50%',
-      ellipsis: true,
-    },
-  ];
-
-  useEffect(() => {
     setOrganization(parentForm.getFieldValue('organization') ?? undefined);
   }, [parentForm]);
 

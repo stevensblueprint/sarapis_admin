@@ -1,8 +1,7 @@
-import { Form, Tooltip, Input, FormInstance } from 'antd';
-import { JSX, forwardRef, useImperativeHandle } from 'react';
+import { Form, Tooltip, Input, FormInstance, Button } from 'antd';
+import { JSX, forwardRef, useImperativeHandle, useState } from 'react';
 import DisplayTable from '../DisplayTable';
 import ServiceArea from '../../../interface/model/ServiceArea';
-import { ColumnsType } from 'antd/es/table';
 import AddServiceAreaForm from './AddServiceAreaForm';
 import Contact from '../../../interface/model/Contact';
 import AddContactForm from './AddContactForm';
@@ -15,6 +14,16 @@ import {
   scheduleParser,
   reverseScheduleParser,
 } from '../../../utils/form/ParseUtils';
+import {
+  phoneColumns,
+  contactColumns,
+  scheduleColumns,
+  serviceAreaColumns,
+} from '../../../data/FormTableColumns';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import Location from '../../../interface/model/Location';
+import AddLocationForm from './AddLocationForm';
+import NestedForm from '../NestedForm';
 
 interface AddServiceAtLocationFormProps {
   parentForm: FormInstance;
@@ -23,6 +32,7 @@ interface AddServiceAtLocationFormProps {
   existingPhones: Phone[];
   existingLanguages: Language[];
   existingSchedules: Schedule[];
+  existingLocations: Location[];
 }
 
 const AddServiceAtLocationForm = forwardRef(
@@ -34,96 +44,29 @@ const AddServiceAtLocationForm = forwardRef(
       existingPhones,
       existingLanguages,
       existingSchedules,
+      existingLocations,
     }: AddServiceAtLocationFormProps,
     ref
   ): JSX.Element => {
     useImperativeHandle(ref, () => ({
-      resetState: () => {},
+      resetState: () => {
+        setSelectedLocation(undefined);
+        setShowLocationModal(false);
+      },
     }));
 
-    const serviceAreaColumns: ColumnsType = [
-      {
-        title: 'Name',
-        dataIndex: 'name',
-        width: '30%',
-        ellipsis: true,
-      },
-      {
-        title: 'Description',
-        dataIndex: 'description',
-        width: '60%',
-        ellipsis: true,
-      },
-    ];
+    const [showLocationModal, setShowLocationModal] = useState<boolean>(false);
+    const [selectedLocation, setSelectedLocation] = useState<Location>();
 
-    const contactColumns: ColumnsType = [
-      {
-        title: 'Name',
-        dataIndex: 'name',
-        width: '20%',
-        ellipsis: true,
-      },
-      {
-        title: 'Title',
-        dataIndex: 'title',
-        width: '25%',
-        ellipsis: true,
-      },
-      {
-        title: 'Department',
-        dataIndex: 'department',
-        width: '20%',
-        ellipsis: true,
-      },
-      {
-        title: 'Email',
-        dataIndex: 'email',
-        width: '25%',
-        ellipsis: true,
-      },
-    ];
+    const handleAddLocation = (newLocation: Location) => {
+      setSelectedLocation(newLocation);
+      parentForm.setFieldsValue({ location: newLocation });
+    };
 
-    const phoneColumns: ColumnsType = [
-      {
-        title: 'Number',
-        dataIndex: 'number',
-        width: '25%',
-        ellipsis: true,
-      },
-      {
-        title: 'Extension',
-        dataIndex: 'extension',
-        width: '15%',
-        ellipsis: true,
-      },
-      {
-        title: 'Description',
-        dataIndex: 'description',
-        width: '50%',
-        ellipsis: true,
-      },
-    ];
-
-    const scheduleColumns: ColumnsType = [
-      {
-        title: 'Opens At',
-        dataIndex: 'opens_at',
-        width: '15%',
-        ellipsis: true,
-      },
-      {
-        title: 'Closes At',
-        dataIndex: 'closes_at',
-        width: '15%',
-        ellipsis: true,
-      },
-      {
-        title: 'Description',
-        dataIndex: 'description',
-        width: '60%',
-        ellipsis: true,
-      },
-    ];
+    const handleDeleteLocation = () => {
+      setSelectedLocation(undefined);
+      parentForm.setFieldsValue({ location: undefined });
+    };
 
     return (
       <>
@@ -216,7 +159,67 @@ const AddServiceAtLocationForm = forwardRef(
             parseObject: reverseScheduleParser,
           }}
         />
-        <div className="flex justify-center"></div>
+        <div className="flex justify-center">
+          <Form.Item
+            label={
+              <div className="flex flex-row items-center gap-2 pt-2">
+                <Tooltip
+                  placement="topLeft"
+                  title="The details of the locations where organizations operate. Locations may be virtual, and one organization may have many locations."
+                >
+                  Location
+                </Tooltip>
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() => setShowLocationModal(true)}
+                  size="small"
+                />
+              </div>
+            }
+            name="location"
+          >
+            {selectedLocation ? (
+              <div className="flex flex-row items-center gap-2 w-full max-w-xl">
+                <div className="overflow-hidden whitespace-nowrap text-ellipsis flex-1">
+                  <span className="truncate">
+                    {selectedLocation.name} - {selectedLocation.description}
+                  </span>
+                </div>
+                <Button
+                  className="ml-auto"
+                  icon={<DeleteOutlined />}
+                  onClick={handleDeleteLocation}
+                  size="middle"
+                  danger
+                />
+              </div>
+            ) : (
+              'No Location Selected'
+            )}
+          </Form.Item>
+          <NestedForm<Location>
+            showModal={showLocationModal}
+            closeModal={() => setShowLocationModal(false)}
+            addObject={handleAddLocation}
+            objectData={[selectedLocation ?? {}]}
+            formItems={() => (
+              <AddLocationForm
+                parentForm={parentForm}
+                existingContacts={existingContacts}
+                existingLanguages={existingLanguages}
+                existingPhones={existingPhones}
+                existingSchedules={existingSchedules}
+              />
+            )}
+            existingObjects={existingLocations}
+            existingLabels={['name']}
+            formTitle="Add Location"
+            parseFields={{}}
+            parseObject={{}}
+            modalWidth={800}
+            attributeClassName="w-2/3"
+          />
+        </div>
       </>
     );
   }

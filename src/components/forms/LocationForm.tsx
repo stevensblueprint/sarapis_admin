@@ -107,6 +107,7 @@ const LocationForm = ({ parentForm }: LocationFormProps) => {
                   ...existingPhones,
                 ]}
                 existingSchedules={existingSchedules}
+                existingLocations={organization?.locations ?? []}
                 ref={ref}
               />
             ),
