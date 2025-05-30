@@ -21,12 +21,6 @@ const AddProgramForm = ({
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
 
-  const handleAddAttribute = (attribute: Attribute) => {
-    const newAttributes = [...attributeData, attribute];
-    setAttributeData(newAttributes);
-    form.setFieldsValue({ attributes: newAttributes });
-  };
-
   const addNewObject = async () => {
     const values = await form.validateFields();
     const newProgram: Program = { ...values };
@@ -43,14 +37,28 @@ const AddProgramForm = ({
     setAttributeData(program.attributes ?? []);
   };
 
+  const handleCancel = () => {
+    if (JSON.stringify(form.getFieldsValue(true)) !== '{}') {
+      Modal.confirm({
+        title: 'Are you sure you want to exit?',
+        content: 'All entered values will be lost.',
+        onOk() {
+          closeModal();
+          form.resetFields();
+          setSelectedProgram(null);
+        },
+      });
+    } else {
+      closeModal();
+      form.resetFields();
+      setSelectedProgram(null);
+    }
+  };
+
   return (
     <Modal
       open={showModal}
-      onCancel={() => {
-        closeModal();
-        form.resetFields();
-        setSelectedProgram(null);
-      }}
+      onCancel={handleCancel}
       title="Add Program"
       footer={
         <Button type="primary" onClick={addNewObject}>
@@ -144,10 +152,11 @@ const AddProgramForm = ({
           <Select mode="multiple" allowClear />
         </Form.Item>
         <AddAttributeForm
+          parentForm={form}
           showModal={showAttributeModal}
           closeModal={() => setShowAttributeModal(false)}
-          addObject={handleAddAttribute}
           objectData={attributeData}
+          addObject={(attributes: Attribute[]) => setAttributeData(attributes)}
         />
       </Form>
     </Modal>

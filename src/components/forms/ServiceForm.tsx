@@ -110,15 +110,19 @@ const ServiceForm = ({
   };
 
   const handleCancel = () => {
-    Modal.confirm({
-      title: 'Are you sure you want to exit?',
-      content: 'All entered values will be lost.',
-      onOk() {
-        closeModal();
-        form.resetFields();
-      },
-      onCancel() {},
-    });
+    if (JSON.stringify(form.getFieldsValue(true)) !== '{}') {
+      Modal.confirm({
+        title: 'Are you sure you want to exit?',
+        content: 'All entered values will be lost.',
+        onOk() {
+          closeModal();
+          form.resetFields();
+        },
+      });
+    } else {
+      closeModal();
+      form.resetFields();
+    }
   };
 
   const modalFooter = () => {

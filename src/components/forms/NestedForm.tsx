@@ -61,16 +61,32 @@ const NestedForm = <T extends { metadata?: any }>({
     return options;
   };
 
+  const handleCancel = () => {
+    if (JSON.stringify(form.getFieldsValue(true)) !== '{}') {
+      Modal.confirm({
+        title: 'Are you sure you want to exit?',
+        content: 'All entered values will be lost.',
+        onOk() {
+          closeModal();
+          form.resetFields();
+          setSelectedObject(null);
+          setAttributeData([]);
+          formRef.current?.resetState();
+        },
+      });
+    } else {
+      closeModal();
+      form.resetFields();
+      setSelectedObject(null);
+      setAttributeData([]);
+      formRef.current?.resetState();
+    }
+  };
+
   return (
     <Modal
       open={showModal}
-      onCancel={() => {
-        closeModal();
-        form.resetFields();
-        setSelectedObject(null);
-        setAttributeData([]);
-        formRef.current?.resetState();
-      }}
+      onCancel={handleCancel}
       title={formTitle}
       width={modalWidth ?? 520}
       footer={
