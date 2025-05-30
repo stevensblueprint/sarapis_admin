@@ -15,6 +15,7 @@ import DisplayTable from './DisplayTable';
 import ServiceCapacity from '../../interface/model/ServiceCapacity';
 import { Dayjs } from 'dayjs';
 import Funding from '../../interface/model/Funding';
+import JSONDataModal from '../JSONDataModal';
 
 const AdditionalInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
   const [showProgramModal, setShowProgramModal] = useState<boolean>(false);
@@ -22,6 +23,7 @@ const AdditionalInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
   const [selectedProgram, setSelectedProgram] = useState<Program>();
   const [organization, setOrganization] = useState<Organization | undefined>();
   const [attributeData, setAttributeData] = useState<Attribute[]>([]);
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
 
   const capacitiesColumns: ColumnsType = [
     {
@@ -77,6 +79,11 @@ const AdditionalInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
 
   return (
     <div className="w-[100%] flex justify-center">
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={selectedProgram ?? {}}
+      />
       <div className="flex flex-col w-3/4">
         <DisplayTable<ServiceCapacity>
           columns={capacitiesColumns}
@@ -166,7 +173,10 @@ const AdditionalInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
             {selectedProgram ? (
               <div className="flex flex-row items-center gap-2">
                 <div className="overflow-hidden">
-                  <span className="truncate">
+                  <span
+                    className="truncate hover:cursor-pointer"
+                    onClick={() => setShowJSONModal(true)}
+                  >
                     {selectedProgram.name} - {selectedProgram.description}
                   </span>
                 </div>

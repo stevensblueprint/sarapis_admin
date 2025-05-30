@@ -24,6 +24,7 @@ import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import Location from '../../../interface/model/Location';
 import AddLocationForm from './AddLocationForm';
 import NestedForm from '../NestedForm';
+import JSONDataModal from '../../JSONDataModal';
 
 interface AddServiceAtLocationFormProps {
   parentForm: FormInstance;
@@ -56,6 +57,7 @@ const AddServiceAtLocationForm = forwardRef(
 
     const [showLocationModal, setShowLocationModal] = useState<boolean>(false);
     const selectedLocation = Form.useWatch('location', parentForm);
+    const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
 
     const handleAddLocation = (newLocation: Location) => {
       parentForm.setFieldsValue({ location: newLocation });
@@ -67,6 +69,11 @@ const AddServiceAtLocationForm = forwardRef(
 
     return (
       <>
+        <JSONDataModal
+          showModal={showJSONModal}
+          closeModal={() => setShowJSONModal(false)}
+          data={selectedLocation ?? {}}
+        />
         <div className="flex justify-center">
           <Form.Item
             className="w-2/3"
@@ -178,7 +185,10 @@ const AddServiceAtLocationForm = forwardRef(
             {selectedLocation ? (
               <div className="flex flex-row items-center gap-2 w-full max-w-xl">
                 <div className="overflow-hidden whitespace-nowrap text-ellipsis flex-1">
-                  <span className="truncate">
+                  <span
+                    className="truncate hover:cursor-pointer"
+                    onClick={() => setShowJSONModal(true)}
+                  >
                     {selectedLocation.name} - {selectedLocation.description}
                   </span>
                 </div>

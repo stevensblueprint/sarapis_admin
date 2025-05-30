@@ -11,6 +11,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import AddOrganizationToServiceForm from './nested_forms/AddOrganizationToServiceForm';
 import DisplayTable from './DisplayTable';
+import JSONDataModal from '../JSONDataModal';
 
 const BasicInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -18,6 +19,7 @@ const BasicInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
     useState<boolean>(false);
   const [selectedOrganization, setSelectedOrganization] =
     useState<Organization>();
+  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
 
   useEffect(() => {
     setSelectedOrganization(
@@ -61,6 +63,11 @@ const BasicInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
 
   return (
     <div className="w-[100%] flex flex-col justify-center pt-4">
+      <JSONDataModal
+        showModal={showJSONModal}
+        closeModal={() => setShowJSONModal(false)}
+        data={selectedOrganization ?? {}}
+      />
       <div className="flex flex-row justify-center gap-4">
         <div className="w-1/3 flex flex-col">
           <Form.Item
@@ -112,7 +119,10 @@ const BasicInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
             {selectedOrganization ? (
               <div className="flex flex-row items-center gap-2">
                 <div className="overflow-hidden">
-                  <span className="truncate">
+                  <span
+                    className="truncate hover:cursor-pointer"
+                    onClick={() => setShowJSONModal(true)}
+                  >
                     {selectedOrganization.name} -{' '}
                     {selectedOrganization.description}
                   </span>
