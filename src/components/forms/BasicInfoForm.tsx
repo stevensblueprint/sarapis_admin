@@ -173,7 +173,7 @@ const BasicInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
               existingObjects: [],
               existingLabels: [],
               formTitle: 'Add Additional URL',
-              formItems: (_, ref) => <AddURLForm ref={ref} />,
+              formItems: () => <AddURLForm />,
               parseFields: {},
               parseObject: {},
             }}

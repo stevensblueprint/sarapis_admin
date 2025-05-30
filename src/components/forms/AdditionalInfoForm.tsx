@@ -60,7 +60,7 @@ const AdditionalInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
             existingObjects: [],
             existingLabels: [],
             formTitle: 'Add Service Capacity',
-            formItems: (_, ref) => <AddCapacityForm ref={ref} />,
+            formItems: () => <AddCapacityForm />,
             parseFields: {
               updated: {
                 parser: (value: Dayjs) =>
@@ -80,7 +80,7 @@ const AdditionalInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
             existingObjects: organization?.funding ?? [],
             existingLabels: fundingExistingLabels,
             formTitle: 'Add Funding Source',
-            formItems: (_, ref) => <AddFundingForm ref={ref} />,
+            formItems: () => <AddFundingForm />,
             parseFields: {},
             parseObject: {},
           }}

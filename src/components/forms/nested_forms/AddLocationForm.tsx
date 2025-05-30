@@ -174,7 +174,7 @@ const AddLocationForm = ({
           existingObjects: existingLanguages,
           existingLabels: languageExistingLabels,
           formTitle: 'Add Language',
-          formItems: (_, ref) => <AddLanguageForm ref={ref} />,
+          formItems: () => <AddLanguageForm />,
           parseFields: {},
           parseObject: {},
         }}
@@ -189,7 +189,7 @@ const AddLocationForm = ({
           existingObjects: [],
           existingLabels: [],
           formTitle: 'Add Address',
-          formItems: (_, ref) => <AddAddressForm ref={ref} />,
+          formItems: () => <AddAddressForm />,
           parseFields: {},
           parseObject: {},
         }}
@@ -204,12 +204,11 @@ const AddLocationForm = ({
           existingObjects: existingContacts,
           existingLabels: contactExistingLabels,
           formTitle: 'Add Contact',
-          formItems: (form, ref) => (
+          formItems: (form) => (
             <AddContactForm
               existingPhones={existingPhones}
               existingLanguages={existingLanguages}
               parentForm={form}
-              ref={ref}
             />
           ),
           parseFields: {},
@@ -241,11 +240,10 @@ const AddLocationForm = ({
           existingObjects: existingPhones,
           existingLabels: phoneExistingLabels,
           formTitle: 'Add Phone',
-          formItems: (form, ref) => (
+          formItems: (form) => (
             <AddPhoneForm
               existingLanguages={existingLanguages}
               parentForm={form}
-              ref={ref}
             />
           ),
           parseFields: {},

@@ -1,11 +1,7 @@
 import { Form, Tooltip, Input, Select } from 'antd';
-import { JSX, forwardRef, useImperativeHandle } from 'react';
+import { JSX } from 'react';
 
-const AddServiceAreaForm = forwardRef((_, ref): JSX.Element => {
-  useImperativeHandle(ref, () => ({
-    resetState: () => {},
-  }));
-
+const AddServiceAreaForm = (): JSX.Element => {
   return (
     <>
       <Form.Item
@@ -87,6 +83,6 @@ const AddServiceAreaForm = forwardRef((_, ref): JSX.Element => {
       </Form.Item>
     </>
   );
-});
+};
 
 export default AddServiceAreaForm;

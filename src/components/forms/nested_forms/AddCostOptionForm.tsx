@@ -1,11 +1,7 @@
 import { Form, Tooltip, Input, DatePicker, InputNumber } from 'antd';
-import { JSX, forwardRef, useImperativeHandle } from 'react';
+import { JSX } from 'react';
 
-const AddCostOptionForm = forwardRef((_, ref): JSX.Element => {
-  useImperativeHandle(ref, () => ({
-    resetState: () => {},
-  }));
-
+const AddCostOptionForm = (): JSX.Element => {
   return (
     <>
       <Form.Item
@@ -82,6 +78,6 @@ const AddCostOptionForm = forwardRef((_, ref): JSX.Element => {
       </div>
     </>
   );
-});
+};
 
 export default AddCostOptionForm;

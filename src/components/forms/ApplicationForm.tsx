@@ -98,7 +98,7 @@ const ApplicationForm = ({ parentForm }: { parentForm: FormInstance }) => {
             existingObjects: [],
             existingLabels: [],
             formTitle: 'Add Required Document',
-            formItems: (_, ref) => <AddRequiredDocumentForm ref={ref} />,
+            formItems: () => <AddRequiredDocumentForm />,
             parseFields: {},
             parseObject: {},
           }}
@@ -113,7 +113,7 @@ const ApplicationForm = ({ parentForm }: { parentForm: FormInstance }) => {
             existingObjects: [],
             existingLabels: [],
             formTitle: 'Add Cost Option',
-            formItems: (_, ref) => <AddCostOptionForm ref={ref} />,
+            formItems: () => <AddCostOptionForm />,
             parseFields: costOptionParser,
             parseObject: {},
           }}

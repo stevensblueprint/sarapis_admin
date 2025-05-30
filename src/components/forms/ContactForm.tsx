@@ -42,11 +42,10 @@ const ContactForm = ({ parentForm }: ContactFormProps) => {
             existingObjects: organization?.phones ?? [],
             existingLabels: phoneExistingLabels,
             formTitle: 'Add Phone',
-            formItems: (form, ref) => (
+            formItems: (form) => (
               <AddPhoneForm
                 existingLanguages={existingLanguages}
                 parentForm={form}
-                ref={ref}
               />
             ),
             parseFields: {},
@@ -63,7 +62,7 @@ const ContactForm = ({ parentForm }: ContactFormProps) => {
             existingObjects: organization?.contacts ?? [],
             existingLabels: contactExistingLabels,
             formTitle: 'Add Contact',
-            formItems: (form, ref) => (
+            formItems: (form) => (
               <AddContactForm
                 existingPhones={
                   organization
@@ -72,7 +71,6 @@ const ContactForm = ({ parentForm }: ContactFormProps) => {
                 }
                 existingLanguages={existingLanguages}
                 parentForm={form}
-                ref={ref}
               />
             ),
             parseFields: {},

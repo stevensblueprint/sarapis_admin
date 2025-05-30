@@ -1,11 +1,7 @@
 import { Form, Tooltip, Input } from 'antd';
-import { JSX, forwardRef, useImperativeHandle } from 'react';
+import { JSX } from 'react';
 
-const AddRequiredDocumentForm = forwardRef((_, ref): JSX.Element => {
-  useImperativeHandle(ref, () => ({
-    resetState: () => {},
-  }));
-
+const AddRequiredDocumentForm = (): JSX.Element => {
   return (
     <>
       <Form.Item
@@ -39,6 +35,6 @@ const AddRequiredDocumentForm = forwardRef((_, ref): JSX.Element => {
       </Form.Item>
     </>
   );
-});
+};
 
 export default AddRequiredDocumentForm;

@@ -19,7 +19,7 @@ const LanguageForm = ({ parentForm }: { parentForm: FormInstance }) => {
             existingObjects: [],
             existingLabels: [],
             formTitle: 'Add Language',
-            formItems: (_, ref) => <AddLanguageForm ref={ref} />,
+            formItems: () => <AddLanguageForm />,
             parseFields: {},
             parseObject: {},
           }}

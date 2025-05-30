@@ -1,11 +1,7 @@
 import { Form, Input, Tooltip } from 'antd';
-import { forwardRef, JSX, useImperativeHandle } from 'react';
+import { JSX } from 'react';
 
-const AddFundingForm = forwardRef((_, ref): JSX.Element => {
-  useImperativeHandle(ref, () => ({
-    resetState: () => {},
-  }));
-
+const AddFundingForm = (): JSX.Element => {
   return (
     <>
       <Form.Item
@@ -24,6 +20,6 @@ const AddFundingForm = forwardRef((_, ref): JSX.Element => {
       </Form.Item>
     </>
   );
-});
+};
 
 export default AddFundingForm;

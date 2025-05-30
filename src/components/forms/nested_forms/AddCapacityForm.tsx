@@ -1,11 +1,7 @@
 import { Form, Input, InputNumber, DatePicker, Tooltip } from 'antd';
-import { forwardRef, JSX, useImperativeHandle } from 'react';
+import { JSX } from 'react';
 
-const AddCapacityForm = forwardRef((_, ref): JSX.Element => {
-  useImperativeHandle(ref, () => ({
-    resetState: () => {},
-  }));
-
+const AddCapacityForm = (): JSX.Element => {
   return (
     <>
       <div className="flex flex-row gap-4">
@@ -128,6 +124,6 @@ const AddCapacityForm = forwardRef((_, ref): JSX.Element => {
       </Form.Item>
     </>
   );
-});
+};
 
 export default AddCapacityForm;

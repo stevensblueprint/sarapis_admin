@@ -57,7 +57,7 @@ const LocationForm = ({ parentForm }: LocationFormProps) => {
             existingObjects: [],
             existingLabels: [],
             formTitle: 'Add Service Area',
-            formItems: (_, ref) => <AddServiceAreaForm ref={ref} />,
+            formItems: () => <AddServiceAreaForm />,
             parseFields: {},
             parseObject: {},
           }}
@@ -72,7 +72,7 @@ const LocationForm = ({ parentForm }: LocationFormProps) => {
             existingObjects: [],
             existingLabels: [],
             formTitle: 'Add Service At Location',
-            formItems: (form, ref) => (
+            formItems: (form) => (
               <AddServiceAtLocationForm
                 parentForm={form}
                 existingServiceAreas={existingServiceAreas}
@@ -87,7 +87,6 @@ const LocationForm = ({ parentForm }: LocationFormProps) => {
                 ]}
                 existingSchedules={existingSchedules}
                 existingLocations={organization?.locations ?? []}
-                ref={ref}
               />
             ),
             parseFields: {},

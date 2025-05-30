@@ -1,14 +1,9 @@
 import { Form, Input, Tooltip } from 'antd';
-import { forwardRef, JSX, useImperativeHandle } from 'react';
+import { JSX } from 'react';
 
-const AddAccessibilityForm = forwardRef((_, ref): JSX.Element => {
-  useImperativeHandle(ref, () => ({
-    resetState: () => {},
-  }));
-
+const AddAccessibilityForm = (): JSX.Element => {
   return (
     <>
-      {' '}
       <Form.Item
         label={
           <Tooltip
@@ -51,6 +46,6 @@ const AddAccessibilityForm = forwardRef((_, ref): JSX.Element => {
       </Form.Item>
     </>
   );
-});
+};
 
 export default AddAccessibilityForm;

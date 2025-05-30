@@ -1,11 +1,7 @@
 import { Form, Input, Tooltip, Select } from 'antd';
-import { forwardRef, JSX, useImperativeHandle } from 'react';
+import { JSX } from 'react';
 
-const AddAddressForm = forwardRef((_, ref): JSX.Element => {
-  useImperativeHandle(ref, () => ({
-    resetState: () => {},
-  }));
-
+const AddAddressForm = (): JSX.Element => {
   return (
     <>
       <div className="flex flex-row gap-2">
@@ -154,6 +150,6 @@ const AddAddressForm = forwardRef((_, ref): JSX.Element => {
       </div>
     </>
   );
-});
+};
 
 export default AddAddressForm;

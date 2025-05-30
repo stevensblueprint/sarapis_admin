@@ -1,11 +1,7 @@
 import { Form, Tooltip, Input } from 'antd';
-import { JSX, forwardRef, useImperativeHandle } from 'react';
+import { JSX } from 'react';
 
-const AddLanguageForm = forwardRef((_, ref): JSX.Element => {
-  useImperativeHandle(ref, () => ({
-    resetState: () => {},
-  }));
-
+const AddLanguageForm = (): JSX.Element => {
   return (
     <>
       <div className="flex flex-row gap-2">
@@ -53,6 +49,6 @@ const AddLanguageForm = forwardRef((_, ref): JSX.Element => {
       </Form.Item>
     </>
   );
-});
+};
 
 export default AddLanguageForm;
