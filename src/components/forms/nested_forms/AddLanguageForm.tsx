@@ -8,7 +8,6 @@ const AddLanguageForm = forwardRef((_, ref): JSX.Element => {
 
   return (
     <>
-      {' '}
       <div className="flex flex-row gap-2">
         <Form.Item
           className="w-2/3"

@@ -11,6 +11,9 @@ import ContactForm from './ContactForm';
 import { createService } from '../../api/lib/services';
 import { Service } from '../../interface/model/Service';
 import { ServiceFormObject } from '../../interface/model/ServiceFormObject';
+import Contact from '../../interface/model/Contact';
+import Phone from '../../interface/model/Phone';
+import Language from '../../interface/model/Language';
 
 const { Step } = Steps;
 
@@ -27,6 +30,16 @@ const ServiceForm = ({
   const [formData, setFormData] = useState<ServiceFormObject>({});
   const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false);
   const [submitModalData, setSubmitModalData] = useState<string>('');
+
+  const [existingContacts, setExistingContacts] = useState<Contact[]>([]);
+  const [existingPhones, setExistingPhones] = useState<Phone[]>([]);
+  const [existingLanguages, setExistingLanguages] = useState<Language[]>([]);
+
+  useEffect(() => {
+    setExistingContacts(form.getFieldValue('contacts') ?? []);
+    setExistingPhones(form.getFieldValue('phones') ?? []);
+    setExistingLanguages(form.getFieldValue('languages') ?? []);
+  }, [form]);
 
   const steps = [
     {
@@ -55,7 +68,14 @@ const ServiceForm = ({
     },
     {
       title: 'Contact',
-      content: <ContactForm parentForm={form} />,
+      content: (
+        <ContactForm
+          existingContacts={[]}
+          existingPhones={[]}
+          existingLanguages={existingLanguages}
+          parentForm={form}
+        />
+      ),
     },
     {
       title: 'Location',

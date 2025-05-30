@@ -2,7 +2,7 @@ import { ColumnsType } from 'antd/es/table';
 import { Button, Form, Table, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { DeleteOutlined } from '@ant-design/icons';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import JSONDataModal from '../JSONDataModal';
 import NestedForm from './NestedForm';
 import { DisplayTableProps } from '../../utils/form/FormUtils';
@@ -29,19 +29,19 @@ const DisplayTable = <T extends { metadata?: any }>({
     parseObject,
   },
 }: DisplayTableProps<T>) => {
-  const [objectData, setObjectData] = useState<T[]>([]);
   const [showObjectModal, setShowObjectModal] = useState<boolean>(false);
   const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
   const [JSONData, setJSONData] = useState<T>();
-
-  useEffect(() => {
-    setObjectData(parentForm.getFieldValue([fieldLabel]) || []);
-  }, [parentForm, fieldLabel]);
+  const objectData = Form.useWatch(fieldLabel, parentForm) || [];
 
   const handleAddObject = (object: T) => {
-    setObjectData(
-      handleAddNestedObject(object, objectData, fieldLabel, parentForm)
+    const updated = handleAddNestedObject(
+      object,
+      objectData,
+      fieldLabel,
+      parentForm
     );
+    parentForm.setFieldsValue({ [fieldLabel]: updated });
   };
 
   const tableColumns: ColumnsType<T> = [
@@ -58,14 +58,14 @@ const DisplayTable = <T extends { metadata?: any }>({
           size="small"
           onClick={(e) => {
             e.stopPropagation();
-            setObjectData(
-              handleDeleteNestedObject(
+            parentForm.setFieldsValue({
+              [fieldLabel]: handleDeleteNestedObject(
                 record,
                 objectData,
                 fieldLabel,
                 parentForm
-              )
-            );
+              ),
+            });
           }}
         />
       ),

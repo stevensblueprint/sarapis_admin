@@ -1,190 +1,40 @@
-import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  message,
-  Select,
-  Divider,
-  InputNumber,
-  Table,
-  Tooltip,
-} from 'antd';
-import { useState } from 'react';
-import Phone from '../../../interface/model/Phone';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Form, Tooltip, Input, Select, InputNumber, FormInstance } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import { JSX, forwardRef, useImperativeHandle } from 'react';
+import DisplayTable from '../DisplayTable';
 import Language from '../../../interface/model/Language';
 import AddLanguageForm from './AddLanguageForm';
-import AddAttributeForm from './AddAttributeForm';
-import Attribute from '../../../interface/model/Attribute';
-import JSONDataModal from '../../JSONDataModal';
 
-const AddPhoneForm = ({
-  showModal,
-  closeModal,
-  addObject,
-  objectData,
-  existingPhones,
-}: {
-  showModal: boolean;
-  closeModal: () => void;
-  addObject: (phone: Phone) => void;
-  objectData: Phone[];
-  existingPhones: Phone[];
-}) => {
-  const [form] = Form.useForm();
-  const [messageApi, contextHolder] = message.useMessage();
-  const [showLanguageModal, setShowLanguageModal] = useState<boolean>(false);
-  const [languageData, setLanguageData] = useState<Language[]>([]);
-  const [showAttributeModal, setShowAttributeModal] = useState<boolean>(false);
-  const [attributeData, setAttributeData] = useState<Attribute[]>([]);
-  const [showJSONModal, setShowJSONModal] = useState<boolean>(false);
-  const [JSONData, setJSONData] = useState<object>();
-  const [selectedPhone, setSelectedPhone] = useState<Phone | null>();
+interface AddPhoneFormProps {
+  parentForm: FormInstance;
+  existingLanguages: Language[];
+}
 
-  const languageColumns: ColumnsType = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      width: '30%',
-      ellipsis: true,
-    },
-    {
-      title: 'Note',
-      dataIndex: 'note',
-      width: '60%',
-      ellipsis: true,
-    },
-    {
-      title: '',
-      key: 'delete',
-      width: '10%',
-      align: 'center',
-      render: (record: Language) => (
-        <Button
-          danger
-          icon={<DeleteOutlined />}
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteLanguage(record);
-          }}
-        />
-      ),
-    },
-  ];
+const AddPhoneForm = forwardRef(
+  ({ parentForm, existingLanguages }: AddPhoneFormProps, ref): JSX.Element => {
+    useImperativeHandle(ref, () => ({
+      resetState: () => {},
+    }));
 
-  const handleAddAttribute = (attribute: Attribute) => {
-    const newAttributes = [...attributeData, attribute];
-    setAttributeData(newAttributes);
-    form.setFieldsValue({ attributes: newAttributes });
-  };
+    const languageColumns: ColumnsType = [
+      {
+        title: 'Name',
+        dataIndex: 'name',
+        width: '30%',
+        ellipsis: true,
+      },
+      {
+        title: 'Note',
+        dataIndex: 'note',
+        width: '60%',
+        ellipsis: true,
+      },
+    ];
 
-  const handleAddLanguage = (language: Language) => {
-    const newLanguages = [...languageData, language];
-    setLanguageData(newLanguages);
-  };
-
-  const handleDeleteLanguage = (languageToDelete: Language) => {
-    const updatedLanguages = languageData.filter(
-      (language) => language !== languageToDelete
-    );
-    setLanguageData(updatedLanguages);
-  };
-
-  const isDuplicate = (newPhone: Phone) => {
-    return objectData.some(
-      (existing) => JSON.stringify(existing) === JSON.stringify(newPhone)
-    );
-  };
-
-  const handleSelect = (jsonValue: string) => {
-    const phone = JSON.parse(jsonValue) as Phone;
-    form.setFieldsValue(phone);
-    setLanguageData(phone.languages ?? []);
-    setSelectedPhone(phone);
-    setAttributeData(phone.attributes ?? []);
-  };
-
-  const addNewObject = async () => {
-    const values = await form.validateFields();
-    const newPhone: Phone = { ...values, languages: languageData };
-    if (isDuplicate(newPhone)) {
-      showError();
-      return;
-    }
-    addObject(newPhone);
-    closeModal();
-    form.resetFields();
-    setLanguageData([]);
-    setSelectedPhone(null);
-  };
-
-  const showError = () => {
-    messageApi.open({
-      type: 'error',
-      content: 'Duplicate phones not allowed!',
-      duration: 5,
-    });
-  };
-
-  return (
-    <Modal
-      open={showModal}
-      onCancel={() => {
-        closeModal();
-        form.resetFields();
-        setLanguageData([]);
-        setSelectedPhone(null);
-      }}
-      title="Add Phone"
-      footer={
-        <Button type="primary" onClick={addNewObject}>
-          Add
-        </Button>
-      }
-    >
-      <JSONDataModal
-        showModal={showJSONModal}
-        closeModal={() => setShowJSONModal(false)}
-        data={JSONData ?? {}}
-      />
-      {contextHolder}
-      <div className="flex flex-col gap-2 pb-2">
-        <strong>Select Existing Phone</strong>
-        <Select
-          showSearch
-          placeholder="Select a Phone"
-          options={Array.from(
-            new Set(
-              existingPhones.map((value) => {
-                delete value.metadata;
-                return JSON.stringify(value);
-              })
-            )
-          )
-            .map((value) => JSON.parse(value) as Phone)
-            .map((phone) => ({
-              value: JSON.stringify(phone),
-              label: phone.extension
-                ? `${phone.number} Ext. ${phone.extension}`
-                : phone.number,
-            }))}
-          onSelect={handleSelect}
-          value={selectedPhone ? JSON.stringify(selectedPhone) : undefined}
-        />
-      </div>
-
-      <Divider />
-
-      <div className="pb-2">
-        <strong>Create New Phone</strong>
-      </div>
-
-      <Form form={form} layout="vertical" requiredMark={false}>
+    return (
+      <>
         <Form.Item label="ID" name="id">
-          <Input disabled value={selectedPhone?.id ?? undefined} />
+          <Input disabled />
         </Form.Item>
         <div className="flex flex-row gap-2">
           <Form.Item
@@ -251,71 +101,24 @@ const AddPhoneForm = ({
         >
           <Input.TextArea rows={5} />
         </Form.Item>
-        <Form.Item
-          label={
-            <div className="flex flex-row items-center gap-2 pt-2">
-              <Tooltip
-                placement="topLeft"
-                title="The details of the languages that are spoken at locations or services. This does not include languages which can only be used with interpretation."
-              >
-                Languages
-              </Tooltip>
-              <Button
-                icon={<PlusOutlined />}
-                onClick={() => setShowLanguageModal(true)}
-                size="small"
-              />
-            </div>
-          }
-          name="languages"
-        >
-          <Table
-            columns={languageColumns}
-            dataSource={languageData}
-            onRow={(record) => ({
-              onClick: () => {
-                setJSONData(record);
-                setShowJSONModal(true);
-              },
-              className: 'hover:cursor-pointer',
-            })}
-          />
-        </Form.Item>
-        <AddLanguageForm
-          showModal={showLanguageModal}
-          closeModal={() => setShowLanguageModal(false)}
-          addObject={handleAddLanguage}
-          objectData={languageData}
+        <DisplayTable<Language>
+          columns={languageColumns}
+          parentForm={parentForm}
+          fieldLabel="languages"
+          tooltipTitle="The details of the languages that are spoken at locations or services. This does not include languages which can only be used with interpretation."
+          formLabel="Languages"
+          formProps={{
+            existingObjects: existingLanguages,
+            existingLabels: ['name', 'note'],
+            formTitle: 'Add Language',
+            formItems: (_, ref) => <AddLanguageForm ref={ref} />,
+            parseFields: {},
+            parseObject: {},
+          }}
         />
-        <Form.Item
-          label={
-            <div className="flex flex-row items-center gap-2">
-              <Tooltip
-                placement="topLeft"
-                title="A link between a service and one or more classifications that describe the nature of the service provided."
-              >
-                Attributes
-              </Tooltip>
-              <Button
-                icon={<PlusOutlined />}
-                onClick={() => setShowAttributeModal(true)}
-                size="small"
-              />
-            </div>
-          }
-          name="attributes"
-        >
-          <Select mode="multiple" allowClear />
-        </Form.Item>
-        <AddAttributeForm
-          showModal={showAttributeModal}
-          closeModal={() => setShowAttributeModal(false)}
-          addObject={handleAddAttribute}
-          objectData={attributeData}
-        />
-      </Form>
-    </Modal>
-  );
-};
+      </>
+    );
+  }
+);
 
 export default AddPhoneForm;

@@ -79,4 +79,41 @@ export const scheduleParser: Record<string, ParseFieldEntry> = {
   },
 };
 
-export const reverseScheduleParser: Record<string, ParseFieldEntry> = {};
+export const reverseScheduleParser: Record<string, ParseFieldEntry> = {
+  'valid_dates.0': {
+    parser: (valid_from: string) => new Dayjs(valid_from),
+    inputPath: 'valid_from',
+  },
+  'valid_dates.1': {
+    parser: (valid_to: string) => new Dayjs(valid_to),
+    inputPath: 'valid_to',
+  },
+  'occurrence.0': {
+    parser: (dtstart: string) => new Dayjs(dtstart),
+    inputPath: 'dtstart',
+  },
+  'occurrence.1': {
+    parser: (until: string) => new Dayjs(until),
+    inputPath: 'until',
+  },
+  'valid_hours.0': {
+    parser: (opens_at: string) => new Dayjs(opens_at),
+    inputPath: 'opens_at',
+  },
+  'valid_hours.1': {
+    parser: (closes_at: string) => new Dayjs(closes_at),
+    inputPath: 'closes_at',
+  },
+  byday: {
+    parser: (arr: string) => arr?.split(',') ?? undefined,
+  },
+  byweekno: {
+    parser: (arr: string) => arr?.split(',') ?? undefined,
+  },
+  bymonthday: {
+    parser: (arr: string) => arr?.split(',') ?? undefined,
+  },
+  byyearday: {
+    parser: (arr: string) => arr?.split(',') ?? undefined,
+  },
+};
