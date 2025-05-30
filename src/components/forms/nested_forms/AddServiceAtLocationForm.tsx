@@ -50,21 +50,18 @@ const AddServiceAtLocationForm = forwardRef(
   ): JSX.Element => {
     useImperativeHandle(ref, () => ({
       resetState: () => {
-        setSelectedLocation(undefined);
         setShowLocationModal(false);
       },
     }));
 
     const [showLocationModal, setShowLocationModal] = useState<boolean>(false);
-    const [selectedLocation, setSelectedLocation] = useState<Location>();
+    const selectedLocation = Form.useWatch('location', parentForm);
 
     const handleAddLocation = (newLocation: Location) => {
-      setSelectedLocation(newLocation);
       parentForm.setFieldsValue({ location: newLocation });
     };
 
     const handleDeleteLocation = () => {
-      setSelectedLocation(undefined);
       parentForm.setFieldsValue({ location: undefined });
     };
 
@@ -202,9 +199,9 @@ const AddServiceAtLocationForm = forwardRef(
             closeModal={() => setShowLocationModal(false)}
             addObject={handleAddLocation}
             objectData={[selectedLocation ?? {}]}
-            formItems={() => (
+            formItems={(form) => (
               <AddLocationForm
-                parentForm={parentForm}
+                parentForm={form}
                 existingContacts={existingContacts}
                 existingLanguages={existingLanguages}
                 existingPhones={existingPhones}

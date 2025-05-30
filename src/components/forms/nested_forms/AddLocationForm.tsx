@@ -1,5 +1,4 @@
 import { Form, Input, Tooltip, InputNumber, FormInstance } from 'antd';
-import { useState, useEffect } from 'react';
 import Contact from '../../../interface/model/Contact';
 import Phone from '../../../interface/model/Phone';
 import Schedule from '../../../interface/model/Schedule';
@@ -21,7 +20,6 @@ import {
   scheduleColumns,
   phoneColumns,
 } from '../../../data/FormTableColumns';
-import Organization from '../../../interface/model/Organization';
 import {
   scheduleParser,
   reverseScheduleParser,
@@ -42,12 +40,6 @@ const AddLocationForm = ({
   existingPhones,
   existingSchedules,
 }: AddLocationFormProps) => {
-  const [organization, setOrganization] = useState<Organization | undefined>();
-
-  useEffect(() => {
-    setOrganization(parentForm.getFieldValue('organization') ?? undefined);
-  }, [parentForm]);
-
   return (
     <>
       <div className="flex justify-center w-full">
@@ -203,18 +195,12 @@ const AddLocationForm = ({
         tooltipTitle="The details of the named contacts for services and organizations."
         formLabel="Contacts"
         formProps={{
-          existingObjects: organization
-            ? [...organization.contacts!, ...existingContacts]
-            : existingContacts,
+          existingObjects: existingContacts,
           existingLabels: ['name', 'email'],
           formTitle: 'Add Contact',
           formItems: (form, ref) => (
             <AddContactForm
-              existingPhones={
-                organization
-                  ? [...organization.phones!, ...existingPhones]
-                  : existingPhones
-              }
+              existingPhones={existingPhones}
               existingLanguages={existingLanguages}
               parentForm={form}
               ref={ref}
@@ -246,9 +232,7 @@ const AddLocationForm = ({
         tooltipTitle="The details of the telephone numbers used to contact organizations, services, and locations."
         formLabel="Phones"
         formProps={{
-          existingObjects: organization
-            ? [...organization.phones!, ...existingPhones]
-            : existingPhones,
+          existingObjects: existingPhones,
           existingLabels: ['number', 'extension'],
           formTitle: 'Add Phone',
           formItems: (form, ref) => (

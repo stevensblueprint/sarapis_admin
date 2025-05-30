@@ -207,5 +207,7 @@ export const handleSelect = <T extends Record<string, any>>(
 
   form.setFieldsValue(newObject);
 
+  console.log(newObject);
+
   return newObject;
 };
