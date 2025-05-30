@@ -20,6 +20,7 @@ const DisplayTable = <T extends { metadata?: any }>({
   fieldLabel,
   tooltipTitle,
   formLabel,
+  updateParentObject,
   formProps: {
     existingObjects,
     existingLabels,
@@ -27,6 +28,8 @@ const DisplayTable = <T extends { metadata?: any }>({
     formTitle,
     parseFields,
     parseObject,
+    modalWidth,
+    attributeClassName,
   },
 }: DisplayTableProps<T>) => {
   const [showObjectModal, setShowObjectModal] = useState<boolean>(false);
@@ -42,6 +45,7 @@ const DisplayTable = <T extends { metadata?: any }>({
       parentForm
     );
     parentForm.setFieldsValue({ [fieldLabel]: updated });
+    updateParentObject?.(updated);
   };
 
   const tableColumns: ColumnsType<T> = [
@@ -117,6 +121,8 @@ const DisplayTable = <T extends { metadata?: any }>({
         formTitle={formTitle}
         parseFields={parseFields}
         parseObject={parseObject}
+        modalWidth={modalWidth ?? 520}
+        attributeClassName={attributeClassName ?? 'w-full'}
       />
     </>
   );

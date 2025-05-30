@@ -29,6 +29,7 @@ export interface NestedFormProps<T> {
   parseObject: Record<string, ParseFieldEntry>;
   attributeClassName?: string;
   nestedExistingObjects?: any[];
+  modalWidth: string | number;
 }
 
 export interface DisplayTableProps<T> {
@@ -38,6 +39,7 @@ export interface DisplayTableProps<T> {
   fieldLabel: string;
   tooltipTitle: string;
   formLabel: string;
+  updateParentObject?: (objects: T[]) => void;
   formProps: {
     existingObjects: T[];
     existingLabels: string[];
@@ -45,6 +47,8 @@ export interface DisplayTableProps<T> {
     formTitle: string;
     parseFields: Record<string, ParseFieldEntry>;
     parseObject: Record<string, ParseFieldEntry>;
+    modalWidth?: string | number;
+    attributeClassName?: string;
   };
 }
 
@@ -159,8 +163,7 @@ export const handleAddObject = async <T>(
 export const handleSelect = <T extends Record<string, any>>(
   jsonValue: string,
   parseFields: Record<string, ParseFieldEntry>,
-  form: FormInstance,
-  setters: SetterEntry<any>[]
+  form: FormInstance
 ): T => {
   const rawObject = JSON.parse(jsonValue) as T;
   const newObject = { ...rawObject };
@@ -170,11 +173,6 @@ export const handleSelect = <T extends Record<string, any>>(
     const rawValue = getNestedValue(rawObject, targetPath);
     const parsedValue = parser(rawValue);
     setNestedValue(newObject, outputPath, parsedValue);
-  });
-
-  setters.forEach(({ setObjectState, formLabel }) => {
-    const value = getNestedValue(newObject, formLabel);
-    setObjectState(value);
   });
 
   Object.entries(parseFields).forEach(([outputPath, { inputPath }]) => {

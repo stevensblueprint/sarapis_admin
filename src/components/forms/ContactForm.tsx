@@ -11,18 +11,17 @@ import Language from '../../interface/model/Language';
 
 interface ContactFormProps {
   parentForm: FormInstance;
-  existingContacts: Contact[];
-  existingPhones: Phone[];
-  existingLanguages: Language[];
 }
 
-const ContactForm = ({
-  parentForm,
-  existingContacts,
-  existingLanguages,
-  existingPhones,
-}: ContactFormProps) => {
+const ContactForm = ({ parentForm }: ContactFormProps) => {
   const [organization, setOrganization] = useState<Organization | undefined>();
+  const [existingPhones, setExistingPhones] = useState<Phone[]>([]);
+  const [existingLanguages, setExistingLanguages] = useState<Language[]>([]);
+
+  useEffect(() => {
+    setExistingLanguages(parentForm.getFieldValue('languages') ?? []);
+    setExistingPhones(parentForm.getFieldValue('phones') ?? []);
+  }, [parentForm]);
 
   const contactColumns: ColumnsType = [
     {
@@ -85,10 +84,9 @@ const ContactForm = ({
           fieldLabel="phones"
           tooltipTitle="The details of the telephone numbers used to contact organizations, services, and locations."
           formLabel="Phones"
+          updateParentObject={(objects: Phone[]) => setExistingPhones(objects)}
           formProps={{
-            existingObjects: organization
-              ? [...organization.phones!, ...existingPhones]
-              : existingPhones,
+            existingObjects: organization?.phones ?? [],
             existingLabels: ['number', 'extension'],
             formTitle: 'Add Phone',
             formItems: (form, ref) => (
@@ -109,9 +107,7 @@ const ContactForm = ({
           tooltipTitle="The details of the named contacts for services and organizations."
           formLabel="Contacts"
           formProps={{
-            existingObjects: organization
-              ? [...organization.contacts!, ...existingContacts]
-              : existingContacts,
+            existingObjects: organization?.contacts ?? [],
             existingLabels: ['name', 'email'],
             formTitle: 'Add Contact',
             formItems: (form, ref) => (

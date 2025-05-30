@@ -10,10 +10,6 @@ import LocationForm from './LocationForm';
 import ContactForm from './ContactForm';
 import { createService } from '../../api/lib/services';
 import { Service } from '../../interface/model/Service';
-import { ServiceFormObject } from '../../interface/model/ServiceFormObject';
-import Contact from '../../interface/model/Contact';
-import Phone from '../../interface/model/Phone';
-import Language from '../../interface/model/Language';
 
 const { Step } = Steps;
 
@@ -27,19 +23,8 @@ const ServiceForm = ({
   const [showServiceModal, setShowServiceModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [form] = Form.useForm();
-  const [formData, setFormData] = useState<ServiceFormObject>({});
   const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false);
   const [submitModalData, setSubmitModalData] = useState<string>('');
-
-  const [existingContacts, setExistingContacts] = useState<Contact[]>([]);
-  const [existingPhones, setExistingPhones] = useState<Phone[]>([]);
-  const [existingLanguages, setExistingLanguages] = useState<Language[]>([]);
-
-  useEffect(() => {
-    setExistingContacts(form.getFieldValue('contacts') ?? []);
-    setExistingPhones(form.getFieldValue('phones') ?? []);
-    setExistingLanguages(form.getFieldValue('languages') ?? []);
-  }, [form]);
 
   const steps = [
     {
@@ -68,18 +53,20 @@ const ServiceForm = ({
     },
     {
       title: 'Contact',
-      content: (
-        <ContactForm
-          existingContacts={[]}
-          existingPhones={[]}
-          existingLanguages={existingLanguages}
-          parentForm={form}
-        />
-      ),
+      content: <ContactForm parentForm={form} />,
     },
     {
       title: 'Location',
-      content: <LocationForm parentForm={form} />,
+      content: (
+        <LocationForm
+          existingContacts={[]}
+          existingLanguages={[]}
+          existingPhones={[]}
+          existingSchedules={[]}
+          existingServiceAreas={[]}
+          parentForm={form}
+        />
+      ),
     },
   ];
 
@@ -90,28 +77,36 @@ const ServiceForm = ({
 
   const next = async () => {
     const values = await form.validateFields();
+    const all = form.getFieldsValue(true);
+    const merged = {
+      ...values,
+      ...all,
+    };
+    form.setFieldsValue(merged);
     setCurrentStep(currentStep + 1);
-    setFormData((prev) => ({ ...prev, ...values }));
-    form.setFieldsValue(values);
   };
 
   const prev = async () => {
     const values = await form.validateFields();
+    const all = form.getFieldsValue(true);
+    const merged = {
+      ...values,
+      ...all,
+    };
+    form.setFieldsValue(merged);
     setCurrentStep(currentStep - 1);
-    setFormData((prev) => ({ ...prev, ...values }));
-    form.setFieldsValue(values);
   };
 
   const handleSubmit = async () => {
     const values = await form.validateFields();
+    const all = form.getFieldsValue(true);
     const service: Service = {
-      ...formData,
+      ...all,
       ...values,
       last_modified:
-        formData.last_modified?.format('YYYY-MM-DD[T]HH:mm:ss:SSS') ??
-        undefined,
-      assured_date: formData.assured_date?.format('YYYY-MM-DD') ?? undefined,
-      organization: { id: formData.organization!.id },
+        all.last_modified?.format('YYYY-MM-DD[T]HH:mm:ss:SSS') ?? undefined,
+      assured_date: all.assured_date?.format('YYYY-MM-DD') ?? undefined,
+      organization: { id: all.organization!.id },
     };
     try {
       await createService(service);
@@ -130,7 +125,6 @@ const ServiceForm = ({
       onOk() {
         closeModal();
         form.resetFields();
-        setFormData({});
       },
       onCancel() {},
     });

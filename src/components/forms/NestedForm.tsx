@@ -24,6 +24,7 @@ const NestedForm = <T extends { metadata?: any }>({
   parseFields,
   parseObject,
   attributeClassName,
+  modalWidth,
 }: NestedFormProps<T>) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
@@ -48,6 +49,12 @@ const NestedForm = <T extends { metadata?: any }>({
         value: JSON.stringify(obj),
         label: existingLabels
           .map((label) => getNestedValue(obj, label))
+          .filter((val) => {
+            if (val === undefined || val === null) return false;
+            if (typeof val === 'string' && val.trim() === '') return false;
+            if (Array.isArray(val) && val.length === 0) return false;
+            return true;
+          })
           .join(' - '),
       }));
 
@@ -65,6 +72,7 @@ const NestedForm = <T extends { metadata?: any }>({
         formRef.current?.resetState();
       }}
       title={formTitle}
+      width={modalWidth ?? 520}
       footer={
         <Button
           type="primary"
@@ -96,9 +104,7 @@ const NestedForm = <T extends { metadata?: any }>({
               placeholder="Select..."
               options={createSelectOptions(existingObjects)}
               onSelect={(value) =>
-                setSelectedObject(
-                  handleSelect(value, parseObject, form, []) as T
-                )
+                setSelectedObject(handleSelect(value, parseObject, form) as T)
               }
               value={
                 selectedObject ? JSON.stringify(selectedObject) : undefined
@@ -114,27 +120,29 @@ const NestedForm = <T extends { metadata?: any }>({
       )}
       <Form form={form} layout="vertical" requiredMark={false}>
         {formItems(form, formRef)}
-        <Form.Item
-          className={`${attributeClassName ?? ''}`}
-          label={
-            <div className="flex flex-row items-center gap-2">
-              <Tooltip
-                placement="topLeft"
-                title="A link between a service and one or more classifications that describe the nature of the service provided."
-              >
-                Attributes
-              </Tooltip>
-              <Button
-                icon={<PlusOutlined />}
-                onClick={() => setShowAttributeModal(true)}
-                size="small"
-              />
-            </div>
-          }
-          name="attributes"
-        >
-          <Select mode="multiple" allowClear />
-        </Form.Item>
+        <div className="flex justify-center">
+          <Form.Item
+            className={`${attributeClassName ?? ''}`}
+            label={
+              <div className="flex flex-row items-center gap-2">
+                <Tooltip
+                  placement="topLeft"
+                  title="A link between a service and one or more classifications that describe the nature of the service provided."
+                >
+                  Attributes
+                </Tooltip>
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() => setShowAttributeModal(true)}
+                  size="small"
+                />
+              </div>
+            }
+            name="attributes"
+          >
+            <Select mode="multiple" allowClear />
+          </Form.Item>
+        </div>
         <AddAttributeForm
           parentForm={form}
           showModal={showAttributeModal}
