@@ -25,6 +25,12 @@ import Location from '../../../interface/model/Location';
 import AddLocationForm from './AddLocationForm';
 import NestedForm from '../NestedForm';
 import JSONDataModal from '../../JSONDataModal';
+import {
+  contactExistingLabels,
+  scheduleExistingLabels,
+  phoneExistingLabels,
+  serviceAreaExistingLabels,
+} from '../../../data/FormExistingLabels';
 
 interface AddServiceAtLocationFormProps {
   parentForm: FormInstance;
@@ -98,7 +104,7 @@ const AddServiceAtLocationForm = forwardRef(
           formLabel="Service Areas"
           formProps={{
             existingObjects: existingServiceAreas,
-            existingLabels: ['name', 'description'],
+            existingLabels: serviceAreaExistingLabels,
             formTitle: 'Add Service Area',
             formItems: (_, ref) => <AddServiceAreaForm ref={ref} />,
             parseFields: {},
@@ -113,7 +119,7 @@ const AddServiceAtLocationForm = forwardRef(
           formLabel="Contacts"
           formProps={{
             existingObjects: existingContacts,
-            existingLabels: ['name', 'email'],
+            existingLabels: contactExistingLabels,
             formTitle: 'Add Contact',
             formItems: (form, ref) => (
               <AddContactForm
@@ -135,7 +141,7 @@ const AddServiceAtLocationForm = forwardRef(
           formLabel="Phones"
           formProps={{
             existingObjects: existingPhones,
-            existingLabels: ['number', 'extension'],
+            existingLabels: phoneExistingLabels,
             formTitle: 'Add Phone',
             formItems: (form, ref) => (
               <AddPhoneForm
@@ -156,7 +162,7 @@ const AddServiceAtLocationForm = forwardRef(
           formLabel="Schedules"
           formProps={{
             existingObjects: existingSchedules,
-            existingLabels: ['description'],
+            existingLabels: scheduleExistingLabels,
             formTitle: 'Add Schedule',
             formItems: (_, ref) => <AddScheduleForm ref={ref} />,
             parseFields: scheduleParser,

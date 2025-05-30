@@ -8,6 +8,10 @@ import Phone from '../../interface/model/Phone';
 import DisplayTable from './DisplayTable';
 import Language from '../../interface/model/Language';
 import { contactColumns, phoneColumns } from '../../data/FormTableColumns';
+import {
+  phoneExistingLabels,
+  contactExistingLabels,
+} from '../../data/FormExistingLabels';
 
 interface ContactFormProps {
   parentForm: FormInstance;
@@ -36,7 +40,7 @@ const ContactForm = ({ parentForm }: ContactFormProps) => {
           updateParentObject={(objects: Phone[]) => setExistingPhones(objects)}
           formProps={{
             existingObjects: organization?.phones ?? [],
-            existingLabels: ['number', 'extension'],
+            existingLabels: phoneExistingLabels,
             formTitle: 'Add Phone',
             formItems: (form, ref) => (
               <AddPhoneForm
@@ -57,7 +61,7 @@ const ContactForm = ({ parentForm }: ContactFormProps) => {
           formLabel="Contacts"
           formProps={{
             existingObjects: organization?.contacts ?? [],
-            existingLabels: ['name', 'email'],
+            existingLabels: contactExistingLabels,
             formTitle: 'Add Contact',
             formItems: (form, ref) => (
               <AddContactForm

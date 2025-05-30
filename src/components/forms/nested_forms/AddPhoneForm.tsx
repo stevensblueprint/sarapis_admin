@@ -4,6 +4,7 @@ import DisplayTable from '../DisplayTable';
 import Language from '../../../interface/model/Language';
 import AddLanguageForm from './AddLanguageForm';
 import { languageColumns } from '../../../data/FormTableColumns';
+import { scheduleExistingLabels } from '../../../data/FormExistingLabels';
 
 interface AddPhoneFormProps {
   parentForm: FormInstance;
@@ -94,7 +95,7 @@ const AddPhoneForm = forwardRef(
           formLabel="Languages"
           formProps={{
             existingObjects: existingLanguages,
-            existingLabels: ['name', 'note'],
+            existingLabels: scheduleExistingLabels,
             formTitle: 'Add Language',
             formItems: (_, ref) => <AddLanguageForm ref={ref} />,
             parseFields: {},

@@ -24,6 +24,12 @@ import {
   scheduleParser,
   reverseScheduleParser,
 } from '../../../utils/form/ParseUtils';
+import {
+  phoneExistingLabels,
+  contactExistingLabels,
+  scheduleExistingLabels,
+  languageExistingLabels,
+} from '../../../data/FormExistingLabels';
 
 interface AddLocationFormProps {
   parentForm: FormInstance;
@@ -166,7 +172,7 @@ const AddLocationForm = ({
         formLabel="Languages"
         formProps={{
           existingObjects: existingLanguages,
-          existingLabels: ['name', 'note'],
+          existingLabels: languageExistingLabels,
           formTitle: 'Add Language',
           formItems: (_, ref) => <AddLanguageForm ref={ref} />,
           parseFields: {},
@@ -196,7 +202,7 @@ const AddLocationForm = ({
         formLabel="Contacts"
         formProps={{
           existingObjects: existingContacts,
-          existingLabels: ['name', 'email'],
+          existingLabels: contactExistingLabels,
           formTitle: 'Add Contact',
           formItems: (form, ref) => (
             <AddContactForm
@@ -233,7 +239,7 @@ const AddLocationForm = ({
         formLabel="Phones"
         formProps={{
           existingObjects: existingPhones,
-          existingLabels: ['number', 'extension'],
+          existingLabels: phoneExistingLabels,
           formTitle: 'Add Phone',
           formItems: (form, ref) => (
             <AddPhoneForm
@@ -254,7 +260,7 @@ const AddLocationForm = ({
         formLabel="Schedules"
         formProps={{
           existingObjects: existingSchedules,
-          existingLabels: ['description'],
+          existingLabels: scheduleExistingLabels,
           formTitle: 'Add Schedule',
           formItems: (_, ref) => <AddScheduleForm ref={ref} />,
           parseFields: scheduleParser,

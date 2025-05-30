@@ -16,6 +16,7 @@ import ServiceCapacity from '../../interface/model/ServiceCapacity';
 import { Dayjs } from 'dayjs';
 import Funding from '../../interface/model/Funding';
 import JSONDataModal from '../JSONDataModal';
+import { fundingExistingLabels } from '../../data/FormExistingLabels';
 
 const AdditionalInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
   const [showProgramModal, setShowProgramModal] = useState<boolean>(false);
@@ -77,7 +78,7 @@ const AdditionalInfoForm = ({ parentForm }: { parentForm: FormInstance }) => {
           formLabel="Funding Sources"
           formProps={{
             existingObjects: organization?.funding ?? [],
-            existingLabels: ['source'],
+            existingLabels: fundingExistingLabels,
             formTitle: 'Add Funding Source',
             formItems: (_, ref) => <AddFundingForm ref={ref} />,
             parseFields: {},

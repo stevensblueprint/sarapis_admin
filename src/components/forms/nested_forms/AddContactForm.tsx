@@ -5,6 +5,7 @@ import Phone from '../../../interface/model/Phone';
 import AddPhoneForm from './AddPhoneForm';
 import Language from '../../../interface/model/Language';
 import { phoneColumns } from '../../../data/FormTableColumns';
+import { phoneExistingLabels } from '../../../data/FormExistingLabels';
 
 interface AddContactFormProps {
   parentForm: FormInstance;
@@ -92,7 +93,7 @@ const AddContactForm = forwardRef(
           formLabel="Phones"
           formProps={{
             existingObjects: existingPhones,
-            existingLabels: ['number', 'extension'],
+            existingLabels: phoneExistingLabels,
             formTitle: 'Add Phone',
             formItems: (form, ref) => (
               <AddPhoneForm
