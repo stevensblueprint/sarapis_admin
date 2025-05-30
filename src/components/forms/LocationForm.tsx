@@ -14,22 +14,25 @@ import Schedule from '../../interface/model/Schedule';
 
 interface LocationFormProps {
   parentForm: FormInstance;
-  existingServiceAreas: ServiceArea[];
-  existingContacts: Contact[];
-  existingPhones: Phone[];
-  existingLanguages: Language[];
-  existingSchedules: Schedule[];
 }
 
-const LocationForm = ({
-  parentForm,
-  existingContacts,
-  existingLanguages,
-  existingPhones,
-  existingSchedules,
-  existingServiceAreas,
-}: LocationFormProps) => {
+const LocationForm = ({ parentForm }: LocationFormProps) => {
   const [organization, setOrganization] = useState<Organization | undefined>();
+  const [existingContacts, setExistingContacts] = useState<Contact[]>([]);
+  const [existingPhones, setExistingPhones] = useState<Phone[]>([]);
+  const [existingLanguages, setExistingLanguages] = useState<Language[]>([]);
+  const [existingSchedules, setExistingSchedules] = useState<Schedule[]>([]);
+  const [existingServiceAreas, setExistingServiceAreas] = useState<
+    ServiceArea[]
+  >([]);
+
+  useEffect(() => {
+    setExistingContacts(parentForm.getFieldValue('contacts') ?? []);
+    setExistingLanguages(parentForm.getFieldValue('languages') ?? []);
+    setExistingPhones(parentForm.getFieldValue('phones') ?? []);
+    setExistingSchedules(parentForm.getFieldValue('schedules') ?? []);
+    setExistingServiceAreas(parentForm.getFieldValue('service_areas') ?? []);
+  }, [parentForm]);
 
   const serviceAreaColumns: ColumnsType = [
     {
@@ -68,6 +71,9 @@ const LocationForm = ({
           fieldLabel="service_areas"
           tooltipTitle="The details of the geographic area for which a service is available."
           formLabel="Service Areas"
+          updateParentObject={(objects: ServiceArea[]) =>
+            setExistingServiceAreas(objects)
+          }
           formProps={{
             existingObjects: [],
             existingLabels: [],

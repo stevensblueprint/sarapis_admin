@@ -57,16 +57,7 @@ const ServiceForm = ({
     },
     {
       title: 'Location',
-      content: (
-        <LocationForm
-          existingContacts={[]}
-          existingLanguages={[]}
-          existingPhones={[]}
-          existingSchedules={[]}
-          existingServiceAreas={[]}
-          parentForm={form}
-        />
-      ),
+      content: <LocationForm parentForm={form} />,
     },
   ];
 

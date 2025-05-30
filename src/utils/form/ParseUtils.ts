@@ -2,6 +2,7 @@ import LinkType from '../../interface/model/LinkType';
 import TaxonomyTerm from '../../interface/model/TaxonomyTerm';
 import Taxonomy from '../../interface/model/Taxonomy';
 import { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 import { ParseFieldEntry } from './FormUtils';
 
@@ -80,29 +81,26 @@ export const scheduleParser: Record<string, ParseFieldEntry> = {
 };
 
 export const reverseScheduleParser: Record<string, ParseFieldEntry> = {
-  'valid_dates.0': {
-    parser: (valid_from: string) => new Dayjs(valid_from),
-    inputPath: 'valid_from',
+  valid_dates: {
+    parser: (values: [string | null, string | null]) =>
+      values[0] && values[1]
+        ? [dayjs(values[0], 'YYYY-MM-DD'), dayjs(values[1], 'YYYY-MM-DD')]
+        : undefined,
+    inputPath: ['valid_from', 'valid_to'],
   },
-  'valid_dates.1': {
-    parser: (valid_to: string) => new Dayjs(valid_to),
-    inputPath: 'valid_to',
+  occurrence: {
+    parser: (values: [string | null, string | null]) =>
+      values[0] && values[1]
+        ? [dayjs(values[0], 'YYYY-MM-DD'), dayjs(values[1], 'YYYY-MM-DD')]
+        : undefined,
+    inputPath: ['dtstart', 'until'],
   },
-  'occurrence.0': {
-    parser: (dtstart: string) => new Dayjs(dtstart),
-    inputPath: 'dtstart',
-  },
-  'occurrence.1': {
-    parser: (until: string) => new Dayjs(until),
-    inputPath: 'until',
-  },
-  'valid_hours.0': {
-    parser: (opens_at: string) => new Dayjs(opens_at),
-    inputPath: 'opens_at',
-  },
-  'valid_hours.1': {
-    parser: (closes_at: string) => new Dayjs(closes_at),
-    inputPath: 'closes_at',
+  valid_hours: {
+    parser: (values: [string | null, string | null]) =>
+      values[0] && values[1]
+        ? [dayjs(values[0], 'HH:mm'), dayjs(values[1], 'HH:mm')]
+        : undefined,
+    inputPath: ['opens_at', 'closes_at'],
   },
   byday: {
     parser: (arr: string) => arr?.split(',') ?? undefined,

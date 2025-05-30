@@ -12,8 +12,8 @@ export type SetterEntry<T> = {
 };
 
 export type ParseFieldEntry = {
-  parser: (val: any) => any;
-  inputPath?: string;
+  parser: (...args: any[]) => any;
+  inputPath?: string | string[];
 };
 
 export interface NestedFormProps<T> {
@@ -134,15 +134,27 @@ export const handleAddObject = async <T>(
     Object.entries(parseFields).forEach(
       ([outputPath, { parser, inputPath }]) => {
         const targetPath = inputPath ?? outputPath;
-        const rawValue = getNestedValue(values, targetPath);
-        const parsedValue = parser(rawValue);
-        setNestedValue(newObject, outputPath, parsedValue);
+        if (Array.isArray(targetPath)) {
+          const rawValues = targetPath.map((path) =>
+            getNestedValue(newObject, path)
+          );
+          const parsedValue = parser(rawValues);
+          setNestedValue(newObject, outputPath, parsedValue);
+        } else {
+          const rawValue = getNestedValue(newObject, targetPath);
+          const parsedValue = parser(rawValue);
+          setNestedValue(newObject, outputPath, parsedValue);
+        }
       }
     );
 
     Object.entries(parseFields).forEach(([outputPath, { inputPath }]) => {
       if (inputPath && inputPath !== outputPath) {
-        deleteNestedValue(newObject, inputPath);
+        if (Array.isArray(inputPath)) {
+          inputPath.map((path) => deleteNestedValue(newObject, path));
+        } else {
+          deleteNestedValue(newObject, inputPath);
+        }
       }
     });
 
@@ -170,14 +182,26 @@ export const handleSelect = <T extends Record<string, any>>(
 
   Object.entries(parseFields).forEach(([outputPath, { parser, inputPath }]) => {
     const targetPath = inputPath ?? outputPath;
-    const rawValue = getNestedValue(rawObject, targetPath);
-    const parsedValue = parser(rawValue);
-    setNestedValue(newObject, outputPath, parsedValue);
+    if (Array.isArray(targetPath)) {
+      const rawValues = targetPath.map((path) =>
+        getNestedValue(rawObject, path)
+      );
+      const parsedValue = parser(rawValues);
+      setNestedValue(newObject, outputPath, parsedValue);
+    } else {
+      const rawValue = getNestedValue(rawObject, targetPath);
+      const parsedValue = parser(rawValue);
+      setNestedValue(newObject, outputPath, parsedValue);
+    }
   });
 
   Object.entries(parseFields).forEach(([outputPath, { inputPath }]) => {
     if (inputPath && inputPath !== outputPath) {
-      deleteNestedValue(newObject, inputPath);
+      if (Array.isArray(inputPath)) {
+        inputPath.map((path) => deleteNestedValue(newObject, path));
+      } else {
+        deleteNestedValue(newObject, inputPath);
+      }
     }
   });
 
