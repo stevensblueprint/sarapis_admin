@@ -57,3 +57,11 @@ export const getTextSearchServices = async (
     .get(`${API_BASE_URL}?query=${query}`)
     .catch((error) => handleApiError(error, 'Failed to fetch services'));
 };
+
+export const createService = async (
+  service: Service
+): Promise<AxiosResponse<Service>> => {
+  return apiClient
+    .post(API_BASE_URL, service)
+    .catch((error) => handleApiError(error, 'Failed to create service'));
+};

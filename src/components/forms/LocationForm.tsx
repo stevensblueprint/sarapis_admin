@@ -1,196 +1,101 @@
-import React, { JSX, useState } from 'react';
+import { FormInstance } from 'antd';
+import Organization from '../../interface/model/Organization';
+import { useState, useEffect } from 'react';
+import ServiceArea from '../../interface/model/ServiceArea';
 import {
-  Alert,
-  Button,
-  Form,
-  FormInstance,
-  FormProps,
-  Input,
-  Select,
-  Space,
-  InputNumber,
-} from 'antd';
-import { LocationError, createLocation } from '../../api/lib/locations';
-import Location from '../../interface/model/Location';
-import { stateList } from '../../data/Common';
+  serviceAreaColumns,
+  serviceAtLocationColumns,
+} from '../../data/FormTableColumns';
+import AddServiceAreaForm from './nested_forms/AddServiceAreaForm';
+import AddServiceAtLocationForm from './nested_forms/AddServiceAtLocationForm';
+import ServiceAtLocation from '../../interface/model/ServiceAtLocation';
+import DisplayTable from './DisplayTable';
+import Contact from '../../interface/model/Contact';
+import Phone from '../../interface/model/Phone';
+import Language from '../../interface/model/Language';
+import Schedule from '../../interface/model/Schedule';
 
 interface LocationFormProps {
   parentForm: FormInstance;
-  setLocations: React.Dispatch<React.SetStateAction<Location[]>>;
 }
 
-const LocationForm = ({
-  parentForm,
-  setLocations,
-}: LocationFormProps): JSX.Element => {
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [form] = Form.useForm<Location>();
+const LocationForm = ({ parentForm }: LocationFormProps) => {
+  const [organization, setOrganization] = useState<Organization | undefined>();
+  const [existingContacts, setExistingContacts] = useState<Contact[]>([]);
+  const [existingPhones, setExistingPhones] = useState<Phone[]>([]);
+  const [existingLanguages, setExistingLanguages] = useState<Language[]>([]);
+  const [existingSchedules, setExistingSchedules] = useState<Schedule[]>([]);
+  const [existingServiceAreas, setExistingServiceAreas] = useState<
+    ServiceArea[]
+  >([]);
 
-  const onFinish: FormProps<Location>['onFinish'] = async (values) => {
-    try {
-      console.log(values);
-      const response = await createLocation(values);
-      console.log(response);
-      parentForm.setFieldValue('locations', response.data);
-      setLocations((prev) => [...prev, response.data]);
-      form.resetFields();
-    } catch (error) {
-      if (error instanceof LocationError) {
-        setErrorMessage(error.message);
-      } else {
-        setErrorMessage('An error occurred while creating the location');
-      }
-    }
-  };
+  useEffect(() => {
+    setExistingContacts(parentForm.getFieldValue('contacts') ?? []);
+    setExistingLanguages(parentForm.getFieldValue('languages') ?? []);
+    setExistingPhones(parentForm.getFieldValue('phones') ?? []);
+    setExistingSchedules(parentForm.getFieldValue('schedules') ?? []);
+    setExistingServiceAreas(parentForm.getFieldValue('service_areas') ?? []);
+  }, [parentForm]);
+
+  useEffect(() => {
+    setOrganization(parentForm.getFieldValue('organization') ?? undefined);
+  }, [parentForm]);
 
   return (
-    <div>
-      {errorMessage && (
-        <Alert
-          message={errorMessage}
-          type="error"
-          closable
-          onClose={() => setErrorMessage('')}
-          className="my-5"
+    <div className="w-[100%] flex justify-center">
+      <div className="flex flex-col w-3/4">
+        <DisplayTable<ServiceArea>
+          columns={serviceAreaColumns}
+          parentForm={parentForm}
+          fieldLabel="service_areas"
+          tooltipTitle="The details of the geographic area for which a service is available."
+          formLabel="Service Areas"
+          updateParentObject={(objects: ServiceArea[]) =>
+            setExistingServiceAreas(objects)
+          }
+          formProps={{
+            existingObjects: [],
+            existingLabels: [],
+            formTitle: 'Add Service Area',
+            formItems: () => <AddServiceAreaForm />,
+            parseFields: {},
+            parseObject: {},
+          }}
         />
-      )}
-      <Form form={form} layout="vertical" onFinish={onFinish}>
-        <Form.Item
-          label="Location Name"
-          name="name"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item label="Alternate Name" name="alternateName">
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Description"
-          name="description"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Input.TextArea />
-        </Form.Item>
-        <Form.Item label="URL" name="url">
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Location Type"
-          name="locationType"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Select
-            placeholder="Select Location Type"
-            options={[
-              { label: 'Virtual', value: 'virtual' },
-              { label: 'Physical', value: 'physical' },
-              { label: 'Postal', value: 'postal' },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item
-          label="Transportation"
-          name="transportation"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Latitude"
-          name="latitude"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <InputNumber style={{ width: '100%' }} />
-        </Form.Item>
-        <Form.Item
-          label="Longitude"
-          name="longitude"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <InputNumber style={{ width: '100%' }} />
-        </Form.Item>
-        <Form.Item label="External Identifier" name="externalIdentifier">
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="External Identifier Type"
-          name="externalIdentifierType"
-        >
-          <Input />
-        </Form.Item>
-        <Form.List name="addresses">
-          {(fields, { add, remove }) => (
-            <>
-              {fields.map((field) => (
-                <Space
-                  key={field.key}
-                  align="baseline"
-                  style={{ display: 'flex', marginBottom: 8 }}
-                >
-                  <Form.Item
-                    {...field}
-                    name={[field.name, 'address']}
-                    fieldKey={[field.key, 'address']}
-                    rules={[{ required: true, message: 'Missing address' }]}
-                  >
-                    <Input placeholder="Address" />
-                  </Form.Item>
-                  <Form.Item
-                    {...field}
-                    name={[field.name, 'city']}
-                    fieldKey={[field.key, 'city']}
-                    rules={[{ required: true, message: 'Missing city' }]}
-                  >
-                    <Input placeholder="City" />
-                  </Form.Item>
-                  <Form.Item
-                    {...field}
-                    name={[field.name, 'state']}
-                    fieldKey={[field.key, 'state']}
-                    rules={[{ required: true, message: 'Missing state' }]}
-                  >
-                    <Select
-                      placeholder="Select State"
-                      options={stateList.map((state) => ({
-                        value: state,
-                        label: state,
-                      }))}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    {...field}
-                    name={[field.name, 'zip']}
-                    fieldKey={[field.key, 'zip']}
-                    rules={[{ required: true, message: 'Missing zip code' }]}
-                  >
-                    <InputNumber placeholder="Zip Code" />
-                  </Form.Item>
-                  <Button type="link" onClick={() => remove(field.name)}>
-                    Remove
-                  </Button>
-                </Space>
-              ))}
-              <Form.Item>
-                <Button type="dashed" onClick={() => add()} block>
-                  Add Address
-                </Button>
-              </Form.Item>
-            </>
-          )}
-        </Form.List>
-
-        <Form.Item>
-          <Space style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-            <Button htmlType="button" onClick={() => form.resetFields()}>
-              Reset
-            </Button>
-          </Space>
-        </Form.Item>
-      </Form>
+        <DisplayTable<ServiceAtLocation>
+          columns={serviceAtLocationColumns}
+          parentForm={parentForm}
+          fieldLabel="service_at_locations"
+          tooltipTitle="A link between a service and a specific location."
+          formLabel="Service At Locations"
+          formProps={{
+            existingObjects: [],
+            existingLabels: [],
+            formTitle: 'Add Service At Location',
+            formItems: (form) => (
+              <AddServiceAtLocationForm
+                parentForm={form}
+                existingServiceAreas={existingServiceAreas}
+                existingContacts={[
+                  ...(organization?.contacts ?? []),
+                  ...existingContacts,
+                ]}
+                existingLanguages={existingLanguages}
+                existingPhones={[
+                  ...(organization?.phones ?? []),
+                  ...existingPhones,
+                ]}
+                existingSchedules={existingSchedules}
+                existingLocations={organization?.locations ?? []}
+              />
+            ),
+            parseFields: {},
+            parseObject: {},
+            modalWidth: 800,
+            attributeClassName: 'w-2/3',
+          }}
+        />
+      </div>
     </div>
   );
 };

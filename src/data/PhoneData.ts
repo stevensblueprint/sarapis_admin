@@ -11,7 +11,7 @@ export const phoneTypeOptions = [
   { value: 'fax', label: 'Fax' },
 ];
 
-export const langaugeOptions = [
+export const languageOptions = [
   { value: 'english', label: 'English' },
   { value: 'spanish', label: 'Spanish' },
   { value: 'french', label: 'French' },

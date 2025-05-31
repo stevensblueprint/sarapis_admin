@@ -7,15 +7,16 @@ import Contact from './Contact';
 import Location from './Location';
 
 interface ServiceAtLocation {
-  id: string;
-  description: string;
-  servicesAreas: ServiceArea[];
-  contacts: Contact[];
-  phones: Phone[];
-  schedules: Schedule[];
-  location: Location;
-  attributes: Attribute[];
-  metadata: Metadata[];
+  id?: string;
+  service_id?: string;
+  description?: string;
+  service_areas?: ServiceArea[];
+  contacts?: Contact[];
+  phones?: Phone[];
+  schedules?: Schedule[];
+  location?: Location[];
+  attributes?: Attribute[];
+  metadata?: Metadata[];
 }
 
 export default ServiceAtLocation;
