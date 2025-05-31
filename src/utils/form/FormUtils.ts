@@ -52,6 +52,10 @@ export interface DisplayTableProps<T> {
   };
 }
 
+/* 
+Get value from object from nested path
+For example: path = 'manager.age' would retrieve the age value from the manager object
+*/
 export const getNestedValue = (obj: any, path: string): any => {
   return path.split('.').reduce((acc, key) => {
     if (acc && typeof acc === 'object' && key in acc) {
@@ -61,6 +65,10 @@ export const getNestedValue = (obj: any, path: string): any => {
   }, obj);
 };
 
+/* 
+Set value of object from nested path
+For example: path = 'manager.age' would set the age value from the manager object
+*/
 const setNestedValue = (obj: any, path: string, value: any): void => {
   const keys = path.split('.');
   const lastKey = keys.pop()!;
@@ -71,16 +79,23 @@ const setNestedValue = (obj: any, path: string, value: any): void => {
   target[lastKey] = value;
 };
 
-function deleteNestedValue(obj: any, path: string) {
+/* 
+Delete field of object from nested path
+For example: path = 'manager.age' would delete the age field from the manager object.
+manager.age would no longer exist for the given object
+*/
+const deleteNestedValue = (obj: any, path: string): void => {
   const keys = path.split('.');
   let current = obj;
   for (let i = 0; i < keys.length - 1; i++) {
     if (!(keys[i] in current)) return;
     current = current[keys[i]];
   }
-  delete current[keys[keys.length - 1]];
-}
+  const lastKey = keys[keys.length - 1];
+  delete current[lastKey];
+};
 
+// Check if object exists in an array of objects
 export const isDuplicate = <T>(newObject: T, objectData: T[]): boolean => {
   return objectData.some(
     (existing) => JSON.stringify(existing) === JSON.stringify(newObject)
