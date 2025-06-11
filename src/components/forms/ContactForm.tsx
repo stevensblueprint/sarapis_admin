@@ -1,149 +1,83 @@
-import {
-  Alert,
-  Button,
-  Form,
-  FormInstance,
-  FormProps,
-  Input,
-  Select,
-  Space,
-} from 'antd';
+import { useState, useEffect } from 'react';
 import Contact from '../../interface/model/Contact';
-import { JSX, useEffect, useState } from 'react';
-import { ContactError, createContact } from '../../api/lib/contacts';
-import { Service } from '../../interface/model/Service';
-import { getAllServices } from '../../api/lib/services';
-import Response from '../../interface/Response';
-import { visibilityOptions } from '../../data/ContactData';
+import { FormInstance } from 'antd';
+import AddContactForm from './nested_forms/AddContactForm';
+import Organization from '../../interface/model/Organization';
+import AddPhoneForm from './nested_forms/AddPhoneForm';
+import Phone from '../../interface/model/Phone';
+import DisplayTable from './DisplayTable';
+import Language from '../../interface/model/Language';
+import { contactColumns, phoneColumns } from '../../data/FormTableColumns';
+import {
+  phoneExistingLabels,
+  contactExistingLabels,
+} from '../../data/FormExistingLabels';
 
 interface ContactFormProps {
   parentForm: FormInstance;
-  setContacts: React.Dispatch<React.SetStateAction<Contact[]>>;
 }
 
-const ContactForm = ({
-  parentForm,
-  setContacts,
-}: ContactFormProps): JSX.Element => {
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [services, setServices] = useState<Service[]>([]);
-  const [form] = Form.useForm();
+const ContactForm = ({ parentForm }: ContactFormProps) => {
+  const [organization, setOrganization] = useState<Organization | undefined>();
+  const [existingPhones, setExistingPhones] = useState<Phone[]>([]);
+  const [existingLanguages, setExistingLanguages] = useState<Language[]>([]);
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await getAllServices();
-        const data = response.data as Response<Service[]>;
-        data.contents?.forEach((service) => {
-          setServices((prev) => [...prev, service]);
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchServices();
-  });
-
-  const onFinish: FormProps<Contact>['onFinish'] = async (values) => {
-    try {
-      const response = await createContact(values);
-      console.log(response);
-      parentForm.setFieldValue('contacts', response.data);
-      setContacts((prev) => [...prev, response.data]);
-      form.resetFields();
-    } catch (error) {
-      if (error instanceof ContactError) {
-        setErrorMessage(error.message);
-      } else {
-        setErrorMessage('An error occurred while creating the contact');
-      }
-    }
-  };
-  // TODO: Add phones table
+    setExistingLanguages(parentForm.getFieldValue('languages') ?? []);
+    setExistingPhones(parentForm.getFieldValue('phones') ?? []);
+    setOrganization(parentForm.getFieldValue('organization') ?? undefined);
+  }, [parentForm]);
 
   return (
-    <div>
-      {errorMessage && (
-        <Alert
-          message={errorMessage}
-          type="error"
-          closable
-          onClose={() => setErrorMessage('')}
-          className="my-5"
+    <div className="w-[100%] flex justify-center">
+      <div className="flex flex-col w-3/4">
+        <DisplayTable<Phone>
+          columns={phoneColumns}
+          parentForm={parentForm}
+          fieldLabel="phones"
+          tooltipTitle="The details of the telephone numbers used to contact organizations, services, and locations."
+          formLabel="Phones"
+          updateParentObject={(objects: Phone[]) => setExistingPhones(objects)}
+          formProps={{
+            existingObjects: organization?.phones ?? [],
+            existingLabels: phoneExistingLabels,
+            formTitle: 'Add Phone',
+            formItems: (form) => (
+              <AddPhoneForm
+                existingLanguages={existingLanguages}
+                parentForm={form}
+              />
+            ),
+            parseFields: {},
+            parseObject: {},
+          }}
         />
-      )}
-      <Form form={form} variant="filled" onFinish={onFinish}>
-        <Form.Item
-          label="Name"
-          name="name"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Service"
-          name="service"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Select
-            showSearch
-            placeholder="Select a Service"
-            options={services.map((service) => {
-              return { value: service.id, label: service.name };
-            })}
-          />
-        </Form.Item>
-        <Form.Item
-          label="Title"
-          name="title"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Contact Department"
-          name="department"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            { required: true, message: 'Required field!' },
-            { type: 'email', message: 'Invalid email address' },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Visibility"
-          name="visibility"
-          rules={[{ required: true, message: 'Required field!' }]}
-        >
-          <Select
-            showSearch
-            placeholder="Select Visibility"
-            options={visibilityOptions}
-          />
-        </Form.Item>
-        <Form.Item>
-          <Space
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-            }}
-          >
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-            <Button htmlType="button" onClick={() => form.resetFields()}>
-              Reset
-            </Button>
-          </Space>
-        </Form.Item>
-      </Form>
+        <DisplayTable<Contact>
+          columns={contactColumns}
+          parentForm={parentForm}
+          fieldLabel="contacts"
+          tooltipTitle="The details of the named contacts for services and organizations."
+          formLabel="Contacts"
+          formProps={{
+            existingObjects: organization?.contacts ?? [],
+            existingLabels: contactExistingLabels,
+            formTitle: 'Add Contact',
+            formItems: (form) => (
+              <AddContactForm
+                existingPhones={
+                  organization
+                    ? [...organization.phones!, ...existingPhones]
+                    : existingPhones
+                }
+                existingLanguages={existingLanguages}
+                parentForm={form}
+              />
+            ),
+            parseFields: {},
+            parseObject: {},
+          }}
+        />
+      </div>
     </div>
   );
 };
